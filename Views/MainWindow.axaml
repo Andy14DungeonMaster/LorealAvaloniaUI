@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+        x:Class="LorealAvaloniaUI.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Loreal Avalonia UI"
+        Width="800" Height="500">
+    <Grid ColumnDefinitions="200, *">
+        <!-- Sidebar Navigation -->
+        <StackPanel Background="Gray" Width="200">
+            <Button Content="Dashboard" Command="{Binding NavigateToDashboardCommand}"/>
+            <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}"/>
+        </StackPanel>
+
+        <!-- Main Content Area -->
+        <ContentControl Name="MainContent" Grid.Column="1"/>
+    </Grid>
+</Window>
