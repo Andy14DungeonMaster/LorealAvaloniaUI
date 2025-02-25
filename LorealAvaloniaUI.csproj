@@ -10,16 +10,17 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />  <!-- ✅ Keep this -->
-    <Folder Include="Views\" />       <!-- ✅ Keep this -->
+    <Folder Include="ViewModels\" />  
+    <Folder Include="Views\" />       
     <AvaloniaResource Include="Assets\**" />
-    <Page Include="Views\*.axaml" />  <!-- ✅ Keep this -->
+    <Page Include="Views\*.axaml" />  
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
+    <PackageReference Include="Avalonia" Version="11.2.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.4" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>

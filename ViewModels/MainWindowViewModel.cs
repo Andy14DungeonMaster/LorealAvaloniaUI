@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
+using System.Threading.Tasks;
 using ReactiveUI;
 using Avalonia.Threading;
 using LorealAvaloniaUI.Services;
+using LorealAvaloniaUI.Views;
 
 namespace LorealAvaloniaUI.ViewModels;
 
@@ -19,15 +19,24 @@ public class MainViewModel : ViewModelBase
     {
         _navigationService = navigationService;
 
-        // Force execution on the UI thread
-        NavigateToDashboardCommand = ReactiveCommand.Create(
-            () => Dispatcher.UIThread.Post(() => _navigationService.Navigate<DashboardViewModel>()),
-            outputScheduler: RxApp.MainThreadScheduler  // ✅ Ensures UI thread execution
-        );
+        NavigateToDashboardCommand = ReactiveCommand.Create(() =>
+        {
+            Console.WriteLine("🚀 Navigating to Dashboard");
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                _navigationService.Navigate<DashboardViewModel, DashboardView>();
+            });
+        });
 
-        NavigateToSettingsCommand = ReactiveCommand.Create(
-            () => Dispatcher.UIThread.Post(() => _navigationService.Navigate<SettingsViewModel>()),
-            outputScheduler: RxApp.MainThreadScheduler  // ✅ Fixes threading issue
-        );
+        NavigateToSettingsCommand = ReactiveCommand.CreateFromTask(async () =>
+ {
+     await Task.Run(() =>
+     {
+         // Simulate background work
+     }).ConfigureAwait(true); // Ensures UI thread context is restored
+
+     _navigationService.Navigate<SettingsViewModel, SettingsView>(); // Runs on UI thread
+ });
+
     }
 }

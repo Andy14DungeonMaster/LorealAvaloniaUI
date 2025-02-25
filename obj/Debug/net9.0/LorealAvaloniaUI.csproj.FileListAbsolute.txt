@@ -21,6 +21,7 @@
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Fonts.Inter.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.FreeDesktop.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Native.dll
+/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.ReactiveUI.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Remote.Protocol.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Skia.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Themes.Fluent.dll
@@ -65,6 +66,7 @@
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.AssemblyInfoInputs.cache
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.AssemblyInfo.cs
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.csproj.CoreCompileInputs.cache
+/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.sourcelink.json
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/LorealAvaloniaUI.dll
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/LorealAvaloniaUI.pdb
 /Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/refint/Avalonia/LorealAvaloniaUI.dll

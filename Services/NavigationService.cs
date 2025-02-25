@@ -1,6 +1,8 @@
 using System;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace LorealAvaloniaUI.Services;
 
@@ -19,12 +21,25 @@ public class NavigationService
         _contentControl = contentControl;
     }
 
-    public void Navigate<TViewModel>() where TViewModel : class
+    public void Navigate<TViewModel, TView>()
+        where TViewModel : class
+        where TView : Control, new()
     {
-        var viewModel = _serviceProvider.GetService<TViewModel>();
-        if (_contentControl != null && viewModel != null)
+        if (_contentControl == null)
         {
-            _contentControl.DataContext = viewModel;
+            throw new InvalidOperationException("NavigationService is not initialized with a ContentControl.");
         }
+
+        var viewModel = _serviceProvider.GetService<TViewModel>();
+        if (viewModel == null)
+        {
+            throw new InvalidOperationException($"Could not resolve ViewModel: {typeof(TViewModel).Name}");
+        }
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await Task.Delay(100);
+            var view = new TView { DataContext = viewModel };
+            _contentControl.Content = view;
+        });
     }
 }
