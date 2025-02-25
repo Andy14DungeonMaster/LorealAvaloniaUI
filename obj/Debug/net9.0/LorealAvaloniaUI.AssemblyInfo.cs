@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LorealAvaloniaUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a7b92a92e184464dcdb1084a93746bd13ffbf10")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+28b22f97a43156c9f4d9bc786b33c0404a219ae9")]
 [assembly: System.Reflection.AssemblyProductAttribute("LorealAvaloniaUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LorealAvaloniaUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
