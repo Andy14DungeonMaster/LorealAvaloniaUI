@@ -1,32 +1,43 @@
-﻿using System;
-using System.Reactive;
+﻿using System.Collections.ObjectModel;
 using ReactiveUI;
-using LorealAvaloniaUI.Services;
-using LorealAvaloniaUI.Views;
 
-namespace LorealAvaloniaUI.ViewModels;
-
-public class MainViewModel : ViewModelBase
+namespace LorealAvaloniaUI.ViewModels
 {
-    private readonly NavigationService _navigationService;
+   public class MainViewModel : ReactiveObject
+{
+    public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
 
-    public ReactiveCommand<Unit, Unit> NavigateToDashboardCommand { get; }
-    public ReactiveCommand<Unit, Unit> NavigateToSettingsCommand { get; }
-
-    public MainViewModel(NavigationService navigationService)
+    private MenuItemViewModel? _selectedMenuItem;
+    public MenuItemViewModel? SelectedMenuItem
     {
-        _navigationService = navigationService;
-
-        NavigateToDashboardCommand = ReactiveCommand.Create(() =>
-        {
-            Console.WriteLine("🚀 Navigating to Dashboard");
-            _navigationService.Navigate<DashboardViewModel, DashboardView>();
-        });
-
-        NavigateToSettingsCommand = ReactiveCommand.Create(() =>
-        {
-            Console.WriteLine("⚙️ Navigating to Settings");
-            _navigationService.Navigate<SettingsViewModel, SettingsView>();
-        });
+        get => _selectedMenuItem;
+        set => this.RaiseAndSetIfChanged(ref _selectedMenuItem, value);
     }
+
+    public MainViewModel()
+    {
+        MenuItems = new ObservableCollection<MenuItemViewModel>
+        {
+            new MenuItemViewModel
+            {
+                Title = "Overview",
+                // Children = new ObservableCollection<MenuItemViewModel>
+                // {
+                //     new MenuItemViewModel { Title = "Dashboard" },
+                //     new MenuItemViewModel { Title = "Reports" }
+                // }
+            },
+            new MenuItemViewModel
+            {
+                Title = "Disk Storage",
+                Children = new ObservableCollection<MenuItemViewModel>
+                {
+                    new MenuItemViewModel { Title = "Download" },
+                    new MenuItemViewModel { Title = "One Drive" },
+                    new MenuItemViewModel { Title = "Outlook Files" }
+                }
+            }
+        };
+    }
+}
 }
