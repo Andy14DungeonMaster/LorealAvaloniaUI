@@ -11,7 +11,7 @@ namespace LorealAvaloniaUI;
 
 sealed class Program
 {
-    public static IServiceProvider ServiceProvider { get; private set; }
+    public static IServiceProvider? ServiceProvider { get; private set; }
 
     [STAThread]
     public static void Main(string[] args)
