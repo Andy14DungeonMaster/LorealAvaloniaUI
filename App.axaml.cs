@@ -24,35 +24,37 @@ public partial class App : Application
     {
         var serviceCollection = new ServiceCollection();
 
-        // Register ViewModels
+        // ✅ Register ViewModels
         serviceCollection.AddSingleton<MainViewModel>();
-        serviceCollection.AddSingleton<DashboardViewModel>();
-        serviceCollection.AddSingleton<SettingsViewModel>();
+        serviceCollection.AddTransient<DashboardViewModel>();
+        serviceCollection.AddTransient<SettingsViewModel>();
+        serviceCollection.AddTransient<DownloadViewModel>();  // ✅ Fix missing ViewModel
+        serviceCollection.AddTransient<OneDriveViewModel>();  // ✅ Fix missing ViewModel
+        serviceCollection.AddTransient<OutlookFilesViewModel>();  // ✅ Fix missing ViewModel
 
-        // Register Services
+        // ✅ Register Services
         serviceCollection.AddSingleton<NavigationService>();
 
         Services = serviceCollection.BuildServiceProvider();
     }
 
-   public override void OnFrameworkInitializationCompleted()
-{
-    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+    public override void OnFrameworkInitializationCompleted()
     {
-        Dispatcher.UIThread.Post(() =>
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var mainWindow = new MainWindow
+            Dispatcher.UIThread.Post(() =>
             {
-                DataContext = Services.GetRequiredService<MainViewModel>()
-            };
+                var mainWindow = new MainWindow
+                {
+                    DataContext = Services.GetRequiredService<MainViewModel>()
+                };
 
-            desktop.MainWindow = mainWindow;
-            mainWindow.Show();  // ✅ Ensure the window appears
-            mainWindow.Activate();  // ✅ Bring window to the front
-        });
+                desktop.MainWindow = mainWindow;
+                mainWindow.Show();  // ✅ Ensure the window appears
+                mainWindow.Activate();  // ✅ Bring window to the front
+            });
+        }
+
+        base.OnFrameworkInitializationCompleted();
     }
-
-    base.OnFrameworkInitializationCompleted();
-}
-
 }

@@ -3,18 +3,66 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
-    Title="Loreal Avalonia UI"
+    Title="Loreal Fix IT"
     Width="800"
     Height="500"
-    x:DataType="vm:MainViewModel">
-    <Grid ColumnDefinitions="200, *">
-        <!--  Sidebar Navigation  -->
-        <StackPanel Width="200" Background="Gray">
-            <Button Command="{Binding NavigateToDashboardCommand}" Content="Dashboard" />
-            <Button Command="{Binding NavigateToSettingsCommand}" Content="Settings" />
-        </StackPanel>
+    x:DataType="vm:MainViewModel"
+    Background="#A7F3D0">
 
-        <!--  Main Content Area  -->
-        <ContentControl Name="MainContent" Grid.Column="1" />
+    <Grid ColumnDefinitions="200, *" RowDefinitions="50, *">
+
+        <!--  Header Section  -->
+        <Border
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Padding="10">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                    <GradientStop Offset="0.0" Color="#4353EA" />
+                    <GradientStop Offset="0.4" Color="#2FA5DF" />
+                    <GradientStop Offset="1.0" Color="#40E16B" />
+
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Arial"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="L'ORÉAL FIX IT" />
+        </Border>
+
+        <!--  Sidebar with TreeView  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Padding="10"
+            Background="#222223">
+            <TreeView ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}">
+                <TreeView.DataTemplates>
+                    <TreeDataTemplate DataType="vm:MenuItemViewModel" ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock
+                                Cursor="Hand"
+                                Foreground="White"
+                                PointerPressed="OnMenuItemClicked"
+                                Text="{Binding Title}" />
+                        </StackPanel>
+                    </TreeDataTemplate>
+                </TreeView.DataTemplates>
+            </TreeView>
+        </Border>
+
+        <!--  Main Content  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Background="Black">
+            <ContentControl Name="MainContent" />
+        </Border>
+
     </Grid>
 </Window>

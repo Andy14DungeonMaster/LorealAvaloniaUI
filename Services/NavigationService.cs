@@ -2,44 +2,45 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
-namespace LorealAvaloniaUI.Services;
-
-public class NavigationService
+namespace LorealAvaloniaUI.Services
 {
-    private readonly IServiceProvider _serviceProvider;
-    private ContentControl? _contentControl;
-
-    public NavigationService(IServiceProvider serviceProvider)
+    public class NavigationService
     {
-        _serviceProvider = serviceProvider;
-    }
+        private readonly IServiceProvider _serviceProvider;
+        private ContentControl? _contentControl;
 
-    public void Initialize(ContentControl contentControl)
-    {
-        _contentControl = contentControl;
-    }
-
-    public void Navigate<TViewModel, TView>()
-        where TViewModel : class
-        where TView : Control, new()
-    {
-        if (_contentControl == null)
+        public NavigationService(IServiceProvider serviceProvider)
         {
-            throw new InvalidOperationException("NavigationService is not initialized with a ContentControl.");
+            _serviceProvider = serviceProvider;
         }
 
-        var viewModel = _serviceProvider.GetService<TViewModel>();
-        if (viewModel == null)
+        public void Initialize(ContentControl contentControl)
         {
-            throw new InvalidOperationException($"Could not resolve ViewModel: {typeof(TViewModel).Name}");
+            _contentControl = contentControl;
         }
-        Dispatcher.UIThread.InvokeAsync(async () =>
+
+        public void Navigate<TViewModel, TView>()
+            where TViewModel : class
+            where TView : Control, new()
         {
-            await Task.Delay(100);
-            var view = new TView { DataContext = viewModel };
-            _contentControl.Content = view;
-        });
+            if (_contentControl == null)
+            {
+                throw new InvalidOperationException("NavigationService is not initialized with a ContentControl.");
+            }
+
+            var viewModel = _serviceProvider.GetService<TViewModel>();
+
+            if (viewModel == null)
+            {
+                throw new InvalidOperationException($"Could not resolve ViewModel: {typeof(TViewModel).Name}");
+            }
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                var view = new TView { DataContext = viewModel };
+                _contentControl.Content = view;
+            });
+        }
     }
 }
