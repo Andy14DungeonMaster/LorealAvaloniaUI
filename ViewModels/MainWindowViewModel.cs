@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using Avalonia.Threading;
+using System.Reactive.Linq;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
@@ -18,48 +18,38 @@ namespace LorealAvaloniaUI.ViewModels
         public MenuItemViewModel? SelectedMenuItem
         {
             get => _selectedMenuItem;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedMenuItem, value);
-                if (value?.Command != null)
-                {
-                    value.Command.Execute().Subscribe();
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _selectedMenuItem, value);
         }
 
         public MainViewModel(NavigationService navigationService)
         {
             _navigationService = navigationService;
 
-            var navigateToDownload = ReactiveCommand.Create(() =>
-            {
-                Dispatcher.UIThread.Post(() => _navigationService.Navigate<DownloadViewModel, DownloadView>());
-            });
+            var dashboardMenuItem = new MenuItemViewModel("Overview", NavigateCommand<DashboardViewModel, DashboardView>());
 
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
-                new MenuItemViewModel("Overview", ReactiveCommand.Create(() =>
-                {
-                    Dispatcher.UIThread.Post(() => _navigationService.Navigate<DashboardViewModel, DashboardView>());
-                })),
+                dashboardMenuItem,
 
-                new MenuItemViewModel("Disk Storage")
+                new MenuItemViewModel("Disk Storage", NavigateCommand<DashboardViewModel, DashboardView>())
                 {
                     Children =
                     {
-                        new MenuItemViewModel("Download", navigateToDownload),  // ✅ Ensure this executes correctly
-                        new MenuItemViewModel("One Drive", ReactiveCommand.Create(() =>
-                        {
-                            Dispatcher.UIThread.Post(() => _navigationService.Navigate<OneDriveViewModel, OneDriveView>());
-                        })),
-                        new MenuItemViewModel("Outlook Files", ReactiveCommand.Create(() =>
-                        {
-                            Dispatcher.UIThread.Post(() => _navigationService.Navigate<OutlookFilesViewModel, OutlookFilesView>());
-                        }))
+                        new MenuItemViewModel("Download", NavigateCommand<DownloadViewModel, DownloadView>()),
+                        new MenuItemViewModel("One Drive", NavigateCommand<OneDriveViewModel, OneDriveView>()),
+                        new MenuItemViewModel("Outlook Files", NavigateCommand<OutlookFilesViewModel, OutlookFilesView>())
                     }
                 }
             };
+            SelectedMenuItem = dashboardMenuItem;
+            SelectedMenuItem?.Command?.Execute().Subscribe();
+        }
+
+        private ReactiveCommand<Unit, Unit> NavigateCommand<TViewModel, TView>()
+            where TViewModel : ReactiveObject
+            where TView : Avalonia.Controls.Control, new()
+        {
+            return ReactiveCommand.Create(() => _navigationService.Navigate<TViewModel, TView>());
         }
     }
 }

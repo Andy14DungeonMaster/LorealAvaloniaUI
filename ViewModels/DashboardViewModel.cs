@@ -1,6 +1,8 @@
+using ReactiveUI;
+
 namespace LorealAvaloniaUI.ViewModels;
 
-public class DashboardViewModel : ViewModelBase
+public class DashboardViewModel : ReactiveObject
 {
     public string Title { get; } = "Dashboard Page";
 }

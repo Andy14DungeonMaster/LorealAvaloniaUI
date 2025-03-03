@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
     Title="Loreal Fix IT"
-    Background="#A7F3D0"
     Width="800"
     Height="500"
-    x:DataType="vm:MainViewModel">
+    x:DataType="vm:MainViewModel"
+    Background="#A7F3D0">
 
     <Grid ColumnDefinitions="200, *" RowDefinitions="50, *">
 
@@ -17,15 +17,17 @@
             Grid.ColumnSpan="2"
             Padding="10">
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Offset="0.0" Color="#3B82F6" />
-                    <GradientStop Offset="1.0" Color="#A7F3D0" />
+                <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                    <GradientStop Offset="0.0" Color="#4353EA" />
+                    <GradientStop Offset="0.4" Color="#2FA5DF" />
+                    <GradientStop Offset="1.0" Color="#40E16B" />
+
                 </LinearGradientBrush>
             </Border.Background>
 
             <TextBlock
-                VerticalAlignment="Center"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 FontFamily="Arial"
                 FontSize="20"
                 FontWeight="Bold"
@@ -47,7 +49,7 @@
                                 Cursor="Hand"
                                 Foreground="White"
                                 PointerPressed="OnMenuItemClicked"
-                                Text="{Binding Title}"/>
+                                Text="{Binding Title}" />
                         </StackPanel>
                     </TreeDataTemplate>
                 </TreeView.DataTemplates>
