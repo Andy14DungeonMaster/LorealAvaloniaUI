@@ -6,8 +6,8 @@
     <StackPanel Margin="20">
         <!-- File Summary -->
         <StackPanel Orientation="Vertical" Margin="0,10,0,10">
-            <TextBlock Text="No of files with size >500 MB: 28" Foreground="White" FontSize="16"/>
-            <TextBlock Text="Total size of the files: 14 GB" Foreground="White" FontSize="16"/>
+            <TextBlock Text="No of files with size >100 MB:" Foreground="White" FontSize="16"/>
+            <TextBlock Text="Total size of the files:" Foreground="White" FontSize="16"/>
         </StackPanel>
 
         <!-- Sort & Filter Buttons -->
@@ -24,7 +24,7 @@
             <TextBlock Grid.Column="3" Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold"/>
         </Grid>
 
-        <!-- File List using ItemsControl -->
+        <!-- File List -->
         <ItemsControl ItemsSource="{Binding Files}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -45,7 +45,7 @@
 
         <!-- Action Buttons -->
         <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Center">
-            <TextBlock Text="Size Selected: 3 GB" Foreground="DodgerBlue" FontSize="16"/>
+            <TextBlock Text="{Binding SelectedSize}" Foreground="DodgerBlue" FontSize="16"/>
             <Button Content="Permanent Delete" Background="#FF4444" Foreground="White" Padding="10,5"/>
             <Button Content="Move to OneDrive" Background="#4444FF" Foreground="White" Padding="10,5"/>
         </StackPanel>

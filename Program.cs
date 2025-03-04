@@ -1,47 +1,57 @@
 ﻿using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.ViewModels;
 using LorealAvaloniaUI.Views;
 
-namespace LorealAvaloniaUI;
-
-sealed class Program
+namespace LorealAvaloniaUI
 {
-    public static IServiceProvider? ServiceProvider { get; private set; }
-
-    [STAThread]
-    public static void Main(string[] args)
+    sealed class Program
     {
-        var services = new ServiceCollection();
+        public static IServiceProvider? ServiceProvider { get; private set; }
 
-        // ✅ Register ViewModels
-        services.AddSingleton<MainViewModel>();
-        services.AddTransient<DashboardViewModel>();
-        services.AddTransient<SettingsViewModel>();
-        services.AddTransient<DownloadViewModel>();  // ✅ Register ViewModel
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            var services = new ServiceCollection();
 
-        // ✅ Register Views
-        services.AddTransient<MainWindow>();
-        services.AddTransient<DashboardView>();
-        services.AddTransient<SettingsView>();
-        services.AddTransient<DownloadView>();
+            // ✅ Load Configuration (appsettings.json)
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            services.AddSingleton<IConfiguration>(configuration);
 
-        // ✅ Register Services
-        services.AddSingleton<NavigationService>();
+            // ✅ Register ViewModels
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<DashboardViewModel>();
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<DownloadViewModel>();
 
-        ServiceProvider = services.BuildServiceProvider();
+            // ✅ Register Views
+            services.AddTransient<MainWindow>();
+            services.AddTransient<DashboardView>();
+            services.AddTransient<SettingsView>();
+            services.AddTransient<DownloadView>();
 
-        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            // ✅ Register Services
+            services.AddSingleton<NavigationService>();
+
+            ServiceProvider = services.BuildServiceProvider();
+
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .UseReactiveUI()
+                .LogToTrace();
     }
-
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .UseReactiveUI()
-            .LogToTrace();
 }
