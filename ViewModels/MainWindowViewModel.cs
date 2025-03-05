@@ -1,32 +1,55 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
-using ReactiveUI;
+using System.Reactive.Linq;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
+using ReactiveUI;
 
-namespace LorealAvaloniaUI.ViewModels;
-
-public class MainViewModel : ViewModelBase
+namespace LorealAvaloniaUI.ViewModels
 {
-    private readonly NavigationService _navigationService;
-
-    public ReactiveCommand<Unit, Unit> NavigateToDashboardCommand { get; }
-    public ReactiveCommand<Unit, Unit> NavigateToSettingsCommand { get; }
-
-    public MainViewModel(NavigationService navigationService)
+    public class MainViewModel : ReactiveObject
     {
-        _navigationService = navigationService;
+        private readonly NavigationService _navigationService;
 
-        NavigateToDashboardCommand = ReactiveCommand.Create(() =>
-        {
-            Console.WriteLine("🚀 Navigating to Dashboard");
-            _navigationService.Navigate<DashboardViewModel, DashboardView>();
-        });
+        public ObservableCollection<MenuItemViewModel> MenuItems { get; }
 
-        NavigateToSettingsCommand = ReactiveCommand.Create(() =>
+        private MenuItemViewModel? _selectedMenuItem;
+        public MenuItemViewModel? SelectedMenuItem
         {
-            Console.WriteLine("⚙️ Navigating to Settings");
-            _navigationService.Navigate<SettingsViewModel, SettingsView>();
-        });
+            get => _selectedMenuItem;
+            set => this.RaiseAndSetIfChanged(ref _selectedMenuItem, value);
+        }
+
+        public MainViewModel(NavigationService navigationService)
+        {
+            _navigationService = navigationService;
+
+            var dashboardMenuItem = new MenuItemViewModel("Overview", NavigateCommand<DashboardViewModel, DashboardView>());
+
+            MenuItems = new ObservableCollection<MenuItemViewModel>
+            {
+                dashboardMenuItem,
+
+                new MenuItemViewModel("Disk Storage", NavigateCommand<DashboardViewModel, DashboardView>())
+                {
+                    Children =
+                    {
+                        new MenuItemViewModel("Download", NavigateCommand<DownloadViewModel, DownloadView>()),
+                        new MenuItemViewModel("One Drive", NavigateCommand<OneDriveViewModel, OneDriveView>()),
+                        new MenuItemViewModel("Outlook Files", NavigateCommand<OutlookFilesViewModel, OutlookFilesView>())
+                    }
+                }
+            };
+            SelectedMenuItem = dashboardMenuItem;
+            SelectedMenuItem?.Command?.Execute().Subscribe();
+        }
+
+        private ReactiveCommand<Unit, Unit> NavigateCommand<TViewModel, TView>()
+            where TViewModel : ReactiveObject
+            where TView : Avalonia.Controls.Control, new()
+        {
+            return ReactiveCommand.Create(() => _navigationService.Navigate<TViewModel, TView>());
+        }
     }
 }

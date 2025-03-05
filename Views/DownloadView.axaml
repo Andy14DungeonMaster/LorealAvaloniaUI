@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+             x:Class="LorealAvaloniaUI.Views.DownloadView"
+             x:DataType="vm:DownloadViewModel">
+    <StackPanel Margin="20">
+        <!-- File Summary -->
+        <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+            <TextBlock Text="No of files with size >500 MB: 28" Foreground="White" FontSize="16"/>
+            <TextBlock Text="Total size of the files: 14 GB" Foreground="White" FontSize="16"/>
+        </StackPanel>
+
+        <!-- Sort & Filter Buttons -->
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+            <Button Content="Sort" Background="#333" Foreground="White" Padding="8,4"/>
+            <Button Content="Filter" Background="#333" Foreground="White" Padding="8,4"/>
+        </StackPanel>
+
+        <!-- Table Headers -->
+        <Grid ColumnDefinitions="40, *, 120, 200" Background="Black" Height="40" Margin="0,10,0,0">
+            <CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="File Name" Foreground="DodgerBlue" FontWeight="Bold"/>
+            <TextBlock Grid.Column="2" Text="Size" Foreground="DodgerBlue" FontWeight="Bold"/>
+            <TextBlock Grid.Column="3" Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold"/>
+        </Grid>
+
+        <!-- File List using ItemsControl -->
+        <ItemsControl ItemsSource="{Binding Files}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="40, *, 120, 200" Height="40" Background="{Binding RowBackground}" Margin="0,5,0,0">
+                        <CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsSelected}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding FileName}" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding FileSize}" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="{Binding LastModified}" Foreground="White" VerticalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Action Buttons -->
+        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Center">
+            <TextBlock Text="Size Selected: 3 GB" Foreground="DodgerBlue" FontSize="16"/>
+            <Button Content="Permanent Delete" Background="#FF4444" Foreground="White" Padding="10,5"/>
+            <Button Content="Move to OneDrive" Background="#4444FF" Foreground="White" Padding="10,5"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

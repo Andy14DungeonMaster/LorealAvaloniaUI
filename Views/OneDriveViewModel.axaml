@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+             x:Class="LorealAvaloniaUI.Views.OneDriveView"
+			 x:DataType="vm:OneDriveViewModel">
+    <StackPanel>
+		<TabControl Margin="5">
+			<TabItem Header="Desktop">
+				<StackPanel>
+					<!-- File List using ItemsControl -->
+					<ItemsControl ItemsSource="{Binding DesktopFiles}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid ColumnDefinitions="40, *, 120, 200" Height="40" Background="{Binding RowBackground}" Margin="0,5,0,0">
+									<CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsSelected}"/>
+									<TextBlock Grid.Column="1" Text="{Binding FileName}" Foreground="White" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="2" Text="{Binding FileSize}" Foreground="White" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="3" Text="{Binding LastModified}" Foreground="White" VerticalAlignment="Center"/>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Documents">
+				<TextBlock Margin="5">This is tab 2 content</TextBlock>
+			</TabItem>
+			<TabItem Header="Pictures">
+				<TextBlock Margin="5">This is tab 3 content</TextBlock>
+			</TabItem>
+			<TabItem Header="Recordings">
+				<TextBlock Margin="5">This is tab 3 content</TextBlock>
+			</TabItem>
+		</TabControl>
+    </StackPanel>
+</UserControl>

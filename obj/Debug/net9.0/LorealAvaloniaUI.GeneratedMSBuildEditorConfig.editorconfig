@@ -15,20 +15,29 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = LorealAvaloniaUI
-build_property.ProjectDir = /Users/anandasahu/Repository/LorealAvaloniaUI/
+build_property.ProjectDir = C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[/Users/anandasahu/Repository/LorealAvaloniaUI/App.axaml]
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/Users/anandasahu/Repository/LorealAvaloniaUI/Views/DashboardView.axaml]
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/DashboardView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/Users/anandasahu/Repository/LorealAvaloniaUI/Views/MainWindow.axaml]
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/DownloadView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/Users/anandasahu/Repository/LorealAvaloniaUI/Views/SettingsView.axaml]
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/OneDriveViewModel.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/OutlookFilesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/alekhya.nandina/Source/Repos/LorealAvaloniaUI/Views/SettingsView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

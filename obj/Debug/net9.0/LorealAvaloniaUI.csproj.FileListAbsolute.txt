@@ -1,75 +1,149 @@
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/LorealAvaloniaUI
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/LorealAvaloniaUI.deps.json
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/LorealAvaloniaUI.runtimeconfig.json
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/LorealAvaloniaUI.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/LorealAvaloniaUI.pdb
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Base.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Controls.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.DesignerSupport.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Dialogs.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Markup.Xaml.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Markup.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Metal.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.MicroCom.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.OpenGL.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Vulkan.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Controls.ColorPicker.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Controls.DataGrid.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Desktop.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Diagnostics.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Fonts.Inter.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.FreeDesktop.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Native.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.ReactiveUI.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Remote.Protocol.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Skia.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Themes.Fluent.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Themes.Simple.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.Win32.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Avalonia.X11.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/CommunityToolkit.Mvvm.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/DynamicData.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/HarfBuzzSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/MicroCom.Runtime.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/ReactiveUI.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/SkiaSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Splat.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/System.Reactive.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/Tmds.DBus.Protocol.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-arm64/native/av_libglesv2.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x64/native/av_libglesv2.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x86/native/av_libglesv2.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/osx/native/libAvaloniaNative.dylib
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-arm/native/libHarfBuzzSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-arm64/native/libHarfBuzzSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-musl-x64/native/libHarfBuzzSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-x64/native/libHarfBuzzSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/osx/native/libHarfBuzzSharp.dylib
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-arm64/native/libHarfBuzzSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x64/native/libHarfBuzzSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x86/native/libHarfBuzzSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-arm/native/libSkiaSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-arm64/native/libSkiaSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-musl-x64/native/libSkiaSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/linux-x64/native/libSkiaSharp.so
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/osx/native/libSkiaSharp.dylib
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-arm64/native/libSkiaSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x64/native/libSkiaSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/bin/Debug/net9.0/runtimes/win-x86/native/libSkiaSharp.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.csproj.AssemblyReference.cache
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/Resources.Inputs.cache
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/resources
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.GeneratedMSBuildEditorConfig.editorconfig
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.AssemblyInfoInputs.cache
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.AssemblyInfo.cs
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.csproj.CoreCompileInputs.cache
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.sourcelink.json
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/LorealAvaloniaUI.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/Avalonia/LorealAvaloniaUI.pdb
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/refint/Avalonia/LorealAvaloniaUI.dll
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAv.D76FEDB8.Up2Date
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/LorealAvaloniaUI.genruntimeconfig.cache
-/Users/anandasahu/Repository/LorealAvaloniaUI/obj/Debug/net9.0/ref/LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\LorealAvaloniaUI.exe
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\LorealAvaloniaUI.deps.json
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\LorealAvaloniaUI.runtimeconfig.json
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\LorealAvaloniaUI.pdb
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Base.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Controls.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.DesignerSupport.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Dialogs.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Markup.Xaml.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Markup.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Metal.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.MicroCom.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.OpenGL.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Vulkan.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Controls.ColorPicker.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Controls.DataGrid.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Desktop.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Diagnostics.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Fonts.Inter.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.FreeDesktop.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Native.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.ReactiveUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Remote.Protocol.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Skia.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Themes.Fluent.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Themes.Simple.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.Win32.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Avalonia.X11.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\CommunityToolkit.Mvvm.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\DynamicData.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\HarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\MicroCom.Runtime.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\ReactiveUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\SkiaSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Splat.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\System.Reactive.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\Tmds.DBus.Protocol.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-arm64\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x64\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x86\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\osx\native\libAvaloniaNative.dylib
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-arm\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-arm64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-musl-x64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-x64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\osx\native\libHarfBuzzSharp.dylib
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-arm64\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x64\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x86\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-arm\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-arm64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-musl-x64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\linux-x64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\osx\native\libSkiaSharp.dylib
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-arm64\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x64\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\bin\Debug\net9.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.csproj.AssemblyReference.cache
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\Avalonia\Resources.Inputs.cache
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\Avalonia\resources
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.AssemblyInfoInputs.cache
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.AssemblyInfo.cs
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.csproj.CoreCompileInputs.cache
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\Avalonia\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\Avalonia\LorealAvaloniaUI.pdb
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\refint\Avalonia\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAv.D76FEDB8.Up2Date
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\LorealAvaloniaUI.genruntimeconfig.cache
+C:\Users\alekhya.nandina\Downloads\LorealAvaloniaUI-Develop_NewUI (2)\LorealAvaloniaUI-Develop_NewUI\obj\Debug\net9.0\ref\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.csproj.AssemblyReference.cache
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\Avalonia\Resources.Inputs.cache
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\Avalonia\resources
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.AssemblyInfoInputs.cache
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.AssemblyInfo.cs
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.csproj.CoreCompileInputs.cache
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.sourcelink.json
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\Avalonia\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\Avalonia\LorealAvaloniaUI.pdb
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\refint\Avalonia\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\LorealAvaloniaUI.exe
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\LorealAvaloniaUI.deps.json
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\LorealAvaloniaUI.runtimeconfig.json
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\LorealAvaloniaUI.pdb
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Base.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Controls.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.DesignerSupport.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Dialogs.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Markup.Xaml.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Markup.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Metal.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.MicroCom.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.OpenGL.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Vulkan.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Controls.ColorPicker.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Controls.DataGrid.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Desktop.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Diagnostics.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Fonts.Inter.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.FreeDesktop.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Native.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.ReactiveUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Remote.Protocol.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Skia.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Themes.Fluent.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Themes.Simple.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.Win32.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Avalonia.X11.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\CommunityToolkit.Mvvm.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\DynamicData.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\HarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\MicroCom.Runtime.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\ReactiveUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\SkiaSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Splat.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\System.Reactive.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\Tmds.DBus.Protocol.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-arm64\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x64\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x86\native\av_libglesv2.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\osx\native\libAvaloniaNative.dylib
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-arm\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-arm64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-musl-x64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-x64\native\libHarfBuzzSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\osx\native\libHarfBuzzSharp.dylib
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-arm64\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x64\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x86\native\libHarfBuzzSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-arm\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-arm64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-musl-x64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\linux-x64\native\libSkiaSharp.so
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\osx\native\libSkiaSharp.dylib
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-arm64\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x64\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\bin\Debug\net9.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAv.D76FEDB8.Up2Date
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\LorealAvaloniaUI.genruntimeconfig.cache
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUI\obj\Debug\net9.0\ref\LorealAvaloniaUI.dll
