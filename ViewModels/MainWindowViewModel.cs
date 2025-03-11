@@ -37,7 +37,8 @@ namespace LorealAvaloniaUI.ViewModels
                     {
                         new MenuItemViewModel("Download", NavigateCommand<DownloadViewModel, DownloadView>()),
                         new MenuItemViewModel("One Drive", NavigateCommand<OneDriveViewModel, OneDriveView>()),
-                        new MenuItemViewModel("Outlook Files", NavigateCommand<OutlookFilesViewModel, OutlookFilesView>())
+                        new MenuItemViewModel("Outlook Files", NavigateCommand<OutlookFilesViewModel, OutlookFilesView>()),
+                        new MenuItemViewModel("Office Files Cache", NavigateCommand<OfficeFileCacheViewModel, OfficeFileCacheView>())
                     }
                 }
             };
