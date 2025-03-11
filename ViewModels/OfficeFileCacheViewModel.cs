@@ -5,7 +5,7 @@ namespace LorealAvaloniaUI.ViewModels
 {
     public class OfficeFileCacheViewModel : ReactiveObject
     {
-        public string Title => "OneDriveViewModel Page";
+        public string Title => "Office File Cache Page";
 
         public OfficeFileCacheViewModel()
         {

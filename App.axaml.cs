@@ -30,7 +30,8 @@ public partial class App : Application
         serviceCollection.AddTransient<SettingsViewModel>();
         serviceCollection.AddTransient<DownloadViewModel>();  // ✅ Fix missing ViewModel
         serviceCollection.AddTransient<OneDriveViewModel>();  // ✅ Fix missing ViewModel
-        serviceCollection.AddTransient<OutlookFilesViewModel>();  // ✅ Fix missing ViewModel
+        serviceCollection.AddTransient<OutlookFilesViewModel>();
+        serviceCollection.AddTransient<OfficeFileCacheViewModel>();// ✅ Fix missing ViewModel
 
         // ✅ Register Services
         serviceCollection.AddSingleton<NavigationService>();
