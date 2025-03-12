@@ -1892,32 +1892,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alekhya.nandina\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/anandasahu/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alekhya.nandina\\Source\\Repos\\LorealAvaloniaUI\\LorealAvaloniaUI.csproj",
+      "projectUniqueName": "/Users/anandasahu/Repository/LorealAvaloniaUI/LorealAvaloniaUI.csproj",
       "projectName": "LorealAvaloniaUI",
-      "projectPath": "C:\\Users\\alekhya.nandina\\Source\\Repos\\LorealAvaloniaUI\\LorealAvaloniaUI.csproj",
-      "packagesPath": "C:\\Users\\alekhya.nandina\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alekhya.nandina\\Source\\Repos\\LorealAvaloniaUI\\obj\\",
+      "projectPath": "/Users/anandasahu/Repository/LorealAvaloniaUI/LorealAvaloniaUI.csproj",
+      "packagesPath": "/Users/anandasahu/.nuget/packages/",
+      "outputPath": "/Users/anandasahu/Repository/LorealAvaloniaUI/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\alekhya.nandina\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/anandasahu/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1936,7 +1928,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -1999,7 +1991,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

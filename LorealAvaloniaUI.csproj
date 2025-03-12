@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaXaml Remove="Views\OfficeFileCacheView.axaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.4" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.4" />
