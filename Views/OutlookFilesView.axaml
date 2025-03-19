@@ -1,7 +1,17 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="LorealAvaloniaUI.Views.OutlookFilesView">
+			 xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+             x:Class="LorealAvaloniaUI.Views.OutlookFilesView"
+			 x:DataType="vm:OutlookFilesViewModel">
+	
     <StackPanel>
-        <TextBlock Text="Welcome to the OutlookFilesView!" FontSize="20"/>
+		<ItemsControl ItemsSource="{Binding OutlookFiles}">
+			<Grid ColumnDefinitions="40, *, *, 200" Height="40" Background="Black" Margin="0,5,0,0">
+				<CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+				<TextBlock Grid.Column="1" Text="{Binding Filename}" Foreground="White" VerticalAlignment="Center"/>
+				<TextBlock Grid.Column="2" Text="{Binding Size}" Foreground="White" VerticalAlignment="Center"/>
+				<TextBlock Grid.Column="3" Text="{Binding AttachedToOutlook}" Foreground="White" VerticalAlignment="Center"/>
+			</Grid>
+		</ItemsControl>
     </StackPanel>
 </UserControl>
