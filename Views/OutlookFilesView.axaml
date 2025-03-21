@@ -1,17 +1,48 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+             xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
              x:Class="LorealAvaloniaUI.Views.OutlookFilesView"
-			 x:DataType="vm:OutlookFilesViewModel">
-	
+             x:DataType="vm:OutlookFilesViewModel">
+
     <StackPanel>
-		<ItemsControl ItemsSource="{Binding OutlookFiles}">
-			<Grid ColumnDefinitions="40, *, *, 200" Height="40" Background="Black" Margin="0,5,0,0">
-				<CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
-				<TextBlock Grid.Column="1" Text="{Binding Filename}" Foreground="White" VerticalAlignment="Center"/>
-				<TextBlock Grid.Column="2" Text="{Binding Size}" Foreground="White" VerticalAlignment="Center"/>
-				<TextBlock Grid.Column="3" Text="{Binding AttachedToOutlook}" Foreground="White" VerticalAlignment="Center"/>
-			</Grid>
-		</ItemsControl>
+        <!-- Table Headers -->
+        <Grid ColumnDefinitions="40, *, *, 200" Background="Black" Height="40" Margin="0,10,0,0">
+            <CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="False" IsEnabled="False"/>
+            <TextBlock Grid.Column="1" Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2" Text="Size (MB)" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="3" Text="Attached to Outlook" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- File List -->
+        <ItemsControl ItemsSource="{Binding OutlookFiles}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="40, *, *, 200" Height="40" Background="#1a1a1a" Margin="0,5,0,0">
+                        <CheckBox Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  IsChecked="True" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Filename}"
+                                   Foreground="White"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding Size, StringFormat='{}{0:F2} MB'}"
+                                   Foreground="White"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="3"
+                                   Text="{Binding AttachedToOutlook}"
+                                   Foreground="White"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 </UserControl>
