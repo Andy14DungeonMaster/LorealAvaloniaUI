@@ -16,8 +16,11 @@ namespace LorealAvaloniaUI.ViewModels
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> SortFilesByDateCommand { get; }
+
         private bool _isSortedAscending = true;
         private bool _isSizeSortedAscending = true;
+
 
         public DownloadViewModel()
         {
@@ -84,6 +87,70 @@ namespace LorealAvaloniaUI.ViewModels
                 _ => "#222222"         // Dark gray for others (1-10MB)
             };
         }
+        
+        /*
+        private void MoveSelectedFiles()
+        {
+            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
+
+            foreach (var file in selectedFiles)
+            {
+                try
+                {
+                    Console.WriteLine($"Trying to delete: {file.FullPath}");
+
+                    if (File.Exists(file.FullPath)) // Check if file exists
+                    {
+                        File.Delete(file.FullPath); // Delete from file system
+                        Files.Remove(file);         // Remove from UI
+                        Console.WriteLine($"{file.FileName} deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File not found: {file.FullPath}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error deleting file: {ex.Message}");
+                }
+            }
+
+            Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
+        }
+
+        private void SizeDetermination()
+        {
+            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
+
+            foreach (var file in selectedFiles)
+            {
+                try
+                {
+                    Console.WriteLine($"Trying to delete: {file.FullPath}");
+
+                    if (File.Exists(file.FullPath)) // Check if file exists
+                    {
+                        File.Delete(file.FullPath); // Delete from file system
+                        Files.Remove(file);         // Remove from UI
+                        Console.WriteLine($"{file.FileName} deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File not found: {file.FullPath}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error deleting file: {ex.Message}");
+                }
+            }
+            
+
+            Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
+        }
+
+        */
 
         private void DeleteSelectedFiles()
         {
