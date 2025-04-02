@@ -3,7 +3,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using ReactiveUI;
+using LorealAvaloniaUI.Views;
+using System.Collections.Generic;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -11,19 +14,75 @@ namespace LorealAvaloniaUI.ViewModels
     {
         public ObservableCollection<FileItemViewModel> Files { get; } = new ObservableCollection<FileItemViewModel>();
 
+        //Calculate Size of Selected Files
+        private string _SelectFilesSize;
+
+        public string sizeOfFilesSelected
+        {
+            get => _SelectFilesSize;
+            set => this.RaiseAndSetIfChanged(ref _SelectFilesSize, value);
+        }
+
+
         // Command to delete files
         public ReactiveCommand<Unit, Unit> DeleteSelectedFilesCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveSelectedFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
 
         public ReactiveCommand<Unit, Unit> SortFilesByDateCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> CalculateDownloadsSizeCommand { get; }
+
         private bool _isSortedAscending = true;
         private bool _isSizeSortedAscending = true;
+        private bool _isDateSortedAscending = true;
 
+        // Total Downloads folder size
+        private string _totalDownloadsSize;
+
+        public string TotalDownloadsSize
+        {
+            get => _totalDownloadsSize;
+            set => this.RaiseAndSetIfChanged(ref _totalDownloadsSize, value);
+        }
+
+        private string _totalNumberOfFiles;
+
+        public string totalNumber
+        {
+            get => _totalNumberOfFiles;
+            set => this.RaiseAndSetIfChanged(ref _totalNumberOfFiles, value);
+        }
+
+        private bool _isActive;
+        public bool IsActive
+        {
+            get => _isActive;
+            set => this.RaiseAndSetIfChanged(ref _isActive, value); // Use SetProperty for INotifyPropertyChanged
+        }
+
+        private bool _isEnabledStatus;
+        public bool IsEnabledStatus
+        {
+            get => _isEnabledStatus;
+            set => this.RaiseAndSetIfChanged(ref _isEnabledStatus, value); // Or OnPropertyChanged if using INotifyPropertyChanged
+        }
+        ////Select FileSize and CheckBox
+        //private bool _isChecked;
+        //public bool IsChecked
+        //{
+        //    get => _isChecked;
+        //    set => this.RaiseAndSetIfChanged(ref _isChecked, value);
+        //}
+
+       
 
         public DownloadViewModel()
         {
+
+              // Call your function
+
             string downloadsPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads"
@@ -70,11 +129,70 @@ namespace LorealAvaloniaUI.ViewModels
                 Console.WriteLine($"Error: {ex.Message}");
             }
 
+            
+           
             // ✅ Initialize commands
             DeleteSelectedFilesCommand = ReactiveCommand.Create(DeleteSelectedFiles);
             SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
             SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
+            SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
+            CalculateDownloadsSizeCommand = ReactiveCommand.Create(CalculateDownloadsSize);
+
+            
+            // 
+            CalculateDownloadsSize();
+
+            //this.WhenAnyValue(x => x.Files.Select(f => f.IsSelected).ToArray()) // Observe array of IsSelected values
+            //    .Subscribe(_ => CalculateSelectedFilesSize());
+
+
         }
+
+        private void CalculateSelectedFilesSize()
+        {
+            sizeOfFilesSelected = Files.Where(f => f.IsSelected).Sum(f => f.FileSize).ToString();
+        }
+
+        private void CalculateDownloadsSize()
+        {
+            
+
+
+            try
+            {
+                // Get the Downloads directory path.  Adapt this to your needs!
+                string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+
+                // Check if the directory exists.
+                if (Directory.Exists(downloadsPath))
+                {
+                    //Calculate total number of files.
+
+
+                    totalNumber = $"Total no of files > 1 MB: {Files.Count.ToString()}";
+
+                    // Calculate the total size of all files.
+                    long totalSize = Directory.GetFiles(downloadsPath, "*", SearchOption.AllDirectories)
+                        .Sum(file => new FileInfo(file).Length);
+
+                    // Format the size (e.g., in MB).
+                    TotalDownloadsSize = $"Total Size of the files: {totalSize / (1024 * 1024)} MB"; // Or another formatting
+
+
+                }
+                else
+                {
+                    TotalDownloadsSize = "Downloads directory not found.";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TotalDownloadsSize = $"Error: {ex.Message}"; // Handle exceptions gracefully
+            }
+
+        }
+
 
         private string DetermineRowColor(double fileSizeMB)
         {
@@ -88,69 +206,6 @@ namespace LorealAvaloniaUI.ViewModels
             };
         }
         
-        /*
-        private void MoveSelectedFiles()
-        {
-            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
-
-            foreach (var file in selectedFiles)
-            {
-                try
-                {
-                    Console.WriteLine($"Trying to delete: {file.FullPath}");
-
-                    if (File.Exists(file.FullPath)) // Check if file exists
-                    {
-                        File.Delete(file.FullPath); // Delete from file system
-                        Files.Remove(file);         // Remove from UI
-                        Console.WriteLine($"{file.FileName} deleted successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"File not found: {file.FullPath}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error deleting file: {ex.Message}");
-                }
-            }
-
-            Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
-        }
-
-        private void SizeDetermination()
-        {
-            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
-
-            foreach (var file in selectedFiles)
-            {
-                try
-                {
-                    Console.WriteLine($"Trying to delete: {file.FullPath}");
-
-                    if (File.Exists(file.FullPath)) // Check if file exists
-                    {
-                        File.Delete(file.FullPath); // Delete from file system
-                        Files.Remove(file);         // Remove from UI
-                        Console.WriteLine($"{file.FileName} deleted successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"File not found: {file.FullPath}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error deleting file: {ex.Message}");
-                }
-            }
-            
-
-            Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
-        }
-
-        */
 
         private void DeleteSelectedFiles()
         {
@@ -179,6 +234,7 @@ namespace LorealAvaloniaUI.ViewModels
                 }
             }
 
+            CalculateDownloadsSize();
             Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
         }
 
@@ -213,6 +269,24 @@ namespace LorealAvaloniaUI.ViewModels
 
             _isSizeSortedAscending = !_isSizeSortedAscending; // Toggle sort order
         }
+
+        // Sort Files by Date (Ascending /Descending)
+        
+        private void SortFilesByDate()
+        {
+            var sortedFiles = _isDateSortedAscending
+                ? Files.OrderBy(f => f.FileSize).ToList()
+                : Files.OrderByDescending(f => f.FileSize).ToList();
+
+            Files.Clear();
+            foreach (var file in sortedFiles)
+            {
+                Files.Add(file);
+            }
+
+            _isDateSortedAscending = !_isDateSortedAscending; // Toggle sort order
+        }
+
     }
 
     public class FileItemViewModel : ReactiveObject
@@ -238,6 +312,7 @@ namespace LorealAvaloniaUI.ViewModels
             LastModified = lastModified;
             RowBackground = rowBackground;
             FullPath = fullPath;
+
         }
     }
 }
