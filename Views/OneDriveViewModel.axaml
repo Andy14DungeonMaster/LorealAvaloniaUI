@@ -9,32 +9,120 @@
 				<StackPanel>
 					<!-- File List using ItemsControl -->
 					<!-- File Summary -->
-					<StackPanel Orientation="Vertical" Margin="0,10,0,10">
-						<TextBlock Text="No of files with size >500 MB: 28" Foreground="White" FontSize="16"/>
-						<TextBlock Text="Total size of the files: 14 GB" Foreground="White" FontSize="16"/>
+					<!--  File Summary  -->
+					<StackPanel
+						Grid.Row="0"
+						Margin="0,10,0,10"
+						Orientation="Vertical">
+						<TextBlock
+							FontSize="16"
+							Foreground="White"
+							Text="Total No of Files"
+				/>
+						<TextBlock
+							FontSize="16"
+							Foreground="White"
+							Text="Total Size: 30 MB" />
 					</StackPanel>
 
+					<!--  Table Headers  -->
+					<Grid
+						Grid.Row="2"
+						Height="40"
+						Margin="0,10,0,0"
+						Background="Black"
+						ColumnDefinitions="40, *, 120, 200">
+						<CheckBox
+							Grid.Column="0"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center" />
 
-					<ItemsControl ItemsSource="{Binding DesktopFiles}">
-						<ItemsControl.ItemsPanel>
-							<ItemsPanelTemplate>
-								<StackPanel/>
-							</ItemsPanelTemplate>
-						</ItemsControl.ItemsPanel>
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Grid ColumnDefinitions="40, *, 120, 200" Height="40" Background="{Binding RowBackground}" Margin="0,5,0,0">
-									<CheckBox Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding IsSelected}"/>
-									<TextBlock Grid.Column="1" Text="{Binding FileName}" Foreground="White" VerticalAlignment="Center"/>
-									<TextBlock Grid.Column="2" Text="{Binding FileSize}" Foreground="White" VerticalAlignment="Center"/>
-									<TextBlock Grid.Column="3" Text="{Binding LastModified}" Foreground="White" VerticalAlignment="Center"/>
-								</Grid>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
+
+						<Button Grid.Column="1" Padding="0" Background="Transparent">
+							<!-- Remove default padding -->
+
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+								<!-- Adjust margin as needed -->
+								<TextBlock Text="File Name"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
+
+							</StackPanel>
+						</Button>
+
+						<Button Grid.Column="2" Padding="0" Background="Transparent">
+							<!-- Remove default padding -->
+
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+								<!-- Adjust margin as needed -->
+								<TextBlock Text="Size"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
+
+							</StackPanel>
+						</Button>
+
+						<Button Grid.Column="3" Padding="0" Background="Transparent">
+							<!-- Remove default padding -->
+
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+								<!-- Adjust margin as needed -->
+								<TextBlock Text="Last Modified"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
+
+							</StackPanel>
+						</Button>
+
+
+					</Grid>
+
+
+					<!--  Scrollable File List  -->
+					<ScrollViewer
+						Grid.Row="3"
+						Height="100"
+						HorizontalScrollBarVisibility="Disabled"
+						VerticalScrollBarVisibility="Auto">
+						<ItemsControl ItemsSource="{Binding DesktopFiles}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid
+										Height="40"
+										Margin="0,5,0,0"
+										Background="{Binding RowBackground}"
+										ColumnDefinitions="40, *, 120, 200">
+										<CheckBox
+											Grid.Column="0"
+											HorizontalAlignment="Center"
+											VerticalAlignment="Center"
+											IsChecked="{Binding IsSelected}" />
+										<TextBlock
+											Grid.Column="1"
+											VerticalAlignment="Center"
+											Foreground="White"
+											Text="{Binding FileName}" />
+										<TextBlock
+											Grid.Column="2"
+											VerticalAlignment="Center"
+											Foreground="White"
+											Text="{Binding FileSize, StringFormat='{}{0} MB'}" />
+										<TextBlock
+											Grid.Column="3"
+											VerticalAlignment="Center"
+											Foreground="White"
+											Text="{Binding LastModified, StringFormat='{}{0:g}'}" />
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+
+					<!-- Free Selected disk space -->
 					<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
 						<TextBlock Text="Size Selected: 3 GB" Foreground="DodgerBlue" FontSize="16"/>
-						<Button Content="Free up selected disk space" Background="#4444FF" Foreground="White" Padding="10,5"/>
+						<Button Content="Free up selected disk space"
+								Background="#4444FF"
+								Foreground="White"
+								Command="{Binding FreeSelectedDiskSpaceCommand}"
+								Padding="10,5"/>
 					</StackPanel>
 
 					<Border Background="#333" CornerRadius="10" Height="120" Margin="5">
