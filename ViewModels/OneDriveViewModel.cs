@@ -8,9 +8,10 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using LorealAvaloniaUI.Views;
 using System.Collections.Generic;
-using static System.Net.WebRequestMethods;
+//using static System.Net.WebRequestMethods;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -19,6 +20,23 @@ namespace LorealAvaloniaUI.ViewModels
         public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new ObservableCollection<DesktopFileItemViewModel>();
 
         public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommand { get; }
+
+        // Total Desktop folder size
+        private string _totalDesktopSize;
+
+        public string TotalDesktopSize
+        {
+            get => _totalDesktopSize;
+            set => this.RaiseAndSetIfChanged(ref _totalDesktopSize, value);
+        }
+
+        private string _totalNumberOfDesktopFiles;
+
+        public string totalDesktopNumber
+        {
+            get => _totalNumberOfDesktopFiles;
+            set => this.RaiseAndSetIfChanged(ref _totalNumberOfDesktopFiles, value);
+        }
 
         public OneDriveViewModel()
         {
@@ -42,8 +60,18 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     var fileInfo = new FileInfo(file);
 
-                    if (fileInfo.Length > OneMB)
+                    string command = $"attrib \"{fileInfo.FullName}\"";
+
+                    
+
+                    if ( true ) // fileInfo.Length(OneMB)
                     {
+                        string result = ExecuteCommand(command);
+                        Console.WriteLine(result);
+
+                        if (IsOfflineFile(result))
+                        {
+
                         var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
                         var rowColor = "#222222".ToString();
 
@@ -54,10 +82,10 @@ namespace LorealAvaloniaUI.ViewModels
                             rowBackground: rowColor,
                             fullPath: fileInfo.FullName
                         ));
+
+                        }
                     }
                 }
-
-
             }
 
             catch (UnauthorizedAccessException)
@@ -72,52 +100,85 @@ namespace LorealAvaloniaUI.ViewModels
             // Initialize commands
             FreeSelectedDiskSpaceCommand = ReactiveCommand.Create(FreeSelectedDiskSpace);
 
+            // calculate Size
+            CalculateDesktopSize();
+
         }
-        public static void ExecuteCommand(string command)
+
+        public static bool IsOfflineFile(string attribOutput)
         {
-            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command) // Use "powershell.exe" for PowerShell
+            // Split the string by spaces, removing empty entries
+            string[] parts = attribOutput.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Check if "U" is present (or absent to determine if it's a system file)
+            return ((parts[2]=="P") | (parts[1] == "P")); // True if "P" is *not* found (meaning it is a System File)
+        }
+
+        public static string ExecuteCommand(string command)
+        {
+            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command) // Use "powershell.exe" if needed
             {
-                CreateNoWindow = true, // Hide the console window
-                UseShellExecute = false, // Necessary for RedirectStandardOutput
-                RedirectStandardOutput = true, // Capture output
-                RedirectStandardError = true // Capture errors
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
             };
+
+            string output = "";
+            string error = "";
 
             try
             {
                 using (var process = Process.Start(processInfo))
                 {
-                    process.WaitForExit(); // Wait for the command to finish
+                    // Asynchronously read the output and error to avoid deadlocks
+                    output = process.StandardOutput.ReadToEndAsync().Result; // Use .Result carefully; see explanation below
+                    error = process.StandardError.ReadToEndAsync().Result; // Use .Result carefully; see explanation below
 
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
+                    // Optionally wait for exit to get the exit code (remove if not needed)
+                    //process.WaitForExit();
+                    //int exitCode = process.ExitCode; //Get the exit code.
 
-                    Console.WriteLine("Output:\n" + output);
-
-                    if (!string.IsNullOrEmpty(error))
-                    {
-                        Console.WriteLine("Error:\n" + error);
-                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error executing command: {ex.Message}");
+                error += Environment.NewLine + $"Error executing command: {ex.Message}"; // Append error message if needed
             }
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                output += Environment.NewLine + "Standard Error:" + Environment.NewLine + error;
+            }
+            return output.Trim();
+
         }
 
 
         public void FreeSelectedDiskSpace()
         {
             var selectedFiles = DesktopFiles.Where(f => f.IsSelected).ToList();
+            string changeStatusCommand;
 
             foreach (var file in selectedFiles)
             {
                 try
                 {
-                    //  bool isOffline = (File.GetAttributes(fileP) & FileAttributes.Offline) == FileAttributes.Offline;
+                    Console.WriteLine($"Trying to UnCache file: {file.FullPath}");
+                    if (System.IO.File.Exists(file.FullPath)) // Check if file exists
+                    {
+                        changeStatusCommand = string.Concat("attrib +u \"", file.FullPath, "\"");
+                        ExecuteCommand(changeStatusCommand);  // UnCache file
+                        DesktopFiles.Remove(file);         // Remove from UI
+                        Console.WriteLine($"{file.FileName} deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File not found: {file.FullPath}");
+                    }
 
-                    ExecuteCommand("attrib +p \"C:\\Users\\alekhya.nandina\\OneDrive - L'Oréal\\Desktop\\Windows App Screens.pptx\"");
+                    
                 }
 
                 catch (Exception ex)
@@ -125,6 +186,48 @@ namespace LorealAvaloniaUI.ViewModels
                     Console.WriteLine(file.ToString());
                 }
             }
+            // calculate Size
+            CalculateDesktopSize();
+        }
+
+        private void CalculateDesktopSize()
+        {
+
+            try
+            {
+                // Get the Desktop directory path.  Adapt this to your needs!
+                string desktopPath = Path.Combine(
+                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                 "OneDrive - L'Oréal\\Desktop");
+
+                // Check if the directory exists.
+                if (Directory.Exists(desktopPath))
+                {
+                    //Calculate total number of files.
+
+
+                    totalDesktopNumber = $"Total no of files > 1 MB: {DesktopFiles.Count.ToString()}";
+
+                    // Calculate the total size of all files.
+                    long totalSize = Directory.GetFiles(desktopPath, "*", SearchOption.AllDirectories)
+                        .Sum(file => new FileInfo(file).Length);
+
+                    // Format the size (e.g., in MB).
+                    TotalDesktopSize = $"Total Size of the files: {totalSize / (1024 * 1024)} MB"; // Or another formatting
+
+
+                }
+                else
+                {
+                    TotalDesktopSize = "Desktop directory not found.";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TotalDesktopSize = $"Error: {ex.Message}"; // Handle exceptions gracefully
+            }
+
         }
 
         public class DesktopFileItemViewModel : ReactiveObject
