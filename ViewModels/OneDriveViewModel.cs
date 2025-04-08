@@ -8,10 +8,14 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using LorealAvaloniaUI.Views;
 using System.Collections.Generic;
-//using static System.Net.WebRequestMethods;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
+using Avalonia.Logging;
+using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -21,9 +25,10 @@ namespace LorealAvaloniaUI.ViewModels
 
         public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommand { get; }
 
+        public Dictionary<string, string> fileAttribute = new Dictionary<string, string>();
+
         // Total Desktop folder size
         private string _totalDesktopSize;
-
         public string TotalDesktopSize
         {
             get => _totalDesktopSize;
@@ -50,26 +55,58 @@ namespace LorealAvaloniaUI.ViewModels
                 return;
             }
 
+            
+
             try
             {
+                Log.Information("Test log");
+
                 const long OneMB = 1048576; // 1 MB
                 var allFiles = Directory.GetFiles(desktopPath, "*.*", SearchOption.AllDirectories);
+
+                string command1 = $"attrib \"C://Users//alekhya.nandina//OneDrive - L'Oréal//Desktop//*.*\" /s";
+                string result1 = ExecuteCommand(command1);
+                string[] lines = result1.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+                string pattern = @"\s*([^\s])\s*C:\\"; // Correctly escaped backslashes
+                string FilePathFromcmd;
+
+                foreach (string line in lines)
+                {
+
+                    string charBefore=null;
+                    Match match = Regex.Match(line, pattern);
+
+                    if (match.Success)
+                    {
+                       charBefore = match.Groups[1].Value;
+                        Console.WriteLine($"Character before 'C:\\': {charBefore}"); // Output: U
+                    }
+                    else
+                    {
+                        Console.WriteLine("'C:\\' not found.");
+                    }
+
+                    FilePathFromcmd = line.Substring(line.IndexOf("C:\\"));
+                    fileAttribute.Add(FilePathFromcmd, charBefore);
+
+                }
+
+                //foreach (KeyValuePair<string, string> pair in fileAttributes)
+                //{
+                //    Console.WriteLine($"Key: {pair.Key}, Value: {pair.Value}");
+                //}
+                Console.WriteLine(result1);
 
 
                 foreach (var file in allFiles)
                 {
                     var fileInfo = new FileInfo(file);
 
-                    string command = $"attrib \"{fileInfo.FullName}\"";
-
-                    
-
                     if ( true ) // fileInfo.Length(OneMB)
                     {
-                        string result = ExecuteCommand(command);
-                        Console.WriteLine(result);
 
-                        if (IsOfflineFile(result))
+                        if (fileAttribute[fileInfo.FullName] == "P")
                         {
 
                         var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
@@ -103,15 +140,6 @@ namespace LorealAvaloniaUI.ViewModels
             // calculate Size
             CalculateDesktopSize();
 
-        }
-
-        public static bool IsOfflineFile(string attribOutput)
-        {
-            // Split the string by spaces, removing empty entries
-            string[] parts = attribOutput.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Check if "U" is present (or absent to determine if it's a system file)
-            return ((parts[2]=="P") | (parts[1] == "P")); // True if "P" is *not* found (meaning it is a System File)
         }
 
         public static string ExecuteCommand(string command)
@@ -172,10 +200,12 @@ namespace LorealAvaloniaUI.ViewModels
                         ExecuteCommand(changeStatusCommand);  // UnCache file
                         DesktopFiles.Remove(file);         // Remove from UI
                         Console.WriteLine($"{file.FileName} deleted successfully.");
+                        Log.Information("Deleteing the file " + file.FileName);
                     }
                     else
                     {
                         Console.WriteLine($"File not found: {file.FullPath}");
+
                     }
 
                     
@@ -183,11 +213,13 @@ namespace LorealAvaloniaUI.ViewModels
 
                 catch (Exception ex)
                 {
+                    Log.Error(ex.Message);
                     Console.WriteLine(file.ToString());
                 }
             }
             // calculate Size
             CalculateDesktopSize();
+            
         }
 
         private void CalculateDesktopSize()
@@ -196,6 +228,32 @@ namespace LorealAvaloniaUI.ViewModels
             try
             {
                 // Get the Desktop directory path.  Adapt this to your needs!
+                DriveInfo cDrive = new DriveInfo(@"C:\");
+                long totalSize=0;
+
+                if (cDrive.IsReady)
+                {
+                    // Total size of the drive in bytes
+                    totalSize = cDrive.TotalSize;
+
+                    // Available free space in bytes
+                    long freeSpace = cDrive.AvailableFreeSpace;
+
+                    // Used space in bytes
+                    long usedSpace = totalSize - freeSpace;
+
+
+                    Console.WriteLine($"C: Drive Information:");
+                    Console.WriteLine($"Total Size: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
+                    Console.WriteLine($"Free Space: {freeSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
+                    Console.WriteLine($"Used Space: {usedSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
+
+                }
+                else
+                {
+                    Console.WriteLine("C: drive is not ready.");
+                }
+
                 string desktopPath = Path.Combine(
                  Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                  "OneDrive - L'Oréal\\Desktop");
@@ -204,19 +262,14 @@ namespace LorealAvaloniaUI.ViewModels
                 if (Directory.Exists(desktopPath))
                 {
                     //Calculate total number of files.
-
-
                     totalDesktopNumber = $"Total no of files > 1 MB: {DesktopFiles.Count.ToString()}";
 
-                    // Calculate the total size of all files.
-                    long totalSize = Directory.GetFiles(desktopPath, "*", SearchOption.AllDirectories)
-                        .Sum(file => new FileInfo(file).Length);
 
                     // Format the size (e.g., in MB).
-                    TotalDesktopSize = $"Total Size of the files: {totalSize / (1024 * 1024)} MB"; // Or another formatting
-
-
+                    TotalDesktopSize = $"Total Size of C:\\ Drive: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"; // Or another formatting
+                    Log.Information("Total Size of System:" + TotalDesktopSize);
                 }
+
                 else
                 {
                     TotalDesktopSize = "Desktop directory not found.";

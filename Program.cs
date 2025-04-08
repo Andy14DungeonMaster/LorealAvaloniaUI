@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.ViewModels;
 using LorealAvaloniaUI.Views;
+using Serilog;
 
 namespace LorealAvaloniaUI;
 
@@ -16,7 +17,15 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         var services = new ServiceCollection();
+
+
 
         // ✅ Register ViewModels
         services.AddSingleton<MainViewModel>();

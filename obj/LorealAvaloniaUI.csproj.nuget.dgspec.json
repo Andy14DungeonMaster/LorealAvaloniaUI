@@ -87,6 +87,18 @@
               "target": "Package",
               "version": "[20.1.63, )"
             },
+            "Serilog": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "System.Reactive": {
               "target": "Package",
               "version": "[6.0.1, )"

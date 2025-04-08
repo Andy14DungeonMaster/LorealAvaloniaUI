@@ -135,6 +135,7 @@
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 Foreground="White"
+								Padding="10"
                                 Text="{Binding FileName}" />
                             <TextBlock
                                 Grid.Column="2"

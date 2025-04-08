@@ -297,3 +297,6 @@ C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\refi
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\LorealAv.D76FEDB8.Up2Date
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\LorealAvaloniaUI.genruntimeconfig.cache
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\ref\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.Sinks.Console.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.Sinks.File.dll

@@ -88,7 +88,8 @@
 										Height="40"
 										Margin="0,5,0,0"
 										Background="{Binding RowBackground}"
-										ColumnDefinitions="40, *, 120, 200">
+										ColumnDefinitions="40, *, 120, 200"
+										>
 										<CheckBox
 											Grid.Column="0"
 											HorizontalAlignment="Center"
@@ -98,11 +99,13 @@
 											Grid.Column="1"
 											VerticalAlignment="Center"
 											Foreground="White"
+
 											Text="{Binding FileName}" />
 										<TextBlock
 											Grid.Column="2"
 											VerticalAlignment="Center"
 											Foreground="White"
+											Padding="10"
 											Text="{Binding FileSize, StringFormat='{}{0} MB'}" />
 										<TextBlock
 											Grid.Column="3"
