@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
     x:DataType="vm:DownloadViewModel">
+	
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" /> 
@@ -98,7 +99,7 @@
 				</StackPanel>
 			</Button>
 
-			<Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortFilesCommand}">
+			<Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortFilesByDateCommand}">
 				<!-- Remove default padding -->
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

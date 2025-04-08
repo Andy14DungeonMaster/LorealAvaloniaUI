@@ -59,7 +59,7 @@ namespace LorealAvaloniaUI.ViewModels
 
             try
             {
-                Log.Information("Test log");
+                Log.Information("One Drive - Desktop Page\n");
 
                 const long OneMB = 1048576; // 1 MB
                 var allFiles = Directory.GetFiles(desktopPath, "*.*", SearchOption.AllDirectories);
@@ -89,6 +89,8 @@ namespace LorealAvaloniaUI.ViewModels
 
                     FilePathFromcmd = line.Substring(line.IndexOf("C:\\"));
                     fileAttribute.Add(FilePathFromcmd, charBefore);
+
+
 
                 }
 
@@ -242,7 +244,10 @@ namespace LorealAvaloniaUI.ViewModels
                     // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-
+                    Log.Information("C: Drive Information:");
+                    Log.Information("Total Size: " + (totalSize / (1024.0 * 1024.0 * 1024.0)) + "GB");
+                    Log.Information("Free Space:" + (freeSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
+                    Log.Information("Used Space:" + (usedSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
                     Console.WriteLine($"C: Drive Information:");
                     Console.WriteLine($"Total Size: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
                     Console.WriteLine($"Free Space: {freeSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
@@ -267,7 +272,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                     // Format the size (e.g., in MB).
                     TotalDesktopSize = $"Total Size of C:\\ Drive: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"; // Or another formatting
-                    Log.Information("Total Size of System:" + TotalDesktopSize);
+                    
                 }
 
                 else

@@ -67,16 +67,7 @@ namespace LorealAvaloniaUI.ViewModels
         {
             get => _isEnabledStatus;
             set => this.RaiseAndSetIfChanged(ref _isEnabledStatus, value); // Or OnPropertyChanged if using INotifyPropertyChanged
-        }
-        ////Select FileSize and CheckBox
-        //private bool _isChecked;
-        //public bool IsChecked
-        //{
-        //    get => _isChecked;
-        //    set => this.RaiseAndSetIfChanged(ref _isChecked, value);
-        //}
-
-       
+        }      
 
         public DownloadViewModel()
         {
@@ -275,8 +266,8 @@ namespace LorealAvaloniaUI.ViewModels
         private void SortFilesByDate()
         {
             var sortedFiles = _isDateSortedAscending
-                ? Files.OrderBy(f => f.FileSize).ToList()
-                : Files.OrderByDescending(f => f.FileSize).ToList();
+                ? Files.OrderBy(f => f.LastModified).ToList()
+                : Files.OrderByDescending(f => f.LastModified).ToList();
 
             Files.Clear();
             foreach (var file in sortedFiles)

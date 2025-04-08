@@ -300,3 +300,6 @@ C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\ref\
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.dll
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.Sinks.Console.dll
 C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\bin\Debug\net9.0\Serilog.Sinks.File.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\refint\LorealAvaloniaUI.dll
+C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\obj\Debug\net9.0\LorealAvaloniaUI.pdb
