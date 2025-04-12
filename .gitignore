@@ -1,2 +1,31 @@
+# Build output directories
+bin/
+obj/
 
-/.vs
+# Avalonia-specific cache files
+*.axaml.g.cs
+*.xaml.g.cs
+
+# User-specific files
+*.userprefs
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs
+logs/
+*.log
+
+# IDE-specific files
+.vscode/
+.idea/
+*.code-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+packages/
+.vs/
