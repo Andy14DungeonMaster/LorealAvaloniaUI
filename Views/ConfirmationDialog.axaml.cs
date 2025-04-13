@@ -42,12 +42,12 @@ namespace LorealAvaloniaUI.Views
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
             ConfirmCommand = ReactiveCommand.Create(() =>
             {
-                _dialog.Close();
+                Console.WriteLine("ConfirmCommand executed");
                 return true;
             });
             CancelCommand = ReactiveCommand.Create(() =>
             {
-                _dialog.Close();
+                Console.WriteLine("CancelCommand executed");
                 return false;
             });
         }
@@ -58,38 +58,53 @@ namespace LorealAvaloniaUI.Views
             var viewModel = new ConfirmationDialogViewModel(dialog) { Message = message };
             dialog.DataContext = viewModel;
 
+            Console.WriteLine($"ShowAsync called with message: {message}, parent: {(parent == null ? "null" : "non-null")}");
+
             if (parent == null || parent == dialog || !parent.IsVisible)
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 var tcs = new TaskCompletionSource<bool>();
+                bool resultSet = false;
 
-                // Subscribe to commands to capture result
                 var confirmSubscription = viewModel.ConfirmCommand
-                    .Subscribe(result => tcs.TrySetResult(result));
-                var cancelSubscription = viewModel.CancelCommand
-                    .Subscribe(result => tcs.TrySetResult(result));
+                    .Subscribe(result =>
+                    {
+                        Console.WriteLine($"Confirm result: {result}");
+                        resultSet = true;
+                        tcs.TrySetResult(result);
+                        dialog.Close();
+                    });
 
-                // Handle window close without button press (e.g., X button)
+                var cancelSubscription = viewModel.CancelCommand
+                    .Subscribe(result =>
+                    {
+                        Console.WriteLine($"Cancel result: {result}");
+                        resultSet = true;
+                        tcs.TrySetResult(result);
+                        dialog.Close();
+                    });
+
                 dialog.Closed += (s, e) =>
                 {
-                    if (!tcs.Task.IsCompleted)
-                        tcs.TrySetResult(false); // Default to false if closed without action
-                };
-
-                try
-                {
-                    dialog.Show();
-                    return await tcs.Task;
-                }
-                finally
-                {
-                    // Clean up subscriptions
+                    Console.WriteLine($"Dialog closed, resultSet: {resultSet}");
+                    if (!resultSet && !tcs.Task.IsCompleted)
+                    {
+                        Console.WriteLine("Setting default result to false");
+                        tcs.TrySetResult(false);
+                    }
                     confirmSubscription.Dispose();
                     cancelSubscription.Dispose();
-                }
+                };
+
+                dialog.Show();
+                var result = await tcs.Task;
+                Console.WriteLine($"ShowAsync returning: {result}");
+                return result;
             }
 
-            return await dialog.ShowDialog<bool>(parent);
+            var dialogResult = await dialog.ShowDialog<bool>(parent);
+            Console.WriteLine($"ShowDialog returning: {dialogResult}");
+            return dialogResult;
         }
     }
 }
