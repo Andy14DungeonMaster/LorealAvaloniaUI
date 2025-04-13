@@ -28,10 +28,10 @@ public partial class App : Application
         serviceCollection.AddSingleton<MainViewModel>();
         serviceCollection.AddTransient<DashboardViewModel>();
         serviceCollection.AddTransient<SettingsViewModel>();
-        serviceCollection.AddTransient<DownloadViewModel>();  // ✅ Fix missing ViewModel
-        serviceCollection.AddTransient<OneDriveViewModel>();  // ✅ Fix missing ViewModel
+        serviceCollection.AddTransient<DownloadViewModel>();
+        serviceCollection.AddTransient<OneDriveViewModel>();
         serviceCollection.AddTransient<OutlookFilesViewModel>();
-        serviceCollection.AddTransient<OfficeFileCacheViewModel>();// ✅ Fix missing ViewModel
+        serviceCollection.AddTransient<OfficeFileCacheViewModel>();
 
         // ✅ Register Services
         serviceCollection.AddSingleton<NavigationService>();
@@ -51,8 +51,8 @@ public partial class App : Application
                 };
 
                 desktop.MainWindow = mainWindow;
-                mainWindow.Show();  // ✅ Ensure the window appears
-                mainWindow.Activate();  // ✅ Bring window to the front
+                mainWindow.Show();
+                mainWindow.Activate();
             });
         }
 

@@ -4,9 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using ReactiveUI;
-using LorealAvaloniaUI.Views;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using Avalonia;
+using Avalonia.Controls;
+using LorealAvaloniaUI.Views;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -14,42 +18,33 @@ namespace LorealAvaloniaUI.ViewModels
     {
         public ObservableCollection<FileItemViewModel> Files { get; } = new ObservableCollection<FileItemViewModel>();
 
-        //Calculate Size of Selected Files
-        private string _SelectFilesSize;
-
-        public string sizeOfFilesSelected
+        private string _selectFilesSize = "0.00 MB";
+        public string SizeOfFilesSelected
         {
-            get => _SelectFilesSize;
-            set => this.RaiseAndSetIfChanged(ref _SelectFilesSize, value);
+            get => _selectFilesSize;
+            set => this.RaiseAndSetIfChanged(ref _selectFilesSize, value);
         }
 
-
-        // Command to delete files
         public ReactiveCommand<Unit, Unit> DeleteSelectedFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> MoveSelectedFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
-
         public ReactiveCommand<Unit, Unit> SortFilesByDateCommand { get; }
-
         public ReactiveCommand<Unit, Unit> CalculateDownloadsSizeCommand { get; }
 
         private bool _isSortedAscending = true;
         private bool _isSizeSortedAscending = true;
         private bool _isDateSortedAscending = true;
 
-        // Total Downloads folder size
-        private string _totalDownloadsSize;
-
+        private string _totalDownloadsSize = "0.00 MB";
         public string TotalDownloadsSize
         {
             get => _totalDownloadsSize;
             set => this.RaiseAndSetIfChanged(ref _totalDownloadsSize, value);
         }
 
-        private string _totalNumberOfFiles;
-
-        public string totalNumber
+        private string _totalNumberOfFiles = "Total no of files > 1 MB: 0";
+        public string TotalNumber
         {
             get => _totalNumberOfFiles;
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfFiles, value);
@@ -59,225 +54,336 @@ namespace LorealAvaloniaUI.ViewModels
         public bool IsActive
         {
             get => _isActive;
-            set => this.RaiseAndSetIfChanged(ref _isActive, value); // Use SetProperty for INotifyPropertyChanged
+            set => this.RaiseAndSetIfChanged(ref _isActive, value);
         }
 
-        private bool _isEnabledStatus;
-        public bool IsEnabledStatus
+        private bool? _selectAll = false;
+        public bool? SelectAll
         {
-            get => _isEnabledStatus;
-            set => this.RaiseAndSetIfChanged(ref _isEnabledStatus, value); // Or OnPropertyChanged if using INotifyPropertyChanged
-        }      
+            get => _selectAll;
+            set
+            {
+                var oldValue = _selectAll;
+                this.RaiseAndSetIfChanged(ref _selectAll, value);
+                if (_selectAll != oldValue && value.HasValue)
+                {
+                    foreach (var file in Files)
+                    {
+                        file.IsSelected = value.Value;
+                    }
+                }
+            }
+        }
 
         public DownloadViewModel()
         {
+            DeleteSelectedFilesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFilesAsync);
+            MoveSelectedFilesCommand = ReactiveCommand.CreateFromTask(MoveSelectedFilesAsync);
+            SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
+            SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
+            SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
+            CalculateDownloadsSizeCommand = ReactiveCommand.CreateFromTask(CalculateDownloadsSizeAsync);
 
-              // Call your function
+            DeleteSelectedFilesCommand.ThrownExceptions
+                .Subscribe(ex =>
+                {
+                    Console.WriteLine($"Delete command error: {ex}");
+                });
 
-            string downloadsPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "Downloads"
-            );
+            InitializeAsync().ConfigureAwait(false);
+        }
 
-            if (!Directory.Exists(downloadsPath))
+        private async Task InitializeAsync()
+        {
+            await LoadFilesAsync();
+            await CalculateDownloadsSizeAsync();
+            SetupObservables();
+        }
+
+        private void SetupObservables()
+        {
+            this.WhenAnyValue(x => x.Files.Count)
+                .Subscribe(count => TotalNumber = $"Total no of files > 1 MB: {count}");
+
+            Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                h => Files.CollectionChanged += h,
+                h => Files.CollectionChanged -= h
+            )
+            .StartWith(default(EventPattern<NotifyCollectionChangedEventArgs>))
+            .Subscribe(_ =>
             {
-                Console.WriteLine("Downloads directory does not exist!");
-                return;
-            }
+                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                    .Select(_ => Files.Where(f => f.IsSelected).Sum(f => f.FileSize))
+                    .Subscribe(sum => SizeOfFilesSelected = $"{sum:0.00} MB");
 
+                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                    .Select(_ =>
+                    {
+                        if (Files.Count == 0) return false;
+                        bool allSelected = Files.All(f => f.IsSelected);
+                        bool noneSelected = Files.All(f => !f.IsSelected);
+                        return allSelected ? true : noneSelected ? false : (bool?)null;
+                    })
+                    .Subscribe(state =>
+                    {
+                        if (_selectAll != state)
+                        {
+                            _selectAll = state;
+                            this.RaisePropertyChanged(nameof(SelectAll));
+                        }
+                    });
+            });
+        }
+
+        private async Task LoadFilesAsync()
+        {
+            IsActive = true;
             try
             {
-                const long OneMB = 1048576; // 1 MB
-                var allFiles = Directory.GetFiles(downloadsPath, "*.*", SearchOption.AllDirectories);
+                string downloadsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "Downloads"
+                );
 
-                foreach (var file in allFiles)
+                if (!Directory.Exists(downloadsPath))
                 {
-                    var fileInfo = new FileInfo(file);
+                    Console.WriteLine("Downloads directory does not exist!");
+                    return;
+                }
 
-                    if (fileInfo.Length > OneMB)
+                const long OneMB = 1048576;
+                var fileItems = await Task.Run(() =>
+                {
+                    var items = new List<FileItemViewModel>();
+                    var allFiles = Directory.GetFiles(downloadsPath, "*.*", SearchOption.AllDirectories);
+
+                    foreach (var file in allFiles)
                     {
-                        var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
-                        var rowColor = DetermineRowColor(fileSizeMB);
-
-                        Files.Add(new FileItemViewModel(
-                            fileName: fileInfo.Name,
-                            fileSize: fileSizeMB,
-                            lastModified: fileInfo.LastWriteTime,
-                            rowBackground: rowColor,
-                            fullPath: fileInfo.FullName
-                        ));
+                        try
+                        {
+                            var fileInfo = new FileInfo(file);
+                            if (fileInfo.Length > OneMB)
+                            {
+                                var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
+                                items.Add(new FileItemViewModel(
+                                    fileInfo.Name,
+                                    fileSizeMB,
+                                    fileInfo.LastWriteTime,
+                                    DetermineRowColor(fileSizeMB),
+                                    fileInfo.FullName
+                                ));
+                            }
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Console.WriteLine($"Access denied to file: {file}");
+                        }
                     }
+                    return items;
+                });
+
+                Files.Clear();
+                foreach (var item in fileItems)
+                {
+                    Files.Add(item);
                 }
 
                 Console.WriteLine($"Found {Files.Count} files larger than 1MB");
             }
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine("Access denied to some files/folders.");
-            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error loading files: {ex.Message}");
             }
-
-            
-           
-            // ✅ Initialize commands
-            DeleteSelectedFilesCommand = ReactiveCommand.Create(DeleteSelectedFiles);
-            SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
-            SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
-            SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
-            CalculateDownloadsSizeCommand = ReactiveCommand.Create(CalculateDownloadsSize);
-
-            
-            // 
-            CalculateDownloadsSize();
-
-            //this.WhenAnyValue(x => x.Files.Select(f => f.IsSelected).ToArray()) // Observe array of IsSelected values
-            //    .Subscribe(_ => CalculateSelectedFilesSize());
-
-
+            finally
+            {
+                IsActive = false;
+            }
         }
 
-        private void CalculateSelectedFilesSize()
+        private async Task DeleteSelectedFilesAsync()
         {
-            sizeOfFilesSelected = Files.Where(f => f.IsSelected).Sum(f => f.FileSize).ToString();
-        }
-
-        private void CalculateDownloadsSize()
-        {
-            
-
-
+            IsActive = true;
             try
             {
-                // Get the Downloads directory path.  Adapt this to your needs!
-                string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-
-                // Check if the directory exists.
-                if (Directory.Exists(downloadsPath))
+                var selectedFiles = Files.Where(f => f.IsSelected).ToList();
+                if (!selectedFiles.Any())
                 {
-                    //Calculate total number of files.
-
-
-                    totalNumber = $"Total no of files > 1 MB: {Files.Count.ToString()}";
-
-                    // Calculate the total size of all files.
-                    long totalSize = Directory.GetFiles(downloadsPath, "*", SearchOption.AllDirectories)
-                        .Sum(file => new FileInfo(file).Length);
-
-                    // Format the size (e.g., in MB).
-                    TotalDownloadsSize = $"Total Size of the files: {totalSize / (1024 * 1024)} MB"; // Or another formatting
-
-
+                    Console.WriteLine("No files selected for deletion.");
+                    return;
                 }
-                else
+
+                string message = $"Are you sure you want to permanently delete {selectedFiles.Count} file(s)?";
+                bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
+
+                if (!confirmed)
+                {
+                    Console.WriteLine("Deletion cancelled by user.");
+                    return;
+                }
+
+                foreach (var file in selectedFiles)
+                {
+                    try
+                    {
+                        if (File.Exists(file.FullPath))
+                        {
+                            await Task.Run(() => File.Delete(file.FullPath));
+                            Files.Remove(file);
+                            Console.WriteLine($"{file.FileName} deleted successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"File not found: {file.FullPath}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error deleting {file.FileName}: {ex.Message}");
+                    }
+                }
+                Console.WriteLine($"{selectedFiles.Count} file(s) processed.");
+                await CalculateDownloadsSizeAsync();
+            }
+            finally
+            {
+                IsActive = false;
+            }
+        }
+
+        private async Task MoveSelectedFilesAsync()
+        {
+            IsActive = true;
+            try
+            {
+                string targetDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "Downloads", "MovedFiles"
+                );
+                if (!Directory.Exists(targetDirectory))
+                {
+                    Directory.CreateDirectory(targetDirectory);
+                }
+
+                var selectedFiles = Files.Where(f => f.IsSelected).ToList();
+                foreach (var file in selectedFiles)
+                {
+                    try
+                    {
+                        if (File.Exists(file.FullPath))
+                        {
+                            string newPath = Path.Combine(targetDirectory, file.FileName);
+                            await Task.Run(() => File.Move(file.FullPath, newPath));
+                            Files.Remove(file);
+                            Console.WriteLine($"{file.FileName} moved successfully.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error moving {file.FileName}: {ex.Message}");
+                    }
+                }
+                await CalculateDownloadsSizeAsync();
+            }
+            finally
+            {
+                IsActive = false;
+            }
+        }
+
+        private async Task CalculateDownloadsSizeAsync()
+        {
+            IsActive = true;
+            try
+            {
+                string downloadsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "Downloads"
+                );
+
+                if (!Directory.Exists(downloadsPath))
                 {
                     TotalDownloadsSize = "Downloads directory not found.";
+                    return;
                 }
 
+                long totalSize = await Task.Run(() =>
+                {
+                    return Directory.GetFiles(downloadsPath, "*", SearchOption.AllDirectories)
+                        .Sum(file =>
+                        {
+                            try
+                            {
+                                return new FileInfo(file).Length;
+                            }
+                            catch
+                            {
+                                return 0;
+                            }
+                        });
+                });
+
+                TotalDownloadsSize = $"Total Size: {totalSize / (1024 * 1024):0.00} MB";
+                TotalNumber = $"Total no of files > 1 MB: {Files.Count}";
             }
             catch (Exception ex)
             {
-                TotalDownloadsSize = $"Error: {ex.Message}"; // Handle exceptions gracefully
+                TotalDownloadsSize = $"Error: {ex.Message}";
             }
-
+            finally
+            {
+                IsActive = false;
+            }
         }
-
 
         private string DetermineRowColor(double fileSizeMB)
         {
-            // Define color logic based on file size
             return fileSizeMB switch
             {
-                > 100 => "#FF6666",    // Red for files > 100MB
-                > 50 => "#FFA500",     // Orange for files > 50MB
-                > 10 => "#FFD700",     // Gold for files > 10MB
-                _ => "#222222"         // Dark gray for others (1-10MB)
+                > 100 => "#FF6666",
+                > 50 => "#FFA500",
+                > 10 => "#FFD700",
+                _ => "#222222"
             };
         }
-        
 
-        private void DeleteSelectedFiles()
-        {
-            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
-
-            foreach (var file in selectedFiles)
-            {
-                try
-                {
-                    Console.WriteLine($"Trying to delete: {file.FullPath}");
-
-                    if (File.Exists(file.FullPath)) // Check if file exists
-                    {
-                        File.Delete(file.FullPath); // Delete from file system
-                        Files.Remove(file);         // Remove from UI
-                        Console.WriteLine($"{file.FileName} deleted successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"File not found: {file.FullPath}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error deleting file: {ex.Message}");
-                }
-            }
-
-            CalculateDownloadsSize();
-            Console.WriteLine($"{selectedFiles.Count} file(s) deleted.");
-        }
-
-        //  Sort Files by Name (Ascending/Descending)
         private void SortFilesByName()
         {
             var sortedFiles = _isSortedAscending
                 ? Files.OrderBy(f => f.FileName).ToList()
                 : Files.OrderByDescending(f => f.FileName).ToList();
 
-            Files.Clear();
-            foreach (var file in sortedFiles)
-            {
-                Files.Add(file);
-            }
-
-            _isSortedAscending = !_isSortedAscending; // Toggle sort order
+            UpdateFilesCollection(sortedFiles);
+            _isSortedAscending = !_isSortedAscending;
         }
 
-        //  Sort Files by Size (Ascending/Descending)
         private void SortFilesBySize()
         {
             var sortedFiles = _isSizeSortedAscending
                 ? Files.OrderBy(f => f.FileSize).ToList()
                 : Files.OrderByDescending(f => f.FileSize).ToList();
 
-            Files.Clear();
-            foreach (var file in sortedFiles)
-            {
-                Files.Add(file);
-            }
-
-            _isSizeSortedAscending = !_isSizeSortedAscending; // Toggle sort order
+            UpdateFilesCollection(sortedFiles);
+            _isSizeSortedAscending = !_isSizeSortedAscending;
         }
 
-        // Sort Files by Date (Ascending /Descending)
-        
         private void SortFilesByDate()
         {
             var sortedFiles = _isDateSortedAscending
                 ? Files.OrderBy(f => f.LastModified).ToList()
                 : Files.OrderByDescending(f => f.LastModified).ToList();
 
+            UpdateFilesCollection(sortedFiles);
+            _isDateSortedAscending = !_isDateSortedAscending;
+        }
+
+        private void UpdateFilesCollection(IEnumerable<FileItemViewModel> sortedFiles)
+        {
             Files.Clear();
             foreach (var file in sortedFiles)
             {
                 Files.Add(file);
             }
-
-            _isDateSortedAscending = !_isDateSortedAscending; // Toggle sort order
         }
-
     }
 
     public class FileItemViewModel : ReactiveObject
@@ -303,7 +409,6 @@ namespace LorealAvaloniaUI.ViewModels
             LastModified = lastModified;
             RowBackground = rowBackground;
             FullPath = fullPath;
-
         }
     }
 }
