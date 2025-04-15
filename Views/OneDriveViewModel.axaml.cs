@@ -10,6 +10,6 @@ public partial class OneDriveView : UserControl
     {
         InitializeComponent();
         DataContext = new OneDriveViewModel();
-        Log.Information("**One Drive Menu Selected**");
+        Log.Information("Initiating OneDrive Menu");
     }
 } 

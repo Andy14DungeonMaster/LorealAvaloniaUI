@@ -16,7 +16,8 @@ namespace LorealAvaloniaUI.ViewModels
 {
     public class OneDriveViewModel : ReactiveObject
     {
-        private readonly string _desktopPath;
+        // Desktop Tab
+        private readonly string desktopPath;
         private readonly ConcurrentDictionary<string, string> _fileAttributes = new();
         private string _totalDesktopSize;
         private string _totalNumberOfDesktopFiles;
@@ -25,11 +26,51 @@ namespace LorealAvaloniaUI.ViewModels
         private bool _isSortBySizeAscending = true;
         private bool _isSortByDateAscending = true;
 
+        // Documents Tab
+        private readonly string documentsPath;
+        private string _totaldocumentsSize;
+        private string _totalNumberOfDocumentsFiles;
+        private bool _selectAllDocuments;
+
+        // Pictures Tab
+        private readonly string picturesPath;
+        private string _totalpicturesSize;
+        private string _totalNumberOfpicturesFiles;
+        private bool _selectAllPictures;
+
+
+
+        //private bool _isSortByNameAscendingDocuments = true;
+        //private bool _isSortBySizeAscendingDocuments = true;
+        //private bool _isSortByDateAscendingDocuments = true;
+
+        private string _desktopTab = "Desktop";
+        private string _documentsTab = "Documents";
+        private string _picturesTab = "Pictures";
+
+
         public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new();
+
+        public ObservableCollection<DesktopFileItemViewModel> DocumentFiles { get; } = new();
+
+        public ObservableCollection<DesktopFileItemViewModel> PicturesFiles { get; } = new();
+
         public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommand { get; }
         public ReactiveCommand<Unit, Unit> SortByNameCommand { get; }
         public ReactiveCommand<Unit, Unit> SortBySizeCommand { get; }
         public ReactiveCommand<Unit, Unit> SortByDateCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommandDocuments { get; }
+        public ReactiveCommand<Unit, Unit> SortByNameDocumentsCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortBySizeDocumentsCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortByDateDocumentsCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommandPictures { get; }
+        public ReactiveCommand<Unit, Unit> SortByNamePicturesCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortBySizePicturesCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortByDatePicturesCommand { get; }
+
+
 
         public string TotalDesktopSize
         {
@@ -43,25 +84,84 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfDesktopFiles, value);
         }
 
+        public string TotalDocumentSize
+        {
+            get => _totaldocumentsSize;
+            set => this.RaiseAndSetIfChanged(ref _totaldocumentsSize, value);
+        }
+
+        public string TotalDocumentNumber
+        {
+            get => _totalNumberOfDocumentsFiles;
+            set => this.RaiseAndSetIfChanged(ref _totalNumberOfDocumentsFiles, value);
+        }
+
+        public string TotalPicturesSize
+        {
+            get => _totalpicturesSize;
+            set => this.RaiseAndSetIfChanged(ref _totalpicturesSize, value);
+        }
+
+        public string TotalPicturesNumber
+        {
+            get => _totalNumberOfpicturesFiles;
+            set => this.RaiseAndSetIfChanged(ref _totalNumberOfpicturesFiles, value);
+        }
+
         public bool SelectAll
         {
             get => _selectAll;
             set => this.RaiseAndSetIfChanged(ref _selectAll, value);
         }
 
+        public bool SelectAllDocuments
+        {
+            get => _selectAllDocuments;
+            set => this.RaiseAndSetIfChanged(ref _selectAllDocuments, value);
+        }
+
+        public bool SelectAllPictures
+        {
+            get => _selectAllPictures;
+            set => this.RaiseAndSetIfChanged(ref _selectAllPictures, value);
+        }
+
         public OneDriveViewModel()
         {
-            _desktopPath = Path.Combine(
+            desktopPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "OneDrive - L'Oréal\\Desktop");
+
+            documentsPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "OneDrive - L'Oréal\\Documents");
+
+            picturesPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "OneDrive - L'Oréal\\Pictures");
 
             _totalDesktopSize = string.Empty;
             _totalNumberOfDesktopFiles = string.Empty;
 
+            _totaldocumentsSize = string.Empty;
+            _totalNumberOfDocumentsFiles = string.Empty;
+
+            
+
             FreeSelectedDiskSpaceCommand = ReactiveCommand.CreateFromTask(FreeSelectedDiskSpaceAsync);
-            SortByNameCommand = ReactiveCommand.Create(SortByName);
-            SortBySizeCommand = ReactiveCommand.Create(SortBySize);
-            SortByDateCommand = ReactiveCommand.Create(SortByDate);
+            SortByNameCommand = ReactiveCommand.Create(() => SortByName(_desktopTab));
+            SortBySizeCommand = ReactiveCommand.Create(() => SortBySize(_desktopTab));
+            SortByDateCommand = ReactiveCommand.Create(() => SortByDate(_desktopTab));
+
+            FreeSelectedDiskSpaceCommandDocuments = ReactiveCommand.CreateFromTask(FreeSelectedDiskSpaceDocumentsAsync);
+            SortByNameDocumentsCommand = ReactiveCommand.Create(() => SortByName(_documentsTab));
+            SortBySizeDocumentsCommand = ReactiveCommand.Create(() => SortBySize(_documentsTab));
+            SortByDateDocumentsCommand = ReactiveCommand.Create(() => SortByDate(_documentsTab));
+
+            FreeSelectedDiskSpaceCommandPictures = ReactiveCommand.CreateFromTask(FreeSelectedDiskSpacePicturesAsync);
+            SortByNamePicturesCommand = ReactiveCommand.Create(() => SortByName(_picturesTab));
+            SortBySizePicturesCommand = ReactiveCommand.Create(() => SortBySize(_picturesTab));
+            SortByDatePicturesCommand = ReactiveCommand.Create(() => SortByDate(_picturesTab));
 
             this.WhenAnyValue(x => x.SelectAll)
                 .Subscribe(selectAll =>
@@ -72,30 +172,86 @@ namespace LorealAvaloniaUI.ViewModels
                     }
                 });
 
+            this.WhenAnyValue(x => x.SelectAllDocuments)
+                .Subscribe(selectAllDocuments =>
+                {
+                    foreach (var file in DocumentFiles)
+                    {
+                        file.IsSelected = selectAllDocuments;
+                    }
+                });
+
+            this.WhenAnyValue(x => x.SelectAllPictures)
+                .Subscribe(selectAllPictures =>
+                {
+                    foreach (var file in PicturesFiles)
+                    {
+                        file.IsSelected = selectAllPictures;
+                    }
+                });
+
             // Perform async initialization without blocking
             InitializeAsync().GetAwaiter().OnCompleted(() => { });
         }
 
+        private async Task FreeSelectedDiskSpaceAsync()
+        {
+            await FreeDiskSpaceAsync(DesktopFiles, _desktopTab);
+        }
+
+        private async Task FreeSelectedDiskSpaceDocumentsAsync()
+        {
+            await FreeDiskSpaceAsync(DocumentFiles, _documentsTab);
+        }
+
+        private async Task FreeSelectedDiskSpacePicturesAsync()
+        {
+            await FreeDiskSpaceAsync(PicturesFiles, _picturesTab);
+        }
+
+
         private async Task InitializeAsync()
         {
-            if (!Directory.Exists(_desktopPath))
+            if (!Directory.Exists(desktopPath))
             {
-                Log.Error("Desktop directory does not exist: {_desktopPath}", _desktopPath);
+                Log.Error("Desktop directory does not exist: {DesktopPath}", desktopPath);
                 await UpdateUIAsync(() => TotalDesktopSize = "Desktop directory not found.");
+                return;
+            }
+
+            if (!Directory.Exists(documentsPath))
+            {
+                Log.Error("Documents directory does not exist: {DocumentsPath}", documentsPath);
+                await UpdateUIAsync(() => TotalDesktopSize = "Documents directory not found.");
+                return;
+            }
+
+            if (!Directory.Exists(picturesPath))
+            {
+                Log.Error("Pictures directory does not exist: {PicturesPath}", picturesPath);
+                await UpdateUIAsync(() => TotalDesktopSize = "Pictures directory not found.");
                 return;
             }
 
             try
             {
-                Log.Information("Initializing OneDrive Desktop Page");
 
                 await Task.WhenAll(
-                    LoadFileAttributesAsync()
+                    LoadFileAttributesAsync(desktopPath)
                 );
 
                 await Task.WhenAll(
-                    CalculateDesktopSizeAsync()  //Separated call to calculate Size on tab open
+                    LoadFileAttributesAsync(documentsPath)
+                );
+
+                await Task.WhenAll(
+                   LoadFileAttributesAsync(picturesPath)
+               );
+
+                await Task.WhenAll(
+                    CalculateSizeAsync() //Separated call to calculate Size on tab open
                     );
+
             }
             catch (Exception ex)
             {
@@ -104,15 +260,15 @@ namespace LorealAvaloniaUI.ViewModels
             }
         }
 
-        private async Task LoadFileAttributesAsync()
+        private async Task LoadFileAttributesAsync(string path)
         {
             const long OneMB = 1048576;
-            string command = $"attrib \"{_desktopPath}\\*.*\" /s";
+            string command = $"attrib \"{path}\\*.*\" /s";
             string result = await ExecuteCommandAsync(command);
             string[] lines = result.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             var pattern = new Regex(@"\s*([^\s])\s*(C:\\.*)", RegexOptions.Compiled);
-            var files = await Task.Run(() => Directory.GetFiles(_desktopPath, "*.*", SearchOption.AllDirectories));
+            var files = await Task.Run(() => Directory.GetFiles(path, "*.*", SearchOption.AllDirectories));
 
             Parallel.ForEach(lines, line =>
             {
@@ -135,12 +291,38 @@ namespace LorealAvaloniaUI.ViewModels
                             var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
                             await UpdateUIAsync(() =>
                             {
-                                DesktopFiles.Add(new DesktopFileItemViewModel(
-                                    fileInfo.Name,
-                                    fileSizeMB,
-                                    fileInfo.LastWriteTime,
-                                    "#222222",
-                                    fileInfo.FullName));
+                            if (path == desktopPath)
+                            {
+                                    DesktopFiles.Add(new DesktopFileItemViewModel(
+                                        fileInfo.Name,
+                                        fileSizeMB,
+                                        fileInfo.LastWriteTime,
+                                        "#222222",
+                                        fileInfo.FullName));
+                                    }
+                            else if (path == documentsPath) {
+                                    DocumentFiles.Add(new DesktopFileItemViewModel(
+                                            fileInfo.Name,
+                                            fileSizeMB,
+                                            fileInfo.LastWriteTime,
+                                            "#222222",
+                                            fileInfo.FullName));
+                                    }
+
+                                else if (path == picturesPath)
+                                {
+                                    PicturesFiles.Add(new DesktopFileItemViewModel(
+                                            fileInfo.Name,
+                                            fileSizeMB,
+                                            fileInfo.LastWriteTime,
+                                            "#222222",
+                                            fileInfo.FullName));
+                                }
+                                else
+                                {
+                                    Log.Information("Not able to load files");
+                                }
+
                             });
                         }
                     }
@@ -184,14 +366,15 @@ namespace LorealAvaloniaUI.ViewModels
             }
         }
 
-        private async Task FreeSelectedDiskSpaceAsync()
+        private async Task FreeDiskSpaceAsync(ObservableCollection<DesktopFileItemViewModel> Files, string _tabSelected)
         {
 
             Log.Information("Delete action initiated");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
 
-            var selectedFiles = DesktopFiles.Where(f => f.IsSelected).ToList();
+            var selectedFiles = Files.Where(f => f.IsSelected).ToList();
+
 
             await Task.WhenAll(selectedFiles.Select(async file =>
             {
@@ -204,7 +387,23 @@ namespace LorealAvaloniaUI.ViewModels
 
                         await UpdateUIAsync(() =>
                         {
-                            DesktopFiles.Remove(file);
+                            if ( _tabSelected == _desktopTab )
+                            {
+                                DesktopFiles.Remove(file);
+                            }
+                            else if (_tabSelected == _documentsTab)
+                            {
+                                DocumentFiles.Remove(file);
+                            }
+                            else if (_tabSelected == _picturesTab)
+                            {
+                                PicturesFiles.Remove(file);
+                            }
+                            else
+                            {
+                                Log.Warning("File not found: {filePath}", file.FullPath);
+                            }
+
                         });
 
                         Log.Information("Uncached file: {fileName}", file.FileName);
@@ -220,10 +419,12 @@ namespace LorealAvaloniaUI.ViewModels
                 }
             }));
 
-            await CalculateDesktopSizeAsync();
+            await CalculateSizeAsync();
         }
 
-        private async Task CalculateDesktopSizeAsync()
+       
+
+        private async Task CalculateSizeAsync()
         {
             try
             {
@@ -232,6 +433,7 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     Log.Warning("C: drive is not ready");
                     await UpdateUIAsync(() => TotalDesktopSize = "C: drive is not ready");
+                    await UpdateUIAsync(() => TotalDocumentSize = "C: drive is not ready");
                     return;
                 }
 
@@ -242,53 +444,150 @@ namespace LorealAvaloniaUI.ViewModels
                 Log.Information("C: Drive - Total: {totalSize:F2} GB, Free: {freeSpace:F2} GB, Used: {usedSpace:F2} GB",
                     totalSizeGB, freeSpace / (1024.0 * 1024.0 * 1024.0), (totalSize - freeSpace) / (1024.0 * 1024.0 * 1024.0));
 
+
+                    await UpdateUIAsync(() =>
+                    {
+                        TotalDesktopNumber = $"Total files > 1 MB: {DesktopFiles.Count}";
+                        TotalDesktopSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                    });
+
+                    await UpdateUIAsync(() =>
+                    {
+                        TotalDocumentNumber = $"Total files > 1 MB: {DocumentFiles.Count}";
+                        TotalDocumentSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                    });
+
                 await UpdateUIAsync(() =>
                 {
-                    TotalDesktopNumber = $"Total files > 1 MB: {DesktopFiles.Count}";
-                    TotalDesktopSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                    TotalPicturesNumber = $"Total files > 1 MB: {PicturesFiles.Count}";
+                    TotalPicturesSize = $"C: Drive Size: {totalSizeGB:F2} GB";
                 });
+
+               
+
+
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to calculate desktop size");
                 await UpdateUIAsync(() => TotalDesktopSize = $"Error: {ex.Message}");
+                await UpdateUIAsync(() => TotalDocumentSize = $"Error: {ex.Message}");
             }
         }
 
-        private void SortByName()
+        private void SortByName(string _tabSelected)
         {
-            var sorted = _isSortByNameAscending
-                ? DesktopFiles.OrderBy(f => f.FileName).ToList()
-                : DesktopFiles.OrderByDescending(f => f.FileName).ToList();
-            UpdateDesktopFiles(sorted);
-            _isSortByNameAscending = !_isSortByNameAscending;
+            if (_tabSelected == _desktopTab)
+            {
+                var sorted = _isSortByNameAscending
+               ? DesktopFiles.OrderBy(f => f.FileName).ToList()
+               : DesktopFiles.OrderByDescending(f => f.FileName).ToList();
+                UpdateDesktopFiles(sorted, _desktopTab);
+                _isSortByNameAscending = !_isSortByNameAscending;
+            }
+            else if (_tabSelected ==_documentsTab)
+            {
+                var sorted = _isSortByNameAscending
+              ? DocumentFiles.OrderBy(f => f.FileName).ToList()
+              : DocumentFiles.OrderByDescending(f => f.FileName).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortByNameAscending = !_isSortByNameAscending;
+            }
+            else if (_tabSelected == _picturesTab)
+            {
+                var sorted = _isSortByNameAscending
+              ? PicturesFiles.OrderBy(f => f.FileName).ToList()
+              : PicturesFiles.OrderByDescending(f => f.FileName).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortByNameAscending = !_isSortByNameAscending;
+            }
+
         }
 
-        private void SortBySize()
+        private void SortBySize(string _tabSelected)
         {
-            var sorted = _isSortBySizeAscending
+            if (_tabSelected == _desktopTab)
+            {
+                var sorted = _isSortBySizeAscending
                 ? DesktopFiles.OrderBy(f => f.FileSize).ToList()
                 : DesktopFiles.OrderByDescending(f => f.FileSize).ToList();
-            UpdateDesktopFiles(sorted);
-            _isSortBySizeAscending = !_isSortBySizeAscending;
+                UpdateDesktopFiles(sorted, _desktopTab);
+                _isSortBySizeAscending = !_isSortBySizeAscending;
+            }
+            else if (_tabSelected == _documentsTab)
+            {
+                var sorted = _isSortBySizeAscending
+                ? DocumentFiles.OrderBy(f => f.FileSize).ToList()
+                : DocumentFiles.OrderByDescending(f => f.FileSize).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortBySizeAscending = !_isSortBySizeAscending;
+            }
+            else if (_tabSelected == _picturesTab)
+            {
+                var sorted = _isSortBySizeAscending
+                ? PicturesFiles.OrderBy(f => f.FileSize).ToList()
+                : PicturesFiles.OrderByDescending(f => f.FileSize).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortBySizeAscending = !_isSortBySizeAscending;
+            }
+
         }
 
-        private void SortByDate()
+        private void SortByDate(string _tabSelected)
         {
-            var sorted = _isSortByDateAscending
+            if (_tabSelected == _desktopTab)
+            {
+                var sorted = _isSortByDateAscending
                 ? DesktopFiles.OrderBy(f => f.LastModified).ToList()
                 : DesktopFiles.OrderByDescending(f => f.LastModified).ToList();
-            UpdateDesktopFiles(sorted);
-            _isSortByDateAscending = !_isSortByDateAscending;
+                UpdateDesktopFiles(sorted, _desktopTab);
+                _isSortByDateAscending = !_isSortByDateAscending;
+            }
+            else if (_tabSelected == _documentsTab)
+            {
+                var sorted = _isSortBySizeAscending
+               ? DocumentFiles.OrderBy(f => f.FileSize).ToList()
+               : DocumentFiles.OrderByDescending(f => f.FileSize).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortBySizeAscending = !_isSortBySizeAscending;
+            }
+            else if (_tabSelected == _picturesTab)
+            {
+                var sorted = _isSortBySizeAscending
+               ? PicturesFiles.OrderBy(f => f.FileSize).ToList()
+               : PicturesFiles.OrderByDescending(f => f.FileSize).ToList();
+                UpdateDesktopFiles(sorted, _documentsTab);
+                _isSortBySizeAscending = !_isSortBySizeAscending;
+            }
         }
 
-        private void UpdateDesktopFiles(List<DesktopFileItemViewModel> sorted)
+        private void UpdateDesktopFiles(List<DesktopFileItemViewModel> sorted, string _tabSelected)
         {
-            DesktopFiles.Clear();
-            foreach (var file in sorted)
+            if (_tabSelected == _desktopTab)
             {
-                DesktopFiles.Add(file);
+                DesktopFiles.Clear();
+                foreach (var file in sorted)
+                {
+                    DesktopFiles.Add(file);
+                }
             }
+            else if (_tabSelected == _documentsTab)
+            {
+                DocumentFiles.Clear();
+                foreach (var file in sorted)
+                {
+                    DocumentFiles.Add(file);
+                }
+            }
+            else if (_tabSelected == _picturesTab)
+            {
+                PicturesFiles.Clear();
+                foreach (var file in sorted)
+                {
+                    DocumentFiles.Add(file);
+                }
+            }
+
         }
 
         private static async Task UpdateUIAsync(Action action)
