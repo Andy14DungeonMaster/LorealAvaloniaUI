@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using LorealAvaloniaUI.ViewModels;
 using ReactiveUI;
+using Serilog;
 
 namespace LorealAvaloniaUI.Views;
 
@@ -11,7 +12,7 @@ public partial class DownloadView : UserControl
     {
         InitializeComponent();
         DataContext = new DownloadViewModel();
-
+        Log.Information("**Downloads Menu Selected**");
 
     }
 

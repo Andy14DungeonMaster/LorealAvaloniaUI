@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using LorealAvaloniaUI.ViewModels;
+using Serilog;
 
 namespace LorealAvaloniaUI.Views;
 
@@ -9,5 +10,6 @@ public partial class OneDriveView : UserControl
     {
         InitializeComponent();
         DataContext = new OneDriveViewModel();
+        Log.Information("**One Drive Menu Selected**");
     }
 } 

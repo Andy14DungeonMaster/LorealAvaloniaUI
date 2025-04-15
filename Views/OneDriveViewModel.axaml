@@ -127,7 +127,7 @@
 								Command="{Binding FreeSelectedDiskSpaceCommand}"
 								Padding="10,5"/>
 					</StackPanel>
-
+					<!--
 					<Border Background="#333" CornerRadius="10" Height="120" Margin="5">
 						<StackPanel>
 							<TextBlock Margin="10,10,10,10" xml:space="preserve" >Free up disk space by removing locally cached files on this device. The files will<LineBreak/> remain On-Demand and can easily be accesses by opening the file agian.
@@ -135,7 +135,7 @@
 							<Button HorizontalAlignment="Right" Margin="10,10,10,10" Content="Free up disk space" Background="#4444FF" Foreground="White" Padding="10,5"/>
 
 						</StackPanel>
-					</Border>
+					</Border>-->
 
 				</StackPanel>
 			</TabItem>

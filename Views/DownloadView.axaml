@@ -119,6 +119,10 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal"
             Spacing="10">
+			<TextBlock
+	            FontSize="16"
+	            Foreground="DodgerBlue"
+	            Text="Size Selected" />
             <TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"

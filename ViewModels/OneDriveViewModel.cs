@@ -59,7 +59,6 @@ namespace LorealAvaloniaUI.ViewModels
 
             try
             {
-                Log.Information("One Drive - Desktop Page\n");
 
                 const long OneMB = 1048576; // 1 MB
                 var allFiles = Directory.GetFiles(desktopPath, "*.*", SearchOption.AllDirectories);
@@ -188,6 +187,11 @@ namespace LorealAvaloniaUI.ViewModels
 
         public void FreeSelectedDiskSpace()
         {
+
+            Log.Information("Delete action initiated");
+            Log.Information("SIZE OF THE DISK BEFORE DELETE");
+            LogSystemInformation(); // Log Size of disk before delete task
+
             var selectedFiles = DesktopFiles.Where(f => f.IsSelected).ToList();
             string changeStatusCommand;
 
@@ -219,6 +223,9 @@ namespace LorealAvaloniaUI.ViewModels
                     Console.WriteLine(file.ToString());
                 }
             }
+
+            Log.Information("SIZE OF THE DISK AFTER DELETE");
+            LogSystemInformation(); // Log Size of disk before delete task
             // calculate Size
             CalculateDesktopSize();
             
@@ -244,10 +251,6 @@ namespace LorealAvaloniaUI.ViewModels
                     // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-                    Log.Information("C: Drive Information:");
-                    Log.Information("Total Size: " + (totalSize / (1024.0 * 1024.0 * 1024.0)) + "GB");
-                    Log.Information("Free Space:" + (freeSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
-                    Log.Information("Used Space:" + (usedSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
                     Console.WriteLine($"C: Drive Information:");
                     Console.WriteLine($"Total Size: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
                     Console.WriteLine($"Free Space: {freeSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
@@ -286,6 +289,44 @@ namespace LorealAvaloniaUI.ViewModels
                 TotalDesktopSize = $"Error: {ex.Message}"; // Handle exceptions gracefully
             }
 
+        }
+
+        private void LogSystemInformation()
+        {
+            try
+            {
+                // Get the Desktop directory path.  Adapt this to your needs!
+                DriveInfo cDrive = new DriveInfo(@"C:\");
+                long totalSize = 0;
+
+                if (cDrive.IsReady)
+                {
+                    // Total size of the drive in bytes
+                    totalSize = cDrive.TotalSize;
+
+                    // Available free space in bytes
+                    long freeSpace = cDrive.AvailableFreeSpace;
+
+                    // Used space in bytes
+                    long usedSpace = totalSize - freeSpace;
+
+                    Log.Information("C: Drive Information:");
+                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+
+                }
+                else
+                {
+                    Console.WriteLine("C: drive is not ready.");
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Log.Information($"Error: {ex.Message}");
+            }
         }
 
         public class DesktopFileItemViewModel : ReactiveObject
