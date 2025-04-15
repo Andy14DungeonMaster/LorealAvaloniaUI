@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using LorealAvaloniaUI.Views;
+using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -202,6 +203,9 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task DeleteSelectedFilesAsync()
         {
+            Log.Information("Delete action initiated");
+            Log.Information("SIZE OF THE DISK BEFORE DELETE");
+            LogSystemInformation(); // Log Size of disk before delete task
             IsActive = true;
             try
             {
@@ -230,6 +234,7 @@ namespace LorealAvaloniaUI.ViewModels
                             await Task.Run(() => File.Delete(file.FullPath));
                             Files.Remove(file);
                             Console.WriteLine($"{file.FileName} deleted successfully.");
+                            Log.Information($"{file.FileName} deleted successfully.");
                         }
                         else
                         {
@@ -242,6 +247,8 @@ namespace LorealAvaloniaUI.ViewModels
                     }
                 }
                 Console.WriteLine($"{selectedFiles.Count} file(s) processed.");
+                Log.Information("SIZE OF THE DISK AFTER DELETE");
+                LogSystemInformation(); // Log Size of disk before delete task
                 await CalculateDownloadsSizeAsync();
             }
             finally
@@ -324,6 +331,9 @@ namespace LorealAvaloniaUI.ViewModels
 
                 TotalDownloadsSize = $"Total Size: {totalSize / (1024 * 1024):0.00} MB";
                 TotalNumber = $"Total no of files > 1 MB: {Files.Count}";
+                //Log.Information("Downloads: ");
+                //Log.Information(TotalDownloadsSize);
+                //Log.Information(TotalNumber);
             }
             catch (Exception ex)
             {
@@ -384,6 +394,45 @@ namespace LorealAvaloniaUI.ViewModels
                 Files.Add(file);
             }
         }
+
+        private void LogSystemInformation()
+        {
+            try
+            {
+                // Get the Desktop directory path.  Adapt this to your needs!
+                DriveInfo cDrive = new DriveInfo(@"C:\");
+                long totalSize = 0;
+
+                if (cDrive.IsReady)
+                {
+                    // Total size of the drive in bytes
+                    totalSize = cDrive.TotalSize;
+
+                    // Available free space in bytes
+                    long freeSpace = cDrive.AvailableFreeSpace;
+
+                    // Used space in bytes
+                    long usedSpace = totalSize - freeSpace;
+
+                    Log.Information("C: Drive Information:");
+                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
+                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
+                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
+
+                }
+                else
+                {
+                    Console.WriteLine("C: drive is not ready.");
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Log.Information($"Error: {ex.Message}");
+            }
+        }
+
     }
 
     public class FileItemViewModel : ReactiveObject

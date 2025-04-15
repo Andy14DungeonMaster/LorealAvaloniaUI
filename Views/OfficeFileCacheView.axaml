@@ -27,7 +27,7 @@
 			<TextBlock
                 FontSize="16"
                 Foreground="White"
-                Text="{Binding totalNumber}"
+                Text="{Binding TotalNumber}"
 				/>
 			<TextBlock
                 FontSize="16"
@@ -44,9 +44,12 @@
 			<CheckBox
                 Grid.Column="0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+				IsChecked="{Binding SelectAll, Mode=TwoWay}" />
 
-			<!--  Sortable File Name Header 
+			<!--  
+			IsChecked="{Binding SelectAll, Mode=TwoWay}"
+			Sortable File Name Header 
             <Button
                 Grid.Column="1"
                 HorizontalAlignment="Left"
@@ -140,9 +143,13 @@
             Orientation="Horizontal"
             Spacing="10">
 			<TextBlock
+	            FontSize="16"
+	            Foreground="DodgerBlue"
+	            Text="Size Selected" />
+			<TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"
-                Text="" />
+                Text="{Binding SizeOfFilesSelected}" />
 			<Button
                 Padding="10,5"
                 Background="DodgerBlue"

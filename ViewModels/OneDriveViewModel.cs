@@ -183,6 +183,11 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task FreeSelectedDiskSpaceAsync()
         {
+
+            Log.Information("Delete action initiated");
+            Log.Information("SIZE OF THE DISK BEFORE DELETE");
+            LogSystemInformation(); // Log Size of disk before delete task
+
             var selectedFiles = DesktopFiles.Where(f => f.IsSelected).ToList();
 
             await Task.WhenAll(selectedFiles.Select(async file =>
@@ -301,6 +306,44 @@ namespace LorealAvaloniaUI.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex, "Failed to update UI");
+            }
+        }
+
+        private void LogSystemInformation()
+        {
+            try
+            {
+                // Get the Desktop directory path.  Adapt this to your needs!
+                DriveInfo cDrive = new DriveInfo(@"C:\");
+                long totalSize = 0;
+
+                if (cDrive.IsReady)
+                {
+                    // Total size of the drive in bytes
+                    totalSize = cDrive.TotalSize;
+
+                    // Available free space in bytes
+                    long freeSpace = cDrive.AvailableFreeSpace;
+
+                    // Used space in bytes
+                    long usedSpace = totalSize - freeSpace;
+
+                    Log.Information("C: Drive Information:");
+                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+
+                }
+                else
+                {
+                    Console.WriteLine("C: drive is not ready.");
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Log.Information($"Error: {ex.Message}");
             }
         }
 

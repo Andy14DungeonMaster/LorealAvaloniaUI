@@ -20,8 +20,13 @@ sealed class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.File($"Logs\\{Environment.MachineName}_.log", rollingInterval: RollingInterval.Day)
             .CreateLogger();
+
+        Log.Information("________________________________________________________________");
+        Log.Information($"User logged in: {Environment.UserDomainName}\\{Environment.UserName}");
+        Log.Information($"Session Initiated: {DateTime.Now}");
+        Log.Information("________________________________________________________________");
 
         var services = new ServiceCollection();
 
