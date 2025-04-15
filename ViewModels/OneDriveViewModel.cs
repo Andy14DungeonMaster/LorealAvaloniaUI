@@ -1,291 +1,307 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using ReactiveUI;
-using LorealAvaloniaUI.Views;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
-using System.Reflection;
+using ReactiveUI;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
-using Avalonia.Logging;
 using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
     public class OneDriveViewModel : ReactiveObject
     {
-        public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new ObservableCollection<DesktopFileItemViewModel>();
-
-        public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommand { get; }
-
-        public Dictionary<string, string> fileAttribute = new Dictionary<string, string>();
-
-        // Total Desktop folder size
+        private readonly string _desktopPath;
+        private readonly ConcurrentDictionary<string, string> _fileAttributes = new();
         private string _totalDesktopSize;
+        private string _totalNumberOfDesktopFiles;
+        private bool _selectAll;
+        private bool _isSortByNameAscending = true;
+        private bool _isSortBySizeAscending = true;
+        private bool _isSortByDateAscending = true;
+
+        public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new();
+        public ReactiveCommand<Unit, Unit> FreeSelectedDiskSpaceCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortByNameCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortBySizeCommand { get; }
+        public ReactiveCommand<Unit, Unit> SortByDateCommand { get; }
+
         public string TotalDesktopSize
         {
             get => _totalDesktopSize;
             set => this.RaiseAndSetIfChanged(ref _totalDesktopSize, value);
         }
 
-        private string _totalNumberOfDesktopFiles;
-
-        public string totalDesktopNumber
+        public string TotalDesktopNumber
         {
             get => _totalNumberOfDesktopFiles;
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfDesktopFiles, value);
         }
 
+        public bool SelectAll
+        {
+            get => _selectAll;
+            set => this.RaiseAndSetIfChanged(ref _selectAll, value);
+        }
+
         public OneDriveViewModel()
         {
-            string desktopPath = Path.Combine(
-                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                 "OneDrive - L'Oréal\\Desktop");
+            _desktopPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "OneDrive - L'Oréal\\Desktop");
 
-            if (!Directory.Exists(desktopPath))
+            _totalDesktopSize = string.Empty;
+            _totalNumberOfDesktopFiles = string.Empty;
+
+            FreeSelectedDiskSpaceCommand = ReactiveCommand.CreateFromTask(FreeSelectedDiskSpaceAsync);
+            SortByNameCommand = ReactiveCommand.Create(SortByName);
+            SortBySizeCommand = ReactiveCommand.Create(SortBySize);
+            SortByDateCommand = ReactiveCommand.Create(SortByDate);
+
+            this.WhenAnyValue(x => x.SelectAll)
+                .Subscribe(selectAll =>
+                {
+                    foreach (var file in DesktopFiles)
+                    {
+                        file.IsSelected = selectAll;
+                    }
+                });
+
+            // Perform async initialization without blocking
+            InitializeAsync().GetAwaiter().OnCompleted(() => { });
+        }
+
+        private async Task InitializeAsync()
+        {
+            if (!Directory.Exists(_desktopPath))
             {
-                Console.WriteLine("desktopPath directory does not exist!");
+                Log.Error("Desktop directory does not exist: {_desktopPath}", _desktopPath);
+                await UpdateUIAsync(() => TotalDesktopSize = "Desktop directory not found.");
                 return;
             }
 
-            
-
             try
             {
-                Log.Information("One Drive - Desktop Page\n");
+                Log.Information("Initializing OneDrive Desktop Page");
 
-                const long OneMB = 1048576; // 1 MB
-                var allFiles = Directory.GetFiles(desktopPath, "*.*", SearchOption.AllDirectories);
+                await Task.WhenAll(
+                    LoadFileAttributesAsync(),
+                    CalculateDesktopSizeAsync()
+                );
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Initialization failed");
+                await UpdateUIAsync(() => TotalDesktopSize = $"Error: {ex.Message}");
+            }
+        }
 
-                string command1 = $"attrib \"C://Users//alekhya.nandina//OneDrive - L'Oréal//Desktop//*.*\" /s";
-                string result1 = ExecuteCommand(command1);
-                string[] lines = result1.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        private async Task LoadFileAttributesAsync()
+        {
+            const long OneMB = 1048576;
+            string command = $"attrib \"{_desktopPath}\\*.*\" /s";
+            string result = await ExecuteCommandAsync(command);
+            string[] lines = result.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
-                string pattern = @"\s*([^\s])\s*C:\\"; // Correctly escaped backslashes
-                string FilePathFromcmd;
+            var pattern = new Regex(@"\s*([^\s])\s*(C:\\.*)", RegexOptions.Compiled);
+            var files = await Task.Run(() => Directory.GetFiles(_desktopPath, "*.*", SearchOption.AllDirectories));
 
-                foreach (string line in lines)
+            Parallel.ForEach(lines, line =>
+            {
+                var match = pattern.Match(line);
+                if (match.Success)
                 {
-
-                    string charBefore=null;
-                    Match match = Regex.Match(line, pattern);
-
-                    if (match.Success)
-                    {
-                       charBefore = match.Groups[1].Value;
-                        Console.WriteLine($"Character before 'C:\\': {charBefore}"); // Output: U
-                    }
-                    else
-                    {
-                        Console.WriteLine("'C:\\' not found.");
-                    }
-
-                    FilePathFromcmd = line.Substring(line.IndexOf("C:\\"));
-                    fileAttribute.Add(FilePathFromcmd, charBefore);
-
-
-
+                    _fileAttributes.TryAdd(match.Groups[2].Value, match.Groups[1].Value);
                 }
+            });
 
-                //foreach (KeyValuePair<string, string> pair in fileAttributes)
-                //{
-                //    Console.WriteLine($"Key: {pair.Key}, Value: {pair.Value}");
-                //}
-                Console.WriteLine(result1);
-
-
-                foreach (var file in allFiles)
+            await Task.Run(async () =>
+            {
+                foreach (var file in files)
                 {
-                    var fileInfo = new FileInfo(file);
-
-                    if ( true ) // fileInfo.Length(OneMB)
+                    if (_fileAttributes.TryGetValue(file, out var attr) && attr == "P")
                     {
-
-                        if (fileAttribute[fileInfo.FullName] == "P")
+                        var fileInfo = new FileInfo(file);
+                        if (fileInfo.Length >= OneMB)
                         {
-
-                        var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
-                        var rowColor = "#222222".ToString();
-
-                        DesktopFiles.Add(new DesktopFileItemViewModel(
-                            fileName: fileInfo.Name,
-                            fileSize: fileSizeMB,
-                            lastModified: fileInfo.LastWriteTime,
-                            rowBackground: rowColor,
-                            fullPath: fileInfo.FullName
-                        ));
-
+                            var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
+                            await UpdateUIAsync(() =>
+                            {
+                                DesktopFiles.Add(new DesktopFileItemViewModel(
+                                    fileInfo.Name,
+                                    fileSizeMB,
+                                    fileInfo.LastWriteTime,
+                                    "#222222",
+                                    fileInfo.FullName));
+                            });
                         }
                     }
                 }
-            }
-
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine("Access denied to some files/folders.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-
-            // Initialize commands
-            FreeSelectedDiskSpaceCommand = ReactiveCommand.Create(FreeSelectedDiskSpace);
-
-            // calculate Size
-            CalculateDesktopSize();
-
+            });
         }
 
-        public static string ExecuteCommand(string command)
+        private static async Task<string> ExecuteCommandAsync(string command)
         {
-            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command) // Use "powershell.exe" if needed
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-
-            string output = "";
-            string error = "";
-
             try
             {
-                using (var process = Process.Start(processInfo))
+                using var process = new Process
                 {
-                    // Asynchronously read the output and error to avoid deadlocks
-                    output = process.StandardOutput.ReadToEndAsync().Result; // Use .Result carefully; see explanation below
-                    error = process.StandardError.ReadToEndAsync().Result; // Use .Result carefully; see explanation below
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = "/c " + command,
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    }
+                };
 
-                    // Optionally wait for exit to get the exit code (remove if not needed)
-                    //process.WaitForExit();
-                    //int exitCode = process.ExitCode; //Get the exit code.
+                process.Start();
+                var outputTask = process.StandardOutput.ReadToEndAsync();
+                var errorTask = process.StandardError.ReadToEndAsync();
 
-                }
+                await Task.WhenAll(outputTask, errorTask);
+
+                string output = await outputTask;
+                string error = await errorTask;
+
+                await process.WaitForExitAsync();
+                return string.IsNullOrEmpty(error) ? output.Trim() : $"{output}\nStandard Error:\n{error}".Trim();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error executing command: {ex.Message}");
-                error += Environment.NewLine + $"Error executing command: {ex.Message}"; // Append error message if needed
+                Log.Error(ex, "Command execution failed: {command}", command);
+                return $"Error: {ex.Message}";
             }
-
-            if (!string.IsNullOrEmpty(error))
-            {
-                output += Environment.NewLine + "Standard Error:" + Environment.NewLine + error;
-            }
-            return output.Trim();
-
         }
 
-
-        public void FreeSelectedDiskSpace()
+        private async Task FreeSelectedDiskSpaceAsync()
         {
             var selectedFiles = DesktopFiles.Where(f => f.IsSelected).ToList();
-            string changeStatusCommand;
 
-            foreach (var file in selectedFiles)
+            await Task.WhenAll(selectedFiles.Select(async file =>
             {
                 try
                 {
-                    Console.WriteLine($"Trying to UnCache file: {file.FullPath}");
-                    if (System.IO.File.Exists(file.FullPath)) // Check if file exists
+                    if (await Task.Run(() => File.Exists(file.FullPath)))
                     {
-                        changeStatusCommand = string.Concat("attrib +u \"", file.FullPath, "\"");
-                        ExecuteCommand(changeStatusCommand);  // UnCache file
-                        DesktopFiles.Remove(file);         // Remove from UI
-                        Console.WriteLine($"{file.FileName} deleted successfully.");
-                        Log.Information("Deleteing the file " + file.FileName);
+                        string command = $"attrib +u \"{file.FullPath}\"";
+                        await ExecuteCommandAsync(command);
+
+                        await UpdateUIAsync(() =>
+                        {
+                            DesktopFiles.Remove(file);
+                        });
+
+                        Log.Information("Uncached file: {fileName}", file.FileName);
                     }
                     else
                     {
-                        Console.WriteLine($"File not found: {file.FullPath}");
-
+                        Log.Warning("File not found: {filePath}", file.FullPath);
                     }
-
-                    
                 }
-
                 catch (Exception ex)
                 {
-                    Log.Error(ex.Message);
-                    Console.WriteLine(file.ToString());
+                    Log.Error(ex, "Failed to uncache file: {fileName}", file.FileName);
                 }
-            }
-            // calculate Size
-            CalculateDesktopSize();
-            
+            }));
+
+            await CalculateDesktopSizeAsync();
         }
 
-        private void CalculateDesktopSize()
+        private async Task CalculateDesktopSizeAsync()
         {
-
             try
             {
-                // Get the Desktop directory path.  Adapt this to your needs!
-                DriveInfo cDrive = new DriveInfo(@"C:\");
-                long totalSize=0;
-
-                if (cDrive.IsReady)
+                var cDrive = new DriveInfo("C");
+                if (!cDrive.IsReady)
                 {
-                    // Total size of the drive in bytes
-                    totalSize = cDrive.TotalSize;
-
-                    // Available free space in bytes
-                    long freeSpace = cDrive.AvailableFreeSpace;
-
-                    // Used space in bytes
-                    long usedSpace = totalSize - freeSpace;
-
-                    Log.Information("C: Drive Information:");
-                    Log.Information("Total Size: " + (totalSize / (1024.0 * 1024.0 * 1024.0)) + "GB");
-                    Log.Information("Free Space:" + (freeSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
-                    Log.Information("Used Space:" + (usedSpace / (1024.0 * 1024.0 * 1024.0)) + "GB");
-                    Console.WriteLine($"C: Drive Information:");
-                    Console.WriteLine($"Total Size: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
-                    Console.WriteLine($"Free Space: {freeSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
-                    Console.WriteLine($"Used Space: {usedSpace / (1024.0 * 1024.0 * 1024.0):F2} GB"); // Convert to GB
-
-                }
-                else
-                {
-                    Console.WriteLine("C: drive is not ready.");
+                    Log.Warning("C: drive is not ready");
+                    await UpdateUIAsync(() => TotalDesktopSize = "C: drive is not ready");
+                    return;
                 }
 
-                string desktopPath = Path.Combine(
-                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                 "OneDrive - L'Oréal\\Desktop");
+                long totalSize = cDrive.TotalSize;
+                long freeSpace = cDrive.AvailableFreeSpace;
+                double totalSizeGB = totalSize / (1024.0 * 1024.0 * 1024.0);
 
-                // Check if the directory exists.
-                if (Directory.Exists(desktopPath))
+                Log.Information("C: Drive - Total: {totalSize:F2} GB, Free: {freeSpace:F2} GB, Used: {usedSpace:F2} GB",
+                    totalSizeGB, freeSpace / (1024.0 * 1024.0 * 1024.0), (totalSize - freeSpace) / (1024.0 * 1024.0 * 1024.0));
+
+                await UpdateUIAsync(() =>
                 {
-                    //Calculate total number of files.
-                    totalDesktopNumber = $"Total no of files > 1 MB: {DesktopFiles.Count.ToString()}";
-
-
-                    // Format the size (e.g., in MB).
-                    TotalDesktopSize = $"Total Size of C:\\ Drive: {totalSize / (1024.0 * 1024.0 * 1024.0):F2} GB"; // Or another formatting
-                    
-                }
-
-                else
-                {
-                    TotalDesktopSize = "Desktop directory not found.";
-                }
-
+                    TotalDesktopNumber = $"Total files > 1 MB: {DesktopFiles.Count}";
+                    TotalDesktopSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                });
             }
             catch (Exception ex)
             {
-                TotalDesktopSize = $"Error: {ex.Message}"; // Handle exceptions gracefully
+                Log.Error(ex, "Failed to calculate desktop size");
+                await UpdateUIAsync(() => TotalDesktopSize = $"Error: {ex.Message}");
             }
+        }
 
+        private void SortByName()
+        {
+            var sorted = _isSortByNameAscending
+                ? DesktopFiles.OrderBy(f => f.FileName).ToList()
+                : DesktopFiles.OrderByDescending(f => f.FileName).ToList();
+            UpdateDesktopFiles(sorted);
+            _isSortByNameAscending = !_isSortByNameAscending;
+        }
+
+        private void SortBySize()
+        {
+            var sorted = _isSortBySizeAscending
+                ? DesktopFiles.OrderBy(f => f.FileSize).ToList()
+                : DesktopFiles.OrderByDescending(f => f.FileSize).ToList();
+            UpdateDesktopFiles(sorted);
+            _isSortBySizeAscending = !_isSortBySizeAscending;
+        }
+
+        private void SortByDate()
+        {
+            var sorted = _isSortByDateAscending
+                ? DesktopFiles.OrderBy(f => f.LastModified).ToList()
+                : DesktopFiles.OrderByDescending(f => f.LastModified).ToList();
+            UpdateDesktopFiles(sorted);
+            _isSortByDateAscending = !_isSortByDateAscending;
+        }
+
+        private void UpdateDesktopFiles(List<DesktopFileItemViewModel> sorted)
+        {
+            DesktopFiles.Clear();
+            foreach (var file in sorted)
+            {
+                DesktopFiles.Add(file);
+            }
+        }
+
+        private static async Task UpdateUIAsync(Action action)
+        {
+            try
+            {
+                if (Avalonia.Threading.Dispatcher.UIThread.CheckAccess())
+                {
+                    // Already on UI thread, execute directly
+                    action();
+                }
+                else
+                {
+                    // Post to UI thread to avoid blocking
+                    await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(action, Avalonia.Threading.DispatcherPriority.Normal);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to update UI");
+            }
         }
 
         public class DesktopFileItemViewModel : ReactiveObject
@@ -311,10 +327,7 @@ namespace LorealAvaloniaUI.ViewModels
                 LastModified = lastModified;
                 RowBackground = rowBackground;
                 FullPath = fullPath;
-
             }
-
         }
     }
-
 }
