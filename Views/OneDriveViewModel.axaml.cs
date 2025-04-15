@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Metadata;
 using LorealAvaloniaUI.ViewModels;
 using Serilog;
 
@@ -8,8 +9,9 @@ public partial class OneDriveView : UserControl
 {
     public OneDriveView()
     {
+        
         InitializeComponent();
         DataContext = new OneDriveViewModel();
-        Log.Information("Initiating OneDrive Menu");
+        Log.Information("-- Initiating OneDrive Menu --");
     }
 } 

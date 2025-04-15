@@ -240,13 +240,19 @@ namespace LorealAvaloniaUI.ViewModels
                     LoadFileAttributesAsync(desktopPath)
                 );
 
+                Log.Information("Found {Count} cached desktop file(s) larger than 100 MB", DesktopFiles.Count);
+           
+
                 await Task.WhenAll(
                     LoadFileAttributesAsync(documentsPath)
                 );
+                Log.Information("Found {Count} cached documents file(s) larger than 100 MB", DocumentFiles.Count);
 
                 await Task.WhenAll(
                    LoadFileAttributesAsync(picturesPath)
                );
+
+                Log.Information("Found {Count} cached pictures file(s) larger than 100 MB", PicturesFiles.Count);
 
                 await Task.WhenAll(
                     CalculateSizeAsync() //Separated call to calculate Size on tab open
@@ -279,55 +285,67 @@ namespace LorealAvaloniaUI.ViewModels
                 }
             });
 
-            await Task.Run(async () =>
+            try
             {
-                foreach (var file in files)
+                await Task.Run(async () =>
                 {
-                    if (_fileAttributes.TryGetValue(file, out var attr) && attr == "P")
+                    foreach (var file in files)
                     {
-                        var fileInfo = new FileInfo(file);
-                        if (fileInfo.Length >= OneMB)
+                        if (_fileAttributes.TryGetValue(file, out var attr) && attr == "P")
                         {
-                            var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
-                            await UpdateUIAsync(() =>
+                            var fileInfo = new FileInfo(file);
+                            if (fileInfo.Length >= (OneMB * 100)) // Only add files Size > 100 MB
                             {
-                            if (path == desktopPath)
-                            {
-                                    DesktopFiles.Add(new DesktopFileItemViewModel(
-                                        fileInfo.Name,
-                                        fileSizeMB,
-                                        fileInfo.LastWriteTime,
-                                        "#222222",
-                                        fileInfo.FullName));
-                                    }
-                            else if (path == documentsPath) {
-                                    DocumentFiles.Add(new DesktopFileItemViewModel(
+                                var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
+                                await UpdateUIAsync(() =>
+                                {
+                                    if (path == desktopPath)
+                                    {
+                                        DesktopFiles.Add(new DesktopFileItemViewModel(
                                             fileInfo.Name,
                                             fileSizeMB,
                                             fileInfo.LastWriteTime,
                                             "#222222",
                                             fileInfo.FullName));
                                     }
+                                    else if (path == documentsPath)
+                                    {
+                                        DocumentFiles.Add(new DesktopFileItemViewModel(
+                                                fileInfo.Name,
+                                                fileSizeMB,
+                                                fileInfo.LastWriteTime,
+                                                "#222222",
+                                                fileInfo.FullName));
+                                    }
 
-                                else if (path == picturesPath)
-                                {
-                                    PicturesFiles.Add(new DesktopFileItemViewModel(
-                                            fileInfo.Name,
-                                            fileSizeMB,
-                                            fileInfo.LastWriteTime,
-                                            "#222222",
-                                            fileInfo.FullName));
-                                }
-                                else
-                                {
-                                    Log.Information("Not able to load files");
-                                }
+                                    else if (path == picturesPath)
+                                    {
+                                        PicturesFiles.Add(new DesktopFileItemViewModel(
+                                                fileInfo.Name,
+                                                fileSizeMB,
+                                                fileInfo.LastWriteTime,
+                                                "#222222",
+                                                fileInfo.FullName));
+                                    }
+                                    else
+                                    {
+                                        Log.Information("Not able to load files");
+                                    }
 
-                            });
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+               
+
+            }
+
+            catch (Exception ex)
+            {
+                Log.Error($"Error loading files: {ex.Message}");
+            }
+
         }
 
         private static async Task<string> ExecuteCommandAsync(string command)
@@ -369,7 +387,7 @@ namespace LorealAvaloniaUI.ViewModels
         private async Task FreeDiskSpaceAsync(ObservableCollection<DesktopFileItemViewModel> Files, string _tabSelected)
         {
 
-            Log.Information("Delete action initiated");
+            Log.Information("** Uncache action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
 
@@ -401,12 +419,12 @@ namespace LorealAvaloniaUI.ViewModels
                             }
                             else
                             {
-                                Log.Warning("File not found: {filePath}", file.FullPath);
+                                Log.Information("File not removed from UI {Filepath}", file.FullPath);
                             }
 
                         });
 
-                        Log.Information("Uncached file: {fileName}", file.FileName);
+                        Log.Information("{FileName} uncached successfully.", file.FullPath);
                     }
                     else
                     {
@@ -419,11 +437,13 @@ namespace LorealAvaloniaUI.ViewModels
                 }
             }));
 
+            Log.Information("{Count} file(s) processed.", selectedFiles.Count);
+            Log.Information("SIZE OF THE DISK AFTER DELETE");
+            LogSystemInformation(); // Log Size of disk before after task
             await CalculateSizeAsync();
         }
 
        
-
         private async Task CalculateSizeAsync()
         {
             try
@@ -434,6 +454,7 @@ namespace LorealAvaloniaUI.ViewModels
                     Log.Warning("C: drive is not ready");
                     await UpdateUIAsync(() => TotalDesktopSize = "C: drive is not ready");
                     await UpdateUIAsync(() => TotalDocumentSize = "C: drive is not ready");
+                    await UpdateUIAsync(() => TotalPicturesSize = "C: drive is not ready");
                     return;
                 }
 
@@ -441,25 +462,22 @@ namespace LorealAvaloniaUI.ViewModels
                 long freeSpace = cDrive.AvailableFreeSpace;
                 double totalSizeGB = totalSize / (1024.0 * 1024.0 * 1024.0);
 
-                Log.Information("C: Drive - Total: {totalSize:F2} GB, Free: {freeSpace:F2} GB, Used: {usedSpace:F2} GB",
-                    totalSizeGB, freeSpace / (1024.0 * 1024.0 * 1024.0), (totalSize - freeSpace) / (1024.0 * 1024.0 * 1024.0));
-
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDesktopNumber = $"Total files > 1 MB: {DesktopFiles.Count}";
+                        TotalDesktopNumber = $"Total files > 100 MB: {DesktopFiles.Count}";
                         TotalDesktopSize = $"C: Drive Size: {totalSizeGB:F2} GB";
                     });
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDocumentNumber = $"Total files > 1 MB: {DocumentFiles.Count}";
+                        TotalDocumentNumber = $"Total files > 100 MB: {DocumentFiles.Count}";
                         TotalDocumentSize = $"C: Drive Size: {totalSizeGB:F2} GB";
                     });
 
                 await UpdateUIAsync(() =>
                 {
-                    TotalPicturesNumber = $"Total files > 1 MB: {PicturesFiles.Count}";
+                    TotalPicturesNumber = $"Total files > 100 MB: {PicturesFiles.Count}";
                     TotalPicturesSize = $"C: Drive Size: {totalSizeGB:F2} GB";
                 });
 
@@ -630,10 +648,11 @@ namespace LorealAvaloniaUI.ViewModels
                     // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-                    Log.Information("C: Drive Information:");
-                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
-                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
-                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+
+
+                    Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2),
+                        Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
+                        Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
 
                 }
                 else
