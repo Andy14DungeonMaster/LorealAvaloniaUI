@@ -90,9 +90,12 @@ namespace LorealAvaloniaUI.ViewModels
                 Log.Information("Initializing OneDrive Desktop Page");
 
                 await Task.WhenAll(
-                    LoadFileAttributesAsync(),
-                    CalculateDesktopSizeAsync()
+                    LoadFileAttributesAsync()
                 );
+
+                await Task.WhenAll(
+                    CalculateDesktopSizeAsync()  //Separated call to calculate Size on tab open
+                    );
             }
             catch (Exception ex)
             {

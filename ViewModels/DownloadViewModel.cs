@@ -88,7 +88,7 @@ namespace LorealAvaloniaUI.ViewModels
             DeleteSelectedFilesCommand.ThrownExceptions
                 .Subscribe(ex =>
                 {
-                    Console.WriteLine($"Delete command error: {ex}");
+                    Log.Error("Delete command error: {Ex}", ex);
                 });
 
             InitializeAsync().ConfigureAwait(false);
@@ -148,7 +148,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 if (!Directory.Exists(downloadsPath))
                 {
-                    Console.WriteLine("Downloads directory does not exist!");
+                    Log.Error("Downloads directory does not exist: {DownloadsPath}", downloadsPath);
                     return;
                 }
 
@@ -177,7 +177,7 @@ namespace LorealAvaloniaUI.ViewModels
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            Console.WriteLine($"Access denied to file: {file}");
+                            Log.Error("Access denied to file: {File}", file);
                         }
                     }
                     return items;
@@ -189,11 +189,11 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                Console.WriteLine($"Found {Files.Count} files larger than 1MB");
+                Log.Information($"Found {Files.Count} files larger than 1MB");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading files: {ex.Message}");
+                Log.Error($"Error loading files: {ex.Message}");
             }
             finally
             {
@@ -212,7 +212,7 @@ namespace LorealAvaloniaUI.ViewModels
                 var selectedFiles = Files.Where(f => f.IsSelected).ToList();
                 if (!selectedFiles.Any())
                 {
-                    Console.WriteLine("No files selected for deletion.");
+                    Log.Information("No files selected for deletion.");
                     return;
                 }
 
@@ -221,7 +221,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 if (!confirmed)
                 {
-                    Console.WriteLine("Deletion cancelled by user.");
+                    Log.Information("Deletion cancelled by user.");
                     return;
                 }
 
@@ -233,20 +233,19 @@ namespace LorealAvaloniaUI.ViewModels
                         {
                             await Task.Run(() => File.Delete(file.FullPath));
                             Files.Remove(file);
-                            Console.WriteLine($"{file.FileName} deleted successfully.");
-                            Log.Information($"{file.FileName} deleted successfully.");
+                            Log.Information("{FileName} deleted successfully.", file.FileName);
                         }
                         else
                         {
-                            Console.WriteLine($"File not found: {file.FullPath}");
+                            Log.Information("File not found: {FullPath}", file.FullPath);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error deleting {file.FileName}: {ex.Message}");
+                        Log.Error("Error deleting {FileName}: {Message}", file.FileName, ex.Message);
                     }
                 }
-                Console.WriteLine($"{selectedFiles.Count} file(s) processed.");
+                Log.Information("{Count} file(s) processed.", selectedFiles.Count);
                 Log.Information("SIZE OF THE DISK AFTER DELETE");
                 LogSystemInformation(); // Log Size of disk before delete task
                 await CalculateDownloadsSizeAsync();
@@ -259,16 +258,27 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task MoveSelectedFilesAsync()
         {
+            Log.Information("Move action initiated");
+            Log.Information("SIZE OF THE DISK BEFORE MOVE");
+            LogSystemInformation(); // Log Size of disk before delete task
             IsActive = true;
             try
             {
                 string targetDirectory = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "Downloads", "MovedFiles"
+                    "OneDrive - L'Oréal\\Documents", "MovedFilesFromDownloads"
                 );
                 if (!Directory.Exists(targetDirectory))
                 {
-                    Directory.CreateDirectory(targetDirectory);
+                    try
+                    {
+                        Directory.CreateDirectory(targetDirectory);
+                    }
+
+                    catch(Exception ex)
+                    {
+                        Log.Error("Error creating directory {TargetDirectory}: {ex}", targetDirectory, ex);
+                    }
                 }
 
                 var selectedFiles = Files.Where(f => f.IsSelected).ToList();
@@ -281,14 +291,17 @@ namespace LorealAvaloniaUI.ViewModels
                             string newPath = Path.Combine(targetDirectory, file.FileName);
                             await Task.Run(() => File.Move(file.FullPath, newPath));
                             Files.Remove(file);
-                            Console.WriteLine($"{file.FileName} moved successfully.");
+                            Log.Information($"{file.FileName} moved successfully.");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error moving {file.FileName}: {ex.Message}");
+                        Log.Error($"Error moving {file.FileName}: {ex.Message}");
                     }
                 }
+                Log.Information("SIZE OF THE DISK AFTER MOVE");
+                LogSystemInformation(); // Log Size of disk before Move task
+                await CalculateDownloadsSizeAsync();
                 await CalculateDownloadsSizeAsync();
             }
             finally
@@ -331,13 +344,11 @@ namespace LorealAvaloniaUI.ViewModels
 
                 TotalDownloadsSize = $"Total Size: {totalSize / (1024 * 1024):0.00} MB";
                 TotalNumber = $"Total no of files > 1 MB: {Files.Count}";
-                //Log.Information("Downloads: ");
-                //Log.Information(TotalDownloadsSize);
-                //Log.Information(TotalNumber);
             }
             catch (Exception ex)
             {
                 TotalDownloadsSize = $"Error: {ex.Message}";
+                Log.Error(TotalDownloadsSize);
             }
             finally
             {
@@ -350,8 +361,8 @@ namespace LorealAvaloniaUI.ViewModels
             return fileSizeMB switch
             {
                 > 100 => "#FF6666",
-                > 50 => "#FFA500",
-                > 10 => "#FFD700",
+                > 50 => "#222222",
+                > 10 => "#222222",
                 _ => "#222222"
             };
         }
@@ -415,21 +426,22 @@ namespace LorealAvaloniaUI.ViewModels
                     long usedSpace = totalSize - freeSpace;
 
                     Log.Information("C: Drive Information:");
-                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
-                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
-                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)),2) + " GB");
+                    Log.Information("Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2), 
+                        Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
+                        Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
+                    Log.Information("Size of Downloads directory: {TotalDownloadsSize}", TotalDownloadsSize);
 
                 }
                 else
                 {
-                    Console.WriteLine("C: drive is not ready.");
+                    Log.Error("C: drive is not ready.");
                 }
 
             }
 
             catch (Exception ex)
             {
-                Log.Information($"Error: {ex.Message}");
+                Log.Error($"Error: {ex.Message}");
             }
         }
 

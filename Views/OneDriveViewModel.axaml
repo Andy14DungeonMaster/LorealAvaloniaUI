@@ -66,12 +66,7 @@
                                 Padding="10,5" />
                     </StackPanel>
 
-                    <!-- Info Panel -->
-                    <Border Background="#333" CornerRadius="10" Margin="5" Padding="10">
-                        <TextBlock xml:space="preserve">
-                            Free up disk space by removing locally cached files on this device. The files will remain On-Demand and can easily be accessed by opening the file again.
-                        </TextBlock>
-                    </Border>
+                    
                 </StackPanel>
             </TabItem>
             <TabItem Header="Documents">

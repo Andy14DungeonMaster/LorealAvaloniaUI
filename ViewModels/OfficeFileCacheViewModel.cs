@@ -282,11 +282,13 @@ namespace LorealAvaloniaUI.ViewModels
                     return;
                 }
 
+
                 double totalSize = await Task.Run(() =>
                 {
 
-                    // Calculate the total size of all files.
-                    return Files.Sum(f => f.FileSize);
+                    //Calculate the total size of all files.
+                    DirectoryInfo dirInfo = new DirectoryInfo(officeFilesPath);
+                    return dirInfo.GetFiles("*", SearchOption.AllDirectories).Sum(file => file.Length);
                     //return Directory.GetDirectories(officeFilesPath, "*", SearchOption.AllDirectories)
                     //    .Sum(file =>
                     //    {
