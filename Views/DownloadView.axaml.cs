@@ -12,7 +12,7 @@ public partial class DownloadView : UserControl
     {
         InitializeComponent();
         DataContext = new DownloadViewModel();
-        Log.Information("**Downloads Menu Selected**");
+        Log.Information("Initializing Downloads Page");
 
     }
 

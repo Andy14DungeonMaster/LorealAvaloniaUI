@@ -1,153 +1,83 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+             xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
              x:Class="LorealAvaloniaUI.Views.OneDriveView"
-			 x:DataType="vm:OneDriveViewModel">
-	<StackPanel>
-		<TabControl Margin="5">
-			<TabItem Header="Desktop">
-				<StackPanel>
-					<!-- File List using ItemsControl -->
-					<!-- File Summary -->
-					<!--  File Summary  -->
-					<StackPanel
-						Grid.Row="0"
-						Margin="0,10,0,10"
-						Orientation="Vertical">
-						<TextBlock
-							FontSize="16"
-							Foreground="White"
-							Text="{Binding totalDesktopNumber}"
-				/>
-						<TextBlock
-							FontSize="16"
-							Foreground="White"
-							Text="{Binding TotalDesktopSize}" />
-					</StackPanel>
+             x:DataType="vm:OneDriveViewModel">
+    <StackPanel>
+        <TabControl Margin="5">
+            <TabItem Header="Desktop">
+                <StackPanel>
+                    <!-- File Summary -->
+                    <StackPanel Margin="0,10,0,10" Orientation="Vertical">
+                        <TextBlock FontSize="16" Foreground="White" Text="{Binding TotalDesktopNumber}" />
+                        <TextBlock FontSize="16" Foreground="White" Text="{Binding TotalDesktopSize}" />
+                    </StackPanel>
 
-					<!--  Table Headers  -->
-					<Grid
-						Grid.Row="2"
-						Height="40"
-						Margin="0,10,0,0"
-						Background="Black"
-						ColumnDefinitions="40, *, 120, 200">
-						<CheckBox
-							Grid.Column="0"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center" />
+                    <!-- Table Headers -->
+                    <Grid Height="40" Margin="0,10,0,0" Background="Black" ColumnDefinitions="40, *, 120, 200">
+                        <CheckBox Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  IsChecked="{Binding SelectAll, Mode=TwoWay}" />
+                        <Button Grid.Column="1" Padding="0" Background="Transparent" Command="{Binding SortByNameCommand}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" Padding="0" Background="Transparent" Command="{Binding SortBySizeCommand}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Size" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortByDateCommand}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
 
+                    <!-- Scrollable File List -->
+                    <ScrollViewer MaxHeight="300" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding DesktopFiles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="40" Margin="0,5,0,0" Background="{Binding RowBackground}"
+                                          ColumnDefinitions="40, *, 120, 200">
+                                        <CheckBox Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  IsChecked="{Binding IsSelected}" />
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="White"
+                                                   Text="{Binding FileName}" />
+                                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Foreground="White" Padding="10"
+                                                   Text="{Binding FileSize, StringFormat='{}{0} MB'}" />
+                                        <TextBlock Grid.Column="3" VerticalAlignment="Center" Foreground="White"
+                                                   Text="{Binding LastModified, StringFormat='{}{0:g}'}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
 
-						<Button Grid.Column="1" Padding="0" Background="Transparent">
-							<!-- Remove default padding -->
+                    <!-- Free Selected Disk Space -->
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
+                        <Button Content="Free up selected disk space"
+                                Background="#4444FF" Foreground="White"
+                                Command="{Binding FreeSelectedDiskSpaceCommand}"
+                                Padding="10,5" />
+                    </StackPanel>
 
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<!-- Adjust margin as needed -->
-								<TextBlock Text="File Name"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
-								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
-
-							</StackPanel>
-						</Button>
-
-						<Button Grid.Column="2" Padding="0" Background="Transparent">
-							<!-- Remove default padding -->
-
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<!-- Adjust margin as needed -->
-								<TextBlock Text="Size"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
-								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
-
-							</StackPanel>
-						</Button>
-
-						<Button Grid.Column="3" Padding="0" Background="Transparent">
-							<!-- Remove default padding -->
-
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<!-- Adjust margin as needed -->
-								<TextBlock Text="Last Modified"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
-								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
-
-							</StackPanel>
-						</Button>
-
-
-					</Grid>
-
-
-					<!--  Scrollable File List  -->
-					<ScrollViewer
-						Grid.Row="3"
-						Height="200"
-						HorizontalScrollBarVisibility="Disabled"
-						VerticalScrollBarVisibility="Auto">
-						<ItemsControl ItemsSource="{Binding DesktopFiles}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Grid
-										Height="40"
-										Margin="0,5,0,0"
-										Background="{Binding RowBackground}"
-										ColumnDefinitions="40, *, 120, 200"
-										>
-										<CheckBox
-											Grid.Column="0"
-											HorizontalAlignment="Center"
-											VerticalAlignment="Center"
-											IsChecked="{Binding IsSelected}" />
-										<TextBlock
-											Grid.Column="1"
-											VerticalAlignment="Center"
-											Foreground="White"
-
-											Text="{Binding FileName}" />
-										<TextBlock
-											Grid.Column="2"
-											VerticalAlignment="Center"
-											Foreground="White"
-											Padding="10"
-											Text="{Binding FileSize, StringFormat='{}{0} MB'}" />
-										<TextBlock
-											Grid.Column="3"
-											VerticalAlignment="Center"
-											Foreground="White"
-											Text="{Binding LastModified, StringFormat='{}{0:g}'}" />
-									</Grid>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</ScrollViewer>
-
-					<!-- Free Selected disk space -->
-					<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
-						<TextBlock Text="" Foreground="DodgerBlue" FontSize="16"/>
-						<Button Content="Free up selected disk space"
-								Background="#4444FF"
-								Foreground="White"
-								Command="{Binding FreeSelectedDiskSpaceCommand}"
-								Padding="10,5"/>
-					</StackPanel>
-					<!--
-					<Border Background="#333" CornerRadius="10" Height="120" Margin="5">
-						<StackPanel>
-							<TextBlock Margin="10,10,10,10" xml:space="preserve" >Free up disk space by removing locally cached files on this device. The files will<LineBreak/> remain On-Demand and can easily be accesses by opening the file agian.
-						</TextBlock>
-							<Button HorizontalAlignment="Right" Margin="10,10,10,10" Content="Free up disk space" Background="#4444FF" Foreground="White" Padding="10,5"/>
-
-						</StackPanel>
-					</Border>-->
-
-				</StackPanel>
-			</TabItem>
-			<TabItem Header="Documents">
-				<TextBlock Margin="5">This is tab 2 content</TextBlock>
-			</TabItem>
-			<TabItem Header="Pictures">
-				<TextBlock Margin="5">This is tab 3 content</TextBlock>
-			</TabItem>
-			<TabItem Header="Recordings">
-				<TextBlock Margin="5">This is tab 3 content</TextBlock>
-			</TabItem>
-		</TabControl>
-	</StackPanel>
+                    
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Documents">
+                <TextBlock Margin="5">This is tab 2 content</TextBlock>
+            </TabItem>
+            <TabItem Header="Pictures">
+                <TextBlock Margin="5">This is tab 3 content</TextBlock>
+            </TabItem>
+            <TabItem Header="Recordings">
+                <TextBlock Margin="5">This is tab 4 content</TextBlock>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </UserControl>
