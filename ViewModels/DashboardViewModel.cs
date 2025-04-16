@@ -29,9 +29,11 @@ namespace LorealAvaloniaUI.ViewModels
 
         public double UsagePercentage => TotalStorageGB > 0 ? UsedStorageGB / TotalStorageGB : 0;
 
-        public SolidColorBrush ProgressBarColor => UsagePercentage > 0.9 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Blue);
+        public SolidColorBrush ProgressBarColor => (TotalStorageGB - UsedStorageGB) < 15 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Blue);
 
-        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "Storage Critically Low" : "Storage Status";
+        public string StorageTextColor => (TotalStorageGB - UsedStorageGB) < 15 ? "Red" : "White";
+
+        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 15 ? "Storage Critically Low" : "Storage Status";
 
         public string StorageUsageText => $"{UsedStorageGB:F0} GB Used of {TotalStorageGB:F0} GB";
 
