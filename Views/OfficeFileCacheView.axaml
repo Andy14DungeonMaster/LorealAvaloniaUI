@@ -70,7 +70,7 @@
 				</StackPanel>
 			</Button>
 
-			<Button Grid.Column="2" Padding="0" Background="Transparent" Command="{Binding SortFilesBySizeCommand}">
+			<Button Grid.Column="2" Padding="10" Background="Transparent" Command="{Binding SortFilesBySizeCommand}">
 				<!-- Remove default padding -->
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -117,12 +117,13 @@
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 Foreground="White"
-								Padding="10"
+								Padding="0"
                                 Text="{Binding FileName}" />
 							<TextBlock
                                 Grid.Column="2"
                                 VerticalAlignment="Center"
                                 Foreground="White"
+								Padding="10"
                                 Text="{Binding FileSize, StringFormat='{}{0} MB'}" />
 							<TextBlock
                                 Grid.Column="3"

@@ -42,7 +42,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalSize, value);
         }
 
-        private string _totalNumberOfFiles = "Total no of files > 1 MB: 0";
+        private string _totalNumberOfFiles = "Total no of files > 100 MB: 0";
         public string TotalNumber
         {
             get => _totalNumberOfFiles;
@@ -86,10 +86,10 @@ namespace LorealAvaloniaUI.ViewModels
             CalculateOfficeFilesCacheSizeCommand = ReactiveCommand.CreateFromTask(CalculateOfficeFilesCacheSizeAsync);
 
             DeleteSelectedFilesCommand.ThrownExceptions
-               .Subscribe(ex =>
-               {
-                   Console.WriteLine($"Delete command error: {ex}");
-               });
+                .Subscribe(ex =>
+                {
+                    Log.Error("Delete command error: {Ex}", ex);
+                });
 
             InitializeAsync().ConfigureAwait(false);
 
@@ -110,7 +110,7 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no of files > 1 MB: {count}");
+                .Subscribe(count => TotalNumber = $"Total no of files > 100 MB: {count}");
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,
@@ -154,7 +154,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 if (!Directory.Exists(officeFilesPath))
                 {
-                    Console.WriteLine("Downloads directory does not exist!");
+                    Log.Error("Office files cache directory does not exist; {OfficeFilesCache}", officeFilesPath);
                     return;
                 }
 
@@ -173,20 +173,20 @@ namespace LorealAvaloniaUI.ViewModels
                             long dirSize = 0;
                             dirSize += dirInfo.GetFiles().Sum(file => file.Length);
 
-                            if (dirSize > OneMB)
+                            if (dirSize > (OneMB * 100))
                             {
-                                                               items.Add(new OfficeFileItemViewModel(
-                                    fileName: dirInfo.Name,
-                                    fileSize: Math.Round((double)dirSize / OneMB, 2),
-                                    lastModified: dirInfo.LastWriteTime,
-                                    rowBackground: "#222222",
-                                    fullPath: dirInfo.FullName
-                                ));
+                                items.Add(new OfficeFileItemViewModel(
+     fileName: dirInfo.Name,
+     fileSize: Math.Round((double)dirSize / OneMB, 2),
+     lastModified: dirInfo.LastWriteTime,
+     rowBackground: "#222222",
+     fullPath: dirInfo.FullName
+ ));
                             }
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            Console.WriteLine($"Access denied to file: {file}");
+                            Log.Error("Access denied to file: {File}", file);
                         }
                     }
                     return items;
@@ -198,11 +198,11 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                Console.WriteLine($"Found {Files.Count} files larger than 1MB");
+                Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading files: {ex.Message}");
+                Log.Error($"Error loading files: {ex.Message}");
             }
             finally
             {
@@ -212,7 +212,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task DeleteSelectedFilesAsync()
         {
-            Log.Information("Delete action initiated");
+            Log.Information("** Delete action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
             IsActive = true;
@@ -221,7 +221,7 @@ namespace LorealAvaloniaUI.ViewModels
                 var selectedFiles = Files.Where(f => f.IsSelected).ToList();
                 if (!selectedFiles.Any())
                 {
-                    Console.WriteLine("No files selected for deletion.");
+                    Log.Information("No files selected for deletion.");
                     return;
                 }
 
@@ -230,7 +230,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 if (!confirmed)
                 {
-                    Console.WriteLine("Deletion cancelled by user.");
+                    Log.Information("Deletion cancelled by user.");
                     return;
                 }
 
@@ -247,15 +247,15 @@ namespace LorealAvaloniaUI.ViewModels
                         }
                         else
                         {
-                            Console.WriteLine($"File not found: {file.FullPath}");
+                            Log.Information($"File not found: {file.FullPath}");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error deleting {file.FileName}: {ex.Message}");
+                        Log.Error($"Error deleting {file.FileName}: {ex.Message}");
                     }
                 }
-                Console.WriteLine($"{selectedFiles.Count} file(s) processed.");
+                Log.Information($"{selectedFiles.Count} file(s) processed.");
                 Log.Information("SIZE OF THE DISK AFTER DELETE");
                 LogSystemInformation(); // Log Size of disk before delete task
                 await CalculateOfficeFilesCacheSizeAsync();
@@ -303,8 +303,8 @@ namespace LorealAvaloniaUI.ViewModels
                     //    });
                 });
 
-                TotalSize = $"Total Size: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no of files > 1 MB: {Files.Count}";
+                TotalSize = $"Total Size of Office Files Cache: {totalSize / (1024 * 1024):0.00} MB";
+                TotalNumber = $"Total no of files > 100 MB: {Files.Count}";
                 //Log.Information("Downloads: ");
                 //Log.Information(TotalDownloadsSize);
                 //Log.Information(TotalNumber);
@@ -312,6 +312,7 @@ namespace LorealAvaloniaUI.ViewModels
             catch (Exception ex)
             {
                 TotalSize = $"Error: {ex.Message}";
+                Log.Error(TotalSize);
             }
             finally
             {
@@ -324,8 +325,8 @@ namespace LorealAvaloniaUI.ViewModels
             return fileSizeMB switch
             {
                 > 100 => "#FF6666",
-                > 50 => "#FFA500",
-                > 10 => "#FFD700",
+                > 50 => "#222222",
+                > 10 => "#222222",
                 _ => "#222222"
             };
         }
@@ -388,22 +389,22 @@ namespace LorealAvaloniaUI.ViewModels
                     // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-                    Log.Information("C: Drive Information:");
-                    Log.Information("Total Size: " + Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
-                    Log.Information("Free Space:" + Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
-                    Log.Information("Used Space:" + Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2) + " GB");
+                    Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2),
+                        Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
+                        Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
+                    Log.Information("{TotalSize}", TotalSize);
 
                 }
                 else
                 {
-                    Console.WriteLine("C: drive is not ready.");
+                    Log.Error("C: drive is not ready.");
                 }
 
             }
 
             catch (Exception ex)
             {
-                Log.Information($"Error: {ex.Message}");
+                Log.Error($"Error: {ex.Message}");
             }
         }
 
@@ -575,4 +576,3 @@ namespace LorealAvaloniaUI.ViewModels
         }
     }
 }
-        

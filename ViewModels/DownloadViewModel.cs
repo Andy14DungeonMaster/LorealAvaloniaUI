@@ -44,7 +44,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalDownloadsSize, value);
         }
 
-        private string _totalNumberOfFiles = "Total no of files > 1 MB: 0";
+        private string _totalNumberOfFiles = "Total no of files > 100 MB: 0";
         public string TotalNumber
         {
             get => _totalNumberOfFiles;
@@ -104,7 +104,7 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no of files > 1 MB: {count}");
+                .Subscribe(count => TotalNumber = $"Total no of files > 100 MB: {count}");
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,
@@ -163,7 +163,7 @@ namespace LorealAvaloniaUI.ViewModels
                         try
                         {
                             var fileInfo = new FileInfo(file);
-                            if (fileInfo.Length > OneMB)
+                            if (fileInfo.Length > (OneMB * 100)) // Adding only if file is > 100 MB
                             {
                                 var fileSizeMB = Math.Round((double)fileInfo.Length / OneMB, 2);
                                 items.Add(new FileItemViewModel(
@@ -189,7 +189,7 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                Log.Information($"Found {Files.Count} files larger than 1MB");
+                Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
             }
             catch (Exception ex)
             {
@@ -203,7 +203,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task DeleteSelectedFilesAsync()
         {
-            Log.Information("Delete action initiated");
+            Log.Information("** Delete action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
             IsActive = true;
@@ -266,7 +266,7 @@ namespace LorealAvaloniaUI.ViewModels
             {
                 string targetDirectory = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "OneDrive - L'Oréal\\Documents", "MovedFilesFromDownloads"
+                    "OneDrive - L'Oréal\\Documents", "[LorealDiskCleanUp]MovedFilesFromDownloads"
                 );
                 if (!Directory.Exists(targetDirectory))
                 {
@@ -342,8 +342,8 @@ namespace LorealAvaloniaUI.ViewModels
                         });
                 });
 
-                TotalDownloadsSize = $"Total Size: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no of files > 1 MB: {Files.Count}";
+                TotalDownloadsSize = $"Total Size of Downloads folder: {totalSize / (1024 * 1024):0.00} MB";
+                TotalNumber = $"Total no of files > 100 MB: {Files.Count}";
             }
             catch (Exception ex)
             {
@@ -425,11 +425,10 @@ namespace LorealAvaloniaUI.ViewModels
                     // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-                    Log.Information("C: Drive Information:");
-                    Log.Information("Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2), 
+                    Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2), 
                         Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
-                    Log.Information("Size of Downloads directory: {TotalDownloadsSize}", TotalDownloadsSize);
+                    Log.Information("{TotalDownloadsSize}", TotalDownloadsSize);
 
                 }
                 else
