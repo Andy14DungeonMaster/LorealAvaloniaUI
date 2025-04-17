@@ -49,6 +49,8 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfFiles, value);
         }
 
+
+
         private bool _isActive;
         public bool IsActive
         {
@@ -90,6 +92,9 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     Log.Error("Delete command error: {Ex}", ex);
                 });
+
+            _totalSize = string.Empty;
+            _totalNumberOfFiles = string.Empty;
 
             InitializeAsync().ConfigureAwait(false);
 

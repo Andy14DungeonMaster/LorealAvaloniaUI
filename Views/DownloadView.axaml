@@ -123,10 +123,12 @@
 			<TextBlock
 	            FontSize="16"
 	            Foreground="DodgerBlue"
-	            Text="Size Selected" />
+				Padding="10"
+	            Text="Size Selected:" />
             <TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"
+				Padding="10"
                 Text="{Binding SizeOfFilesSelected}" />
             <Button
                 Padding="10,5"

@@ -146,7 +146,10 @@ namespace LorealAvaloniaUI.ViewModels
             _totaldocumentsSize = string.Empty;
             _totalNumberOfDocumentsFiles = string.Empty;
 
-            
+            _totalpicturesSize = string.Empty;
+            _totalNumberOfpicturesFiles = string.Empty;
+
+
 
             FreeSelectedDiskSpaceCommand = ReactiveCommand.CreateFromTask(FreeSelectedDiskSpaceAsync);
             SortByNameCommand = ReactiveCommand.Create(() => SortByName(_desktopTab));
