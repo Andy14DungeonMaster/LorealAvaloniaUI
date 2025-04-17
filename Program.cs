@@ -20,7 +20,7 @@ sealed class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File($"{Environment.MachineName}_.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.File($"Logs\\{Environment.MachineName}_.log", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         Log.Information("________________________________________________________________");

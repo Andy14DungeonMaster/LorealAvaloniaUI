@@ -124,7 +124,7 @@
 	            FontSize="16"
 	            Foreground="DodgerBlue"
 				Padding="10"
-	            Text="Size Selected:" />
+	            Text="Size Selected" />
             <TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"
