@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Management.Automation;
 using Serilog;
+using LorealAvaloniaUI.Views;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -48,6 +50,7 @@ namespace LorealAvaloniaUI.ViewModels
         private string _documentsTab = "Documents";
         private string _picturesTab = "Pictures";
 
+        string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
 
         public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new();
 
@@ -70,7 +73,7 @@ namespace LorealAvaloniaUI.ViewModels
         public ReactiveCommand<Unit, Unit> SortBySizePicturesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortByDatePicturesCommand { get; }
 
-
+        public ReactiveCommand<Unit, Unit> FreeAllDiskSpaceCommand { get; }
 
         public string TotalDesktopSize
         {
@@ -129,16 +132,16 @@ namespace LorealAvaloniaUI.ViewModels
         public OneDriveViewModel()
         {
             desktopPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "OneDrive - L'Oréal\\Desktop");
+                oneDrivePath,
+                "Desktop");
 
             documentsPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "OneDrive - L'Oréal\\Documents");
+                oneDrivePath,
+                "Documents");
 
             picturesPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "OneDrive - L'Oréal\\Pictures");
+                oneDrivePath,
+                "Pictures");
 
             _totalDesktopSize = string.Empty;
             _totalNumberOfDesktopFiles = string.Empty;
@@ -165,6 +168,8 @@ namespace LorealAvaloniaUI.ViewModels
             SortByNamePicturesCommand = ReactiveCommand.Create(() => SortByName(_picturesTab));
             SortBySizePicturesCommand = ReactiveCommand.Create(() => SortBySize(_picturesTab));
             SortByDatePicturesCommand = ReactiveCommand.Create(() => SortByDate(_picturesTab));
+
+            FreeAllDiskSpaceCommand = ReactiveCommand.CreateFromTask(FreeAllDiskSpaceAsync);
 
             this.WhenAnyValue(x => x.SelectAll)
                 .Subscribe(selectAll =>
@@ -446,7 +451,47 @@ namespace LorealAvaloniaUI.ViewModels
             await CalculateSizeAsync();
         }
 
-       
+        private async Task FreeAllDiskSpaceAsync()
+        {
+            Log.Information("** Free up all space initiated **");
+            Log.Information("SIZE OF THE DISK BEFORE");
+            LogSystemInformation(); // Log Size of disk before delete task
+
+            try
+            {
+                using var ps = PowerShell.Create();
+
+                string message = $"This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file int he future, you'll need to be online.";
+                bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
+
+                if (!confirmed)
+                {
+                    Log.Information("Free up all space cancelled by user.");
+                    return;
+                }
+
+                ps.AddScript(@"get-childitem $ENV:OneDriveCommercial -Force -File -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.Attributes -match 'ReparsePoint' -or $_.Attributes -eq '525344' } | ForEach-Object { attrib.exe $_.fullname +U -P /s }");
+                var result = await ps.InvokeAsync();
+
+                Log.Information($"All the files on this device are set to online-only");
+                Log.Information("SIZE OF THE DISK AFTER");
+                LogSystemInformation();
+
+                if (result != null)
+                {
+                    Log.Information(result.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to execute unpinning");
+            }
+
+            
+            await CalculateSizeAsync();
+        }
+
+
         private async Task CalculateSizeAsync()
         {
             try

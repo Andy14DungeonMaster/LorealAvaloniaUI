@@ -1,19 +1,27 @@
 using System;
 using System.IO;
+using System.Reactive;
 using System.Runtime.InteropServices;
-using System.Windows.Input;
 using Avalonia.Media;
+using LorealAvaloniaUI.Services;
+using LorealAvaloniaUI.Views;
 using ReactiveUI;
+using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
     public class DashboardViewModel : ReactiveObject
     {
+        private readonly NavigationService _navigationService;
         private double _usedStorageGB;
         private double _totalStorageGB;
         private string _cleanupDate = "26-Jan-2025";
         private string _clearedSpace = "10 GB";
         private string _totalAvailableAfterCleanup = "170 GB of 200 GB";
+        public ReactiveCommand<Unit, Unit> FreeUpDownloadsCommand { get; }
+        public ReactiveCommand<Unit, Unit> FreeUpOneDriveCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowOutlookDetailsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowOfficeCacheDetailsCommand { get; }
 
         public double UsedStorageGB
         {
@@ -29,11 +37,11 @@ namespace LorealAvaloniaUI.ViewModels
 
         public double UsagePercentage => TotalStorageGB > 0 ? UsedStorageGB / TotalStorageGB : 0;
 
-        public SolidColorBrush ProgressBarColor => (TotalStorageGB - UsedStorageGB) < 15 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Blue);
+        public SolidColorBrush ProgressBarColor => UsagePercentage > 0.9 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Blue);
 
-        public string StorageTextColor => (TotalStorageGB - UsedStorageGB) < 15 ? "Red" : "White";
+        public SolidColorBrush StorageTextColor => UsagePercentage > 0.9 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.White);
 
-        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 15 ? "Storage Critically Low" : "Storage Status";
+        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "Storage Critically Low" : "Storage Status";
 
         public string StorageUsageText => $"{UsedStorageGB:F0} GB Used of {TotalStorageGB:F0} GB";
 
@@ -57,17 +65,29 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalAvailableAfterCleanup, value);
         }
 
-        public ICommand FreeUpDownloadsCommand { get; }
-        public ICommand FreeUpOneDriveCommand { get; }
-        public ICommand ShowOutlookDetailsCommand { get; }
-        public ICommand ShowOfficeCacheDetailsCommand { get; }
-
-        public DashboardViewModel()
+        public DashboardViewModel(NavigationService navigationService)
         {
-            FreeUpDownloadsCommand = ReactiveCommand.Create(() => { /* Logic to free up downloads space */ });
-            FreeUpOneDriveCommand = ReactiveCommand.Create(() => { /* Logic to free up OneDrive space */ });
-            ShowOutlookDetailsCommand = ReactiveCommand.Create(() => { /* Logic to show Outlook details */ });
-            ShowOfficeCacheDetailsCommand = ReactiveCommand.Create(() => { /* Logic to show Office cache details */ });
+            _navigationService = navigationService;
+            FreeUpDownloadsCommand = ReactiveCommand.Create(() =>
+            {
+                Log.Information("Navigating to DownloadView");
+                _navigationService.Navigate<DownloadViewModel, DownloadView>();
+            });
+            FreeUpOneDriveCommand = ReactiveCommand.Create(() =>
+            {
+                Log.Information("Navigating to OneDriveView");
+                _navigationService.Navigate<OneDriveViewModel, OneDriveView>();
+            });
+            ShowOutlookDetailsCommand = ReactiveCommand.Create(() =>
+            {
+                Log.Information("Navigating to OutlookFilesView");
+                _navigationService.Navigate<OutlookFilesViewModel, OutlookFilesView>();
+            });
+            ShowOfficeCacheDetailsCommand = ReactiveCommand.Create(() =>
+            {
+                Log.Information("Navigating to OfficeFileCacheView");
+                _navigationService.Navigate<OfficeFileCacheViewModel, OfficeFileCacheView>();
+            });
 
             LoadDriveInfo();
         }
@@ -91,9 +111,9 @@ namespace LorealAvaloniaUI.ViewModels
                     UsedStorageGB = 186;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Handle errors (e.g., drive not found)
+                Log.Error(ex, "Failed to load drive info");
                 TotalStorageGB = 200;
                 UsedStorageGB = 186;
             }
