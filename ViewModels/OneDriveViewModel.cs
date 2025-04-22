@@ -461,7 +461,7 @@ namespace LorealAvaloniaUI.ViewModels
             {
                 using var ps = PowerShell.Create();
 
-                string message = $"This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file int he future, you'll need to be online.";
+                string message = $"This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.";
                 bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
 
                 if (!confirmed)
