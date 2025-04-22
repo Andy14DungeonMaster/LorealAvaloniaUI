@@ -6,17 +6,13 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <ApplicationIcon>Icon\AppIcon.ico</ApplicationIcon>
+    <ApplicationIcon>AppIconB128 - Copy.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />       
     <AvaloniaResource Include="Assets\**" />
     <Page Include="Views\*.axaml" />  
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Icon\AppIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,5 +33,13 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Remove="Icon\AppIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppIconB128 - Copy.ico" />
   </ItemGroup>
 </Project>

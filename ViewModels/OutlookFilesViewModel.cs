@@ -5,11 +5,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using System.Text.Json;
 using DynamicData;
 using ReactiveUI;
 using static LorealAvaloniaUI.ViewModels.OneDriveViewModel;
+using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -18,10 +20,39 @@ namespace LorealAvaloniaUI.ViewModels
     {
         public ObservableCollection<OutlookDisplayFiles> OutlookFiles { get; set; } = new();
 
-        
+        private string _outlookStatus = "";
+        public string outlookStatus
+        {
+            get => _outlookStatus;
+            set => this.RaiseAndSetIfChanged(ref _outlookStatus, value);
+        }
+
+
         public OutlookFilesViewModel() 
         {
-            string psScript = @"
+            try
+            {
+                string outlookPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "AppData\\Local\\Microsoft\\Outlook"
+                );
+
+                if (!Directory.Exists(outlookPath))
+                {
+                    Log.Error("Outlook directory does not exist: {OutlookPath}", outlookPath);
+                    outlookStatus = $"Outlook directory does not exist: {outlookPath}";
+                    return;
+                }
+
+                if (!Directory.EnumerateFiles(outlookPath, "*.ost").Any())
+                {
+                    Log.Error("Outlook not configured: {OutlookPath} ", outlookPath);
+                    outlookStatus = $"Outlook not configured: {outlookPath}";
+                    return;
+                }
+
+
+                string psScript = @"
 Add-Type -AssemblyName 'Microsoft.Office.Interop.Outlook'
 $outlook = New-Object -ComObject Outlook.Application
 $namespace = $outlook.GetNamespace('MAPI')
@@ -41,38 +72,39 @@ foreach ($store in $stores) {
 }
 @($results) | ConvertTo-Json -Compress
 ";
-            var psi = new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{psScript}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{psScript}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
-            var process = new Process { StartInfo = psi };
-            process.Start();
+                var process = new Process { StartInfo = psi };
+                process.Start();
 
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-            process.WaitForExit();
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+                process.WaitForExit();
 
-            if (!string.IsNullOrWhiteSpace(error))
-            {
-                Console.WriteLine("PowerShell Error:");
-                Console.WriteLine(error);
-                return;
-            }
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    Log.Information("PowerShell Error:");
+                    Log.Error(error);
+                    return;
+                }
 
-            try
-            {
+
+
+
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var files = JsonSerializer.Deserialize<List<OutlookDisplayFiles>>(output, options);
 
                 //OutlookFiles.AddRange(files);
 
-                Console.WriteLine("OST/PST Files Found:");
+                Log.Information("OST/PST Files Found:");
                 foreach (var file in files)
                 {
 
@@ -83,36 +115,18 @@ foreach ($store in $stores) {
                     outlookFile.Extension = file.Extension;
 
                     OutlookFiles.Add(outlookFile);
+                    Log.Information("Outlook file found: {FilePath}", outlookFile.FilePath);
 
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to parse PowerShell output:");
-                Console.WriteLine(ex.Message);
+                Log.Error("Failed to parse PowerShell output:");
+                Log.Error(ex.Message);
             }
-
-            //OutlookFiles = new ObservableCollection<OutlookDisplayFiles>
-            //{
-            ////new OutlookDisplayFiles("OutlookFile.ost", "101", "yes", "C:/Users\\alekhya.nandina\\AppData\\Local\\Microsoft\\Outlook"),
-            ////new OutlookDisplayFiles("OutlookFile1.pst", "143", "no", "C:\\Users\\alekhya.nandina\\OneDrive - L'Oréal\\Documents\\Outlook Files"),
-            ////new OutlookDisplayFiles("OutlookFile2.pst", "300", "no", "C:\\Users\\alekhya.nandina\\OneDrive - L'Oréal\\Documents\\Outlook Files")
-            //};
 
         }
     }
-
-    //public class powershellOutput
-    //{
-
-    //    public string FileName { get; set; }
-
-    //    public string FilePath { get; set; }
-
-    //    public string Extension { get; set; }
-    //    public string FileSizeMB { get; set; }
-    //}
-
 
 
 
@@ -125,15 +139,5 @@ foreach ($store in $stores) {
         public string Extension { get; set; } = string.Empty;
         public string FileSizeMB { get; set; } = string.Empty;
 
-
-
-        //public OutlookDisplayFiles(string filename, string size, string extension, string filepath)
-        //{
-        //    FileName = filename;
-        //    FileSizeMB = size;
-        //    Extension = extension;
-        //    FilePath = filepath;
-
-        //}
     }
 }

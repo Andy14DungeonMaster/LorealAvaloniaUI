@@ -129,7 +129,8 @@
                 FontSize="16"
                 Foreground="DodgerBlue"
 				Padding="10"
-                Text="{Binding SizeOfFilesSelected}" />
+                Text="{Binding 
+				}" />
             <Button
                 Padding="10,5"
                 Background="#FF4444"
