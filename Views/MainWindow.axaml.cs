@@ -22,9 +22,9 @@ public partial class MainWindow : Window
         navigationService.Initialize(MainContent);
     }
     private void OnMenuItemClicked(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control && control.DataContext is MenuItemViewModel menuItem)
         {
-            if (sender is TextBlock textBlock && textBlock.DataContext is MenuItemViewModel menuItem)
-            {
                 menuItem.Command?.Execute().Subscribe();
         }
     }

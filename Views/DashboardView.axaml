@@ -76,6 +76,9 @@
         <!-- Cleanup Summary -->
 		<StackPanel >
         <TextBlock Text="Previous clean up summary:" Foreground="White" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
+	    <TextBlock Text="Downloads space cleared: " Foreground="White" FontSize="14"/>
+		<TextBlock Text="OneDrive space cleared: " Foreground="White" FontSize="14"/>
+		<TextBlock Text="Office Files Cache space cleared: " Foreground="White" FontSize="14"/>
         <TextBlock Text="{Binding CleanupDate}" Foreground="White" FontSize="14"/>
         <TextBlock Text="{Binding ClearedSpace}" Foreground="White" FontSize="14"/>
         <TextBlock Text="{Binding TotalAvailableAfterCleanup}" Foreground="White" FontSize="14"/>
