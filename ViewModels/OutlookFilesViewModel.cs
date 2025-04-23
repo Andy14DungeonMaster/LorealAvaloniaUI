@@ -51,7 +51,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
 
 
-                _ = LoadOutlookFilesAsync(); // fire and forget
+          _ =  LoadOutlookFilesAsync(); // fire and forget
         }
 
         private async Task LoadOutlookFilesAsync()
@@ -74,7 +74,13 @@ foreach ($store in $stores) {
         }
     }
 }
-@($results) | ConvertTo-Json -Compress
+
+if ($results.Count -eq 1) {  # Check if only one item
+    ConvertTo-Json -InputObject @($results) -Compress # Wrap in array
+} else {
+    ConvertTo-Json -InputObject $results -Compress # Already an array
+}
+
 ";
 
             try
@@ -96,10 +102,17 @@ foreach ($store in $stores) {
                 string error = await process.StandardError.ReadToEndAsync();
                 await process.WaitForExitAsync();
 
+                if (string.IsNullOrWhiteSpace(output))
+                {
+                    Log.Information("Output of powershell is empty string");
+
+                    return;
+                }
+
                 if (!string.IsNullOrWhiteSpace(error))
                 {
-                    Console.WriteLine("PowerShell Error:");
-                    Console.WriteLine(error);
+                    Log.Information("PowerShell Error:");
+                    Log.Error(error);
                     return;
                 }
 
@@ -109,14 +122,26 @@ foreach ($store in $stores) {
                 if (files != null)
                 {
                     foreach (var file in files)
+                    {
                         OutlookFiles.Add(file);
+                        Log.Information("Found file {FileName} of Size {Size} at {Location}", file.FileName,file.FileSizeMB, file.FilePath);
+                    }
+
                 }
+            }
+
+            catch (JsonException ex)
+            {
+                Log.Error("Json Error: {Ex}", ex);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to run PowerShell script:");
-                Console.WriteLine(ex.Message);
+                Log.Error("Failed to run PowerShell script:");
+                Log.Error(ex.Message);
             }
+
+            
+
         }
     }
 

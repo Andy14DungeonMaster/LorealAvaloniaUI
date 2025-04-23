@@ -9,6 +9,6 @@ public partial class OutlookFilesView : UserControl
     public OutlookFilesView()
     {
         InitializeComponent();
-        Log.Information("-- Initiating Outlook Menu --");
+        Log.Information("-- Initializing Outlook page --");
     }
 }

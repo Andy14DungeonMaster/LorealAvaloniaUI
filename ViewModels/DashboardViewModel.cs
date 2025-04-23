@@ -70,22 +70,22 @@ namespace LorealAvaloniaUI.ViewModels
             _navigationService = navigationService;
             FreeUpDownloadsCommand = ReactiveCommand.Create(() =>
             {
-                Log.Information("Navigating to DownloadView");
+                Log.Information("Navigating to DownloadView from dashboard");
                 _navigationService.Navigate<DownloadViewModel, DownloadView>();
             });
             FreeUpOneDriveCommand = ReactiveCommand.Create(() =>
             {
-                Log.Information("Navigating to OneDriveView");
+                Log.Information("Navigating to OneDriveView from dashboard");
                 _navigationService.Navigate<OneDriveViewModel, OneDriveView>();
             });
             ShowOutlookDetailsCommand = ReactiveCommand.Create(() =>
             {
-                Log.Information("Navigating to OutlookFilesView");
+                Log.Information("Navigating to OutlookFilesView from dashboard");
                 _navigationService.Navigate<OutlookFilesViewModel, OutlookFilesView>();
             });
             ShowOfficeCacheDetailsCommand = ReactiveCommand.Create(() =>
             {
-                Log.Information("Navigating to OfficeFileCacheView");
+                Log.Information("Navigating to OfficeFileCacheView from dashboard");
                 _navigationService.Navigate<OfficeFileCacheViewModel, OfficeFileCacheView>();
             });
 
@@ -103,6 +103,9 @@ namespace LorealAvaloniaUI.ViewModels
                     // Convert bytes to GB (1 GB = 1024^3 bytes)
                     TotalStorageGB = drive.TotalSize / (1024.0 * 1024.0 * 1024.0);
                     UsedStorageGB = (drive.TotalSize - drive.AvailableFreeSpace) / (1024.0 * 1024.0 * 1024.0);
+                    //Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round(TotalStorageGB, 2),
+                    //   Math.Round((drive.AvailableFreeSpace) / (1024.0 * 1024.0 * 1024.0),2),
+                    //   Math.Round(UsedStorageGB,2));
                 }
                 else
                 {

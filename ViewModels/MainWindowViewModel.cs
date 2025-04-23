@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
+using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
