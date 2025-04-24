@@ -7,9 +7,10 @@
     Width="800"
     Height="500"
     x:DataType="vm:MainViewModel"
-    Background="#A7F3D0">
+    Background="#222223"
+	  Loaded="Window_Loaded">
 
-    <Grid ColumnDefinitions="200, *" RowDefinitions="50, *">
+    <Grid ColumnDefinitions="250, *" RowDefinitions="50, *">
 
         <!--  Header Section  -->
         <Border
@@ -39,18 +40,31 @@
         <Border
             Grid.Row="1"
             Grid.Column="0"
-            Padding="10"
+			Margin="0,10,0,0"
             Background="#222223">
-            <TreeView ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}">
+            <TreeView ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}" Margin="0,0,0,0">
+				<TreeView.Styles>
+					<Style Selector="TreeView">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						
+					</Style>
+				</TreeView.Styles>
                 <TreeView.DataTemplates>
-                    <TreeDataTemplate DataType="vm:MenuItemViewModel" ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                            <TextBlock
-                                Cursor="Hand"
-                                Foreground="White"
-                                PointerPressed="OnMenuItemClicked"
-                                Text="{Binding Title}" />
-                        </StackPanel>
+                    <TreeDataTemplate DataType="vm:MenuItemViewModel" ItemsSource="{Binding Children}" >
+						<Border
+						   HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="Transparent"
+						   	Cursor="Hand"
+							PointerPressed="OnMenuItemClicked"
+							Height="30"
+						   >
+							<TextBlock Foreground="White"
+									   Text="{Binding Title}"
+									   VerticalAlignment="Center"
+									   FontSize="16"
+									   />
+						</Border>
                     </TreeDataTemplate>
                 </TreeView.DataTemplates>
             </TreeView>

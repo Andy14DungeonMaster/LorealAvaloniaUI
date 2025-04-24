@@ -12,6 +12,6 @@ public partial class OneDriveView : UserControl
         
         InitializeComponent();
         DataContext = new OneDriveViewModel();
-        Log.Information("-- Initiating OneDrive Menu --");
+        Log.Information("-- Initializing OneDrive Menu --");
     }
 } 

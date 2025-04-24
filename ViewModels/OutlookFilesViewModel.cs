@@ -1,21 +1,15 @@
-
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
 using System.Text.Json;
-using DynamicData;
+using System.Threading.Tasks;
 using ReactiveUI;
-using static LorealAvaloniaUI.ViewModels.OneDriveViewModel;
 using Serilog;
 
 namespace LorealAvaloniaUI.ViewModels
 {
-
     public class OutlookFilesViewModel : ReactiveObject
     {
         public ObservableCollection<OutlookDisplayFiles> OutlookFiles { get; set; } = new();
@@ -27,8 +21,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _outlookStatus, value);
         }
 
-
-        public OutlookFilesViewModel() 
+        public OutlookFilesViewModel()
         {
             try
             {
@@ -50,9 +43,20 @@ namespace LorealAvaloniaUI.ViewModels
                     outlookStatus = $"Outlook not configured: {outlookPath}";
                     return;
                 }
+            }
+
+            catch(Exception ex)
+            {
+                Log.Error("{exception}",ex);
+            }
 
 
-                string psScript = @"
+          _ =  LoadOutlookFilesAsync(); // fire and forget
+        }
+
+        private async Task LoadOutlookFilesAsync()
+        {
+            string psScript = @"
 Add-Type -AssemblyName 'Microsoft.Office.Interop.Outlook'
 $outlook = New-Object -ComObject Outlook.Application
 $namespace = $outlook.GetNamespace('MAPI')
@@ -70,8 +74,17 @@ foreach ($store in $stores) {
         }
     }
 }
-@($results) | ConvertTo-Json -Compress
+
+if ($results.Count -eq 1) {  # Check if only one item
+    ConvertTo-Json -InputObject @($results) -Compress # Wrap in array
+} else {
+    ConvertTo-Json -InputObject $results -Compress # Already an array
+}
+
 ";
+
+            try
+            {
                 var psi = new ProcessStartInfo
                 {
                     FileName = "powershell.exe",
@@ -82,12 +95,19 @@ foreach ($store in $stores) {
                     CreateNoWindow = true
                 };
 
-                var process = new Process { StartInfo = psi };
-                process.Start();
+                using var process = Process.Start(psi);
+                if (process == null) return;
 
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
+                await process.WaitForExitAsync();
+
+                if (string.IsNullOrWhiteSpace(output))
+                {
+                    Log.Information("Output of powershell is empty string");
+
+                    return;
+                }
 
                 if (!string.IsNullOrWhiteSpace(error))
                 {
@@ -96,48 +116,40 @@ foreach ($store in $stores) {
                     return;
                 }
 
-
-
-
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var files = JsonSerializer.Deserialize<List<OutlookDisplayFiles>>(output, options);
+                var files = JsonSerializer.Deserialize<OutlookDisplayFiles[]>(output, options);
 
-                //OutlookFiles.AddRange(files);
-
-                Log.Information("OST/PST Files Found:");
-                foreach (var file in files)
+                if (files != null)
                 {
-
-                    OutlookDisplayFiles outlookFile = new();
-                    outlookFile.FileName = file.FileName;
-                    outlookFile.FilePath = file.FilePath;
-                    outlookFile.FileSizeMB = file.FileSizeMB;
-                    outlookFile.Extension = file.Extension;
-
-                    OutlookFiles.Add(outlookFile);
-                    Log.Information("Outlook file found: {FilePath}", outlookFile.FilePath);
+                    foreach (var file in files)
+                    {
+                        OutlookFiles.Add(file);
+                        Log.Information("Found file {FileName} of Size {Size} at {Location}", file.FileName,file.FileSizeMB, file.FilePath);
+                    }
 
                 }
             }
+
+            catch (JsonException ex)
+            {
+                Log.Error("Json Error: {Ex}", ex);
+            }
             catch (Exception ex)
             {
-                Log.Error("Failed to parse PowerShell output:");
+                Log.Error("Failed to run PowerShell script:");
                 Log.Error(ex.Message);
             }
+
+            
 
         }
     }
 
-
-
-    public class OutlookDisplayFiles: ReactiveObject
+    public class OutlookDisplayFiles : ReactiveObject
     {
         public string FileName { get; set; } = string.Empty;
-
         public string FilePath { get; set; } = string.Empty;
-
         public string Extension { get; set; } = string.Empty;
         public string FileSizeMB { get; set; } = string.Empty;
-
     }
 }

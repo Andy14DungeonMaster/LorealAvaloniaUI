@@ -383,6 +383,7 @@ namespace LorealAvaloniaUI.ViewModels
                 string error = await errorTask;
 
                 await process.WaitForExitAsync();
+                
                 return string.IsNullOrEmpty(error) ? output.Trim() : $"{output}\nStandard Error:\n{error}".Trim();
             }
             catch (Exception ex)
@@ -408,7 +409,7 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     if (await Task.Run(() => File.Exists(file.FullPath)))
                     {
-                        string command = $"attrib +u \"{file.FullPath}\"";
+                        string command = $"attrib +u -p \"{file.FullPath}\"";
                         await ExecuteCommandAsync(command);
 
                         await UpdateUIAsync(() =>

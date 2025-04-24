@@ -11,6 +11,6 @@ public partial class OfficeFileCacheView : UserControl
     {
         InitializeComponent();
         DataContext = new OfficeFileCacheViewModel();
-        Log.Information("-- Initializing Office Files Cache Page --");
+        Log.Information("-- Initializing Office Cache Files Page --");
     }
 }
