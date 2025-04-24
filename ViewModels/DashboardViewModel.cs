@@ -85,7 +85,7 @@ namespace LorealAvaloniaUI.ViewModels
             });
             ShowOfficeCacheDetailsCommand = ReactiveCommand.Create(() =>
             {
-                Log.Information("Navigating to OfficeFileCacheView from dashboard");
+                Log.Information("Navigating to OfficeCacheFilesView from dashboard");
                 _navigationService.Navigate<OfficeFileCacheViewModel, OfficeFileCacheView>();
             });
 
