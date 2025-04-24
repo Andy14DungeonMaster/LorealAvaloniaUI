@@ -1,61 +1,76 @@
 using Avalonia;
-using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Threading;
+using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.ViewModels;
 using LorealAvaloniaUI.Views;
-using LorealAvaloniaUI.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using System;
+using System.IO;
 
-namespace LorealAvaloniaUI;
-
-public partial class App : Application
+namespace LorealAvaloniaUI
 {
-    public static IServiceProvider Services { get; private set; } = null!;
-
-    public override void Initialize()
+    public partial class App : Application
     {
-        AvaloniaXamlLoader.Load(this);
-        ConfigureServices();
-    }
+        public static IServiceProvider Services { get; private set; } = null!;
 
-    private void ConfigureServices()
-    {
-        var serviceCollection = new ServiceCollection();
-
-        // ✅ Register ViewModels
-        serviceCollection.AddSingleton<MainViewModel>();
-        serviceCollection.AddTransient<DashboardViewModel>();
-        serviceCollection.AddTransient<SettingsViewModel>();
-        serviceCollection.AddTransient<DownloadViewModel>();
-        serviceCollection.AddTransient<OneDriveViewModel>();
-        serviceCollection.AddTransient<OutlookFilesViewModel>();
-        serviceCollection.AddTransient<OfficeFileCacheViewModel>();
-
-        // ✅ Register Services
-        serviceCollection.AddSingleton<NavigationService>();
-
-        Services = serviceCollection.BuildServiceProvider();
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        public override void Initialize()
         {
-            Dispatcher.UIThread.Post(() =>
-            {
-                var mainWindow = new MainWindow
-                {
-                    DataContext = Services.GetRequiredService<MainViewModel>()
-                };
-
-                desktop.MainWindow = mainWindow;
-                mainWindow.Show();
-                mainWindow.Activate();
-            });
+            AvaloniaXamlLoader.Load(this);
+            ConfigureServices();
         }
 
-        base.OnFrameworkInitializationCompleted();
+        private void ConfigureServices()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            // Configure Serilog
+            var logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LorealAvaloniaUI", "deletion_log.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                .CreateLogger();
+
+            // Register ViewModels
+            serviceCollection.AddSingleton<MainViewModel>();
+            serviceCollection.AddTransient<DashboardViewModel>();
+            serviceCollection.AddTransient<SettingsViewModel>();
+            serviceCollection.AddTransient<DownloadViewModel>();
+            serviceCollection.AddTransient<OneDriveViewModel>();
+            serviceCollection.AddTransient<OutlookFilesViewModel>();
+            serviceCollection.AddTransient<OfficeFileCacheViewModel>();
+
+            // Register Services
+            serviceCollection.AddSingleton<NavigationService>();
+
+            Services = serviceCollection.BuildServiceProvider();
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
+            // Update LastUsedDate on app launch
+            FileDeletionTracker.Instance.LastUsedDate = DateTime.UtcNow;
+
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    var mainWindow = new MainWindow
+                    {
+                        DataContext = Services.GetRequiredService<MainViewModel>()
+                    };
+
+                    desktop.MainWindow = mainWindow;
+                    mainWindow.Show();
+                    mainWindow.Activate();
+                });
+            }
+
+            base.OnFrameworkInitializationCompleted();
+        }
     }
 }
