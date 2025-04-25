@@ -65,12 +65,6 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalAvailableAfterCleanup, value);
         }
 
-        public long DeletedFilesCount => FileDeletionTracker.Instance.DeletedFilesCount;
-
-        public double TotalDeletedSizeGB => FileDeletionTracker.Instance.TotalDeletedSizeGB;
-
-        public string LastUsedDate => FileDeletionTracker.Instance.LastUsedDate == DateTime.MinValue ? "Never" : FileDeletionTracker.Instance.LastUsedDate.ToString("yyyy-MM-dd HH:mm:ss");
-
         public DashboardViewModel(NavigationService navigationService)
         {
             _navigationService = navigationService;
