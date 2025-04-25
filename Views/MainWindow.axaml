@@ -4,11 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
     Title="L'ORÉAL DISK CLEANUP"
-    Width="800"
-    Height="500"
+
     x:DataType="vm:MainViewModel"
     Background="#222223"
-	  Loaded="Window_Loaded">
+	Loaded="Window_Loaded">
 
     <Grid ColumnDefinitions="250, *" RowDefinitions="50, *">
 
