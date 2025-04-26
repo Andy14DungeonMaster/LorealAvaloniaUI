@@ -15,9 +15,12 @@ namespace LorealAvaloniaUI.ViewModels
         private readonly NavigationService _navigationService;
         private double _usedStorageGB;
         private double _totalStorageGB;
-        private string _cleanupDate = "26-Jan-2025";
-        private string _clearedSpace = "10 GB";
-        private string _totalAvailableAfterCleanup = "170 GB of 200 GB";
+        private DateTime _cleanupDate = FileDeletionTracker.Instance.PreviousLastUsedDate;
+        private double _noOfFilesDeleted = FileDeletionTracker.Instance.PreviousDeletedFilesCount;
+        private double _clearedSpace = FileDeletionTracker.Instance.PreviousTotalDeletedSizeGB;
+        private double _noOfFilesUncached = FileDeletionTracker.Instance.PreviousUncachedFilesCount;
+        private double _uncachedSpace = FileDeletionTracker.Instance.PreviousTotalUncachedSizeGB;
+        private string _totalAvailableAfterCleanup =$"{FileDeletionTracker.Instance.PreviousAvailableSpace} GB available of {FileDeletionTracker.Instance.PreviousTotalSize} GB";
         public ReactiveCommand<Unit, Unit> FreeUpDownloadsCommand { get; }
         public ReactiveCommand<Unit, Unit> FreeUpOneDriveCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowOutlookDetailsCommand { get; }
@@ -47,16 +50,34 @@ namespace LorealAvaloniaUI.ViewModels
 
         public string FreeStorageText => $"{TotalStorageGB - UsedStorageGB:F0} GB Free";
 
-        public string CleanupDate
+        public DateTime CleanupDate
         {
             get => _cleanupDate;
             set => this.RaiseAndSetIfChanged(ref _cleanupDate, value);
         }
 
-        public string ClearedSpace
+        public double DeletedFileCount
+        {
+            get => _noOfFilesDeleted;
+            set => this.RaiseAndSetIfChanged(ref _noOfFilesDeleted, value);
+        }
+
+        public double ClearedSpace
         {
             get => _clearedSpace;
             set => this.RaiseAndSetIfChanged(ref _clearedSpace, value);
+        }
+
+        public double UncachedFileCount
+        {
+            get => _noOfFilesUncached;
+            set => this.RaiseAndSetIfChanged(ref _noOfFilesUncached, value);
+        }
+
+        public double UncachedSpace
+        {
+            get => _uncachedSpace;
+            set => this.RaiseAndSetIfChanged(ref _uncachedSpace, value);
         }
 
         public string TotalAvailableAfterCleanup

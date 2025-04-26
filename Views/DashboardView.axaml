@@ -75,13 +75,13 @@
 		</Grid>
         <!-- Cleanup Summary -->
 		<StackPanel >
-        <TextBlock Text="Previous clean up summary:" Foreground="White" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
-	    <TextBlock Text="Downloads space cleared: " Foreground="White" FontSize="14"/>
-		<TextBlock Text="OneDrive space cleared: " Foreground="White" FontSize="14"/>
-		<TextBlock Text="Office Cache  space cleared: " Foreground="White" FontSize="14"/>
-        <TextBlock Text="{Binding CleanupDate}" Foreground="White" FontSize="14"/>
-        <TextBlock Text="{Binding ClearedSpace}" Foreground="White" FontSize="14"/>
-        <TextBlock Text="{Binding TotalAvailableAfterCleanup}" Foreground="White" FontSize="14"/>
+        <TextBlock Text="Previous clean up summary:" FontStyle="Italic" Foreground="White" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
+        <TextBlock Text="{Binding CleanupDate, StringFormat='Date: {0:f}'}" Foreground="White" FontSize="14"/>
+        <TextBlock Text="{Binding DeletedFileCount, StringFormat='No. of files deleted: {0}'}" Foreground="White" FontSize="14"/>
+			<TextBlock Text="{Binding ClearedSpace, StringFormat='Size of the deleted files: {0} GB'}" Foreground="White" FontSize="14"/>
+			<TextBlock Text="{Binding UncachedFileCount, StringFormat='No. of OneDrive files uncached through selection: {0} '}" Foreground="White" FontSize="14"/>
+			<TextBlock Text="{Binding UncachedSpace, StringFormat='Size of the OneDrive uncached files through selection: {0} GB'}" Foreground="White" FontSize="14"/>
+			<TextBlock Text="{Binding TotalAvailableAfterCleanup}" Foreground="White" FontSize="14"/>
 		</StackPanel>
 
     </StackPanel>

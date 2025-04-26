@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Management.Automation;
 using Serilog;
 using LorealAvaloniaUI.Views;
+using LorealAvaloniaUI.Services;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -412,6 +413,8 @@ namespace LorealAvaloniaUI.ViewModels
                         string command = $"attrib +u -p \"{file.FullPath}\"";
                         await ExecuteCommandAsync(command);
 
+                        FileDeletionTracker.Instance.LogUncaching(file.FileName, file.FullPath, file.FileSize);
+
                         await UpdateUIAsync(() =>
                         {
                             if ( _tabSelected == _desktopTab )
@@ -514,20 +517,20 @@ namespace LorealAvaloniaUI.ViewModels
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDesktopNumber = $"Total files > 100 MB: {DesktopFiles.Count}";
-                        TotalDesktopSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                        TotalDesktopNumber = $"Total no. of files greater than 100 MB: {DesktopFiles.Count}";
+                        TotalDesktopSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
                     });
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDocumentNumber = $"Total files > 100 MB: {DocumentFiles.Count}";
-                        TotalDocumentSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                        TotalDocumentNumber = $"Total no. of files greater than 100 MB: {DocumentFiles.Count}";
+                        TotalDocumentSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
                     });
 
                 await UpdateUIAsync(() =>
                 {
-                    TotalPicturesNumber = $"Total files > 100 MB: {PicturesFiles.Count}";
-                    TotalPicturesSize = $"C: Drive Size: {totalSizeGB:F2} GB";
+                    TotalPicturesNumber = $"Total no. of files greater than 100 MB: {PicturesFiles.Count}";
+                    TotalPicturesSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
                 });
 
                

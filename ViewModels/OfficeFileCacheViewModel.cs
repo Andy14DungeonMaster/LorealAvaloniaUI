@@ -9,6 +9,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData;
+using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
 using Serilog;
@@ -42,7 +43,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalSize, value);
         }
 
-        private string _totalNumberOfFiles = "Total no of files > 100 MB: 0";
+        private string _totalNumberOfFiles = "Total no. of files greater than 100 MB: 0";
         public string TotalNumber
         {
             get => _totalNumberOfFiles;
@@ -115,7 +116,7 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no of files > 100 MB: {count}");
+                .Subscribe(count => TotalNumber = $"Total no. of files greater than 100 MB: {count}");
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,
@@ -247,8 +248,8 @@ namespace LorealAvaloniaUI.ViewModels
                         {
                             await Task.Run(() => Directory.Delete(file.FullPath, true)); // 
                             Files.Remove(file);
-                            Console.WriteLine($"{file.FileName} deleted successfully.");
                             Log.Information($"{file.FileName} deleted successfully.");
+                            FileDeletionTracker.Instance.LogDeletion(file.FileName, file.FullPath, file.FileSize);
                         }
                         else
                         {
@@ -308,8 +309,8 @@ namespace LorealAvaloniaUI.ViewModels
                     //    });
                 });
 
-                TotalSize = $"Total Size of Office Files Cache: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no of files > 100 MB: {Files.Count}";
+                TotalSize = $"Total size of office cache files: {totalSize / (1024 * 1024):0.00} MB";
+                TotalNumber = $"Total no. of files greater than 100 MB: {Files.Count}";
                 //Log.Information("Downloads: ");
                 //Log.Information(TotalDownloadsSize);
                 //Log.Information(TotalNumber);

@@ -12,6 +12,7 @@ using Avalonia;
 using Avalonia.Controls;
 using LorealAvaloniaUI.Views;
 using Serilog;
+using LorealAvaloniaUI.Services;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -44,7 +45,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalDownloadsSize, value);
         }
 
-        private string _totalNumberOfFiles = "Total no of files > 100 MB: 0";
+        private string _totalNumberOfFiles = "Total no. of files with size greater than 100 MB: 0";
         public string TotalNumber
         {
             get => _totalNumberOfFiles;
@@ -104,7 +105,7 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no of files > 100 MB: {count}");
+                .Subscribe(count => TotalNumber = $"Total no. of files with size greater than 100 MB: {count}");
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,
@@ -233,7 +234,9 @@ namespace LorealAvaloniaUI.ViewModels
                         {
                             await Task.Run(() => File.Delete(file.FullPath));
                             Files.Remove(file);
+                            FileDeletionTracker.Instance.LogDeletion(file.FileName, file.FullPath, file.FileSize);
                             Log.Information("{FileName} deleted successfully.", file.FileName);
+
                         }
                         else
                         {
@@ -342,8 +345,8 @@ namespace LorealAvaloniaUI.ViewModels
                         });
                 });
 
-                TotalDownloadsSize = $"Total Size of Downloads folder: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no of files > 100 MB: {Files.Count}";
+                TotalDownloadsSize = $"Total size of downloads folder: {totalSize / (1024 * 1024):0.00} MB";
+                TotalNumber = $"Total no. of files with size greater than 100 MB: {Files.Count}";
             }
             catch (Exception ex)
             {
