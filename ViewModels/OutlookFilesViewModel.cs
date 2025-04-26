@@ -21,6 +21,12 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _outlookStatus, value);
         }
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
         public OutlookFilesViewModel()
         {
             try
@@ -56,6 +62,8 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task LoadOutlookFilesAsync()
         {
+            IsLoading = true; // Show loading indicator
+
             string psScript = @"
 Add-Type -AssemblyName 'Microsoft.Office.Interop.Outlook'
 $outlook = New-Object -ComObject Outlook.Application
@@ -138,6 +146,10 @@ if ($results.Count -eq 1) {  # Check if only one item
             {
                 Log.Error("Failed to run PowerShell script:");
                 Log.Error(ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             

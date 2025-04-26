@@ -5,11 +5,15 @@
              x:DataType="vm:OneDriveViewModel">
 	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 			<!-- For the TabControl -->
 		</Grid.RowDefinitions>
-        <TabControl Margin="10">
+
+		<ProgressBar Grid.Row ="0" Margin="5" IsVisible="{Binding IsLoading}" IsIndeterminate="True" />
+		
+        <TabControl Grid.Row="1" Margin="10">
             <TabItem Header="Desktop" Foreground="DodgerBlue">
 				<Grid>
 					<Grid.RowDefinitions>
@@ -225,8 +229,9 @@
 					
             </TabItem>
         </TabControl>
+		
 		<!-- Free Selected Disk Space -->
-		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="20">
+		<StackPanel Grid.Row="2" Orientation="Vertical" Margin="20">
 			<!-- StackPanel to hold both -->
 			<TextBlock Padding="10" FontSize="16" Text="Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again." Foreground="White" TextWrapping="Wrap" />
 			<Button HorizontalAlignment="Right" Content="Free up all disk space" Command="{Binding FreeAllDiskSpaceCommand}" Background="#4444FF" Foreground="White"/>

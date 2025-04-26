@@ -118,7 +118,7 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectAll, value);
         }
 
-        public bool SelectAllDocuments
+        public bool SelectAllDocuments 
         {
             get => _selectAllDocuments;
             set => this.RaiseAndSetIfChanged(ref _selectAllDocuments, value);
@@ -128,6 +128,13 @@ namespace LorealAvaloniaUI.ViewModels
         {
             get => _selectAllPictures;
             set => this.RaiseAndSetIfChanged(ref _selectAllPictures, value);
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         public OneDriveViewModel()
@@ -277,6 +284,8 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task LoadFileAttributesAsync(string path)
         {
+            IsLoading = true;
+
             const long OneMB = 1048576;
             string command = $"attrib \"{path}\\*.*\" /s";
             string result = await ExecuteCommandAsync(command);
@@ -354,6 +363,10 @@ namespace LorealAvaloniaUI.ViewModels
             {
                 Log.Error($"Error loading files: {ex.Message}");
             }
+            finally
+            {
+                IsLoading = false;
+            }
 
         }
 
@@ -396,6 +409,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task FreeDiskSpaceAsync(ObservableCollection<DesktopFileItemViewModel> Files, string _tabSelected)
         {
+            IsLoading = true;
 
             Log.Information("** Uncache action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
@@ -447,6 +461,10 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     Log.Error(ex, "Failed to uncache file: {fileName}", file.FileName);
                 }
+                finally
+                {
+                    IsLoading = false;
+                }
             }));
 
             Log.Information("{Count} file(s) processed.", selectedFiles.Count);
@@ -457,6 +475,8 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task FreeAllDiskSpaceAsync()
         {
+            IsLoading = true;
+
             Log.Information("** Free up all space initiated **");
             Log.Information("SIZE OF THE DISK BEFORE");
             LogSystemInformation(); // Log Size of disk before delete task
@@ -490,7 +510,10 @@ namespace LorealAvaloniaUI.ViewModels
             {
                 Log.Error(ex, "Failed to execute unpinning");
             }
-
+            finally
+            {
+                IsLoading = false;
+            }
             
             await CalculateSizeAsync();
         }
@@ -498,6 +521,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task CalculateSizeAsync()
         {
+            IsLoading = true;
             try
             {
                 var cDrive = new DriveInfo("C");
@@ -542,6 +566,11 @@ namespace LorealAvaloniaUI.ViewModels
                 Log.Error(ex, "Failed to calculate desktop size");
                 await UpdateUIAsync(() => TotalDesktopSize = $"Error: {ex.Message}");
                 await UpdateUIAsync(() => TotalDocumentSize = $"Error: {ex.Message}");
+            }
+
+            finally
+            {
+                IsLoading = false;
             }
         }
 

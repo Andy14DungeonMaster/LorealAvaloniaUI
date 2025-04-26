@@ -52,11 +52,11 @@ namespace LorealAvaloniaUI.ViewModels
 
 
 
-        private bool _isActive;
-        public bool IsActive
+        private bool _isLoading;
+        public bool IsLoading
         {
-            get => _isActive;
-            set => this.RaiseAndSetIfChanged(ref _isActive, value);
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         private bool _isSortedAscending = true;
@@ -150,7 +150,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task LoadFilesAsync()
         {
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 string officeFilesPath = Path.Combine(
@@ -212,7 +212,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
@@ -221,7 +221,7 @@ namespace LorealAvaloniaUI.ViewModels
             Log.Information("** Delete action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 var selectedFiles = Files.Where(f => f.IsSelected).ToList();
@@ -268,13 +268,13 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
         private async Task CalculateOfficeFilesCacheSizeAsync()
         {
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 string officeFilesPath = Path.Combine(
@@ -322,7 +322,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 

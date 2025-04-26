@@ -52,11 +52,11 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfFiles, value);
         }
 
-        private bool _isActive;
-        public bool IsActive
+        private bool _isLoading;
+        public bool IsLoading
         {
-            get => _isActive;
-            set => this.RaiseAndSetIfChanged(ref _isActive, value);
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         private bool? _selectAll = false;
@@ -139,7 +139,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task LoadFilesAsync()
         {
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 string downloadsPath = Path.Combine(
@@ -198,7 +198,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
@@ -207,7 +207,7 @@ namespace LorealAvaloniaUI.ViewModels
             Log.Information("** Delete action initiated **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
             LogSystemInformation(); // Log Size of disk before delete task
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 var selectedFiles = Files.Where(f => f.IsSelected).ToList();
@@ -255,7 +255,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
@@ -264,7 +264,7 @@ namespace LorealAvaloniaUI.ViewModels
             Log.Information("Move action initiated");
             Log.Information("SIZE OF THE DISK BEFORE MOVE");
             LogSystemInformation(); // Log Size of disk before delete task
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 string targetDirectory = Path.Combine(
@@ -309,13 +309,13 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
         private async Task CalculateDownloadsSizeAsync()
         {
-            IsActive = true;
+            IsLoading = true;
             try
             {
                 string downloadsPath = Path.Combine(
@@ -355,7 +355,7 @@ namespace LorealAvaloniaUI.ViewModels
             }
             finally
             {
-                IsActive = false;
+                IsLoading = false;
             }
         }
 
