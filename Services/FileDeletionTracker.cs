@@ -32,9 +32,6 @@ namespace LorealAvaloniaUI.Services
         private double _currentSessionUncachedFilesCount;
         private double _currentSessionTotalUncachedSizeBytes;
 
-        // Drive information
-        private DriveInfo _targetDrive;
-
         private FileDeletionTracker()
         {
             _statsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LorealDiskCleanUp", "deletion_stats.json");

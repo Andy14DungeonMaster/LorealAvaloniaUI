@@ -134,7 +134,7 @@ if ($results.Count -eq 1) {  # Check if only one item
                 if (output.Trim() == "[]")
                 {
                     Log.Information("Outlook in not running. OST/PST files not accessed");
-                    outlookStatus = $"Outlook is not running. Open outlook on your device. Navigate or click again on \"Outlook Files\" in the app to access OST/PST files.";
+                    outlookStatus = $"Outlook is not running. Please open Outlook on your device.\r\nOnce open, navigate to or click on \"Outlook files\" within this application to access information about your OST/PST files.";
                     return;
                 }
 

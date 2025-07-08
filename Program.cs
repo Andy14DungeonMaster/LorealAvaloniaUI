@@ -10,6 +10,7 @@ using Serilog;
 using System.IO;
 using Avalonia.Controls;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace LorealAvaloniaUI;
 
@@ -30,6 +31,7 @@ sealed class Program
             .WriteTo.File(logFileNamePattern, rollingInterval: RollingInterval.Day)
             .CreateLogger();
         Log.Information("________________________________________________________________");
+        Log.Information($"Application Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}");
         Log.Information($"Session Initiated: {DateTime.Now}");
         Log.Information($"Machine ID: {Environment.MachineName}");
         Log.Information($"User logged in: {Environment.UserDomainName}\\{Environment.UserName}");
