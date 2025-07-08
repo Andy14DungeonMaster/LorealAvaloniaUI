@@ -14,6 +14,7 @@ using System.Management.Automation;
 using Serilog;
 using LorealAvaloniaUI.Views;
 using LorealAvaloniaUI.Services;
+using System.Text;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -51,7 +52,8 @@ namespace LorealAvaloniaUI.ViewModels
         private string _documentsTab = "Documents";
         private string _picturesTab = "Pictures";
 
-        string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
+
+        string oneDrivePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive - L'Oréal");
 
         public ObservableCollection<DesktopFileItemViewModel> DesktopFiles { get; } = new();
 
@@ -143,6 +145,8 @@ namespace LorealAvaloniaUI.ViewModels
                 oneDrivePath,
                 "Desktop");
 
+            //desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             documentsPath = Path.Combine(
                 oneDrivePath,
                 "Documents");
@@ -231,21 +235,21 @@ namespace LorealAvaloniaUI.ViewModels
             if (!Directory.Exists(desktopPath))
             {
                 Log.Error("Desktop directory does not exist: {DesktopPath}", desktopPath);
-                await UpdateUIAsync(() => TotalDesktopSize = "Desktop directory not found.");
+                await UpdateUIAsync(() => TotalDesktopSize = $"Desktop directory does not exist: {desktopPath}");
                 return;
             }
 
             if (!Directory.Exists(documentsPath))
             {
                 Log.Error("Documents directory does not exist: {DocumentsPath}", documentsPath);
-                await UpdateUIAsync(() => TotalDesktopSize = "Documents directory not found.");
+                await UpdateUIAsync(() => TotalDocumentSize = $"Documents directory does not exist: {documentsPath}");
                 return;
             }
 
             if (!Directory.Exists(picturesPath))
             {
                 Log.Error("Pictures directory does not exist: {PicturesPath}", picturesPath);
-                await UpdateUIAsync(() => TotalDesktopSize = "Pictures directory not found.");
+                await UpdateUIAsync(() => TotalPicturesSize = $"Pictures directory does not exist: {picturesPath}");
                 return;
             }
 
@@ -256,18 +260,21 @@ namespace LorealAvaloniaUI.ViewModels
                     LoadFileAttributesAsync(desktopPath)
                 );
 
+                Log.Information($"Desktop path: {desktopPath}");
                 Log.Information("Found {Count} cached desktop file(s) larger than 100 MB", DesktopFiles.Count);
-           
+
 
                 await Task.WhenAll(
                     LoadFileAttributesAsync(documentsPath)
                 );
+                Log.Information($"Documents path: {documentsPath}");
                 Log.Information("Found {Count} cached documents file(s) larger than 100 MB", DocumentFiles.Count);
 
                 await Task.WhenAll(
                    LoadFileAttributesAsync(picturesPath)
                );
 
+                Log.Information($"Pictures path: {picturesPath}");
                 Log.Information("Found {Count} cached pictures file(s) larger than 100 MB", PicturesFiles.Count);
 
                 await Task.WhenAll(
@@ -483,8 +490,6 @@ namespace LorealAvaloniaUI.ViewModels
 
             try
             {
-                using var ps = PowerShell.Create();
-
                 string message = $"This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.";
                 bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
 
@@ -494,29 +499,92 @@ namespace LorealAvaloniaUI.ViewModels
                     return;
                 }
 
-                ps.AddScript(@"get-childitem $ENV:OneDriveCommercial -Force -File -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.Attributes -match 'ReparsePoint' -or $_.Attributes -eq '525344' } | ForEach-Object { attrib.exe $_.fullname +U -P /s }");
-                var result = await ps.InvokeAsync();
+                // The PowerShell script to execute in non-elevated mode
+                // Note the ""$($_.fullname)"" to correctly quote the path for attrib.exe in PowerShell.
+                string powerShellScript = @"get-childitem $ENV:OneDriveCommercial -Force -File -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.Attributes -match 'ReparsePoint' -or $_.Attributes -eq '525344' } | ForEach-Object { attrib.exe ""$($_.fullname)"" +U -P /s }";
+
+               // string powerShellScript = @"Write-Host 'Test successful from non-elevated PowerShell!'; Get-Location; exit 0";
+
+                // Encode the script to Base64 to avoid quoting issues when passing as argument
+                byte[] scriptBytes = Encoding.Unicode.GetBytes(powerShellScript);
+                string encodedCommand = Convert.ToBase64String(scriptBytes);
+
+                Log.Information($"Executing PowerShell command in user mode: {powerShellScript}");
+
+                // Prepare the process start info for the non-elevated PowerShell process
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "powershell.exe";
+
+                // -NoProfile for faster startup, -ExecutionPolicy Bypass to allow script execution, -EncodedCommand to run Base64 script
+                startInfo.Arguments = $"-NoProfile -ExecutionPolicy Bypass -EncodedCommand {encodedCommand}";
+                startInfo.UseShellExecute = false;       // CRUCIAL: Set to false to run without elevation (as current user)
+                startInfo.RedirectStandardOutput = true; // Capture output
+                startInfo.RedirectStandardError = true;  // Capture errors
+                startInfo.CreateNoWindow = true;         // Don't show a PowerShell window
+
+                StringBuilder outputBuilder = new StringBuilder();
+                StringBuilder errorBuilder = new StringBuilder();
+
+                using (Process process = new Process())
+                {
+                    process.StartInfo = startInfo;
+
+                    // Event handlers for asynchronous output reading
+                    process.OutputDataReceived += (sender, e) => { if (e.Data != null) outputBuilder.AppendLine(e.Data); };
+                    process.ErrorDataReceived += (sender, e) => { if (e.Data != null) errorBuilder.AppendLine(e.Data); };
+
+                    process.Start();
+
+                    // Begin asynchronous reading of output and error streams
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    // Wait for the process to exit asynchronously
+                    await Task.Run(() => process.WaitForExit());
+
+                    string output = outputBuilder.ToString().Trim();
+                    string error = errorBuilder.ToString().Trim();
+
+                    // Log results based on exit code
+                    if (process.ExitCode == 0)
+                    {
+                        Log.Information($"PowerShell command executed successfully in user mode.");
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            Log.Information($"PowerShell Output:\n{output}");
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"PowerShell command failed with exit code {process.ExitCode}.");
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            Log.Error($"PowerShell Output (despite error):\n{output}");
+                        }
+                        if (!string.IsNullOrEmpty(error))
+                        {
+                            Log.Error($"PowerShell Error Output:\n{error}");
+                        }
+                    }
+                }
 
                 Log.Information($"All the files on this device are set to online-only");
                 Log.Information("SIZE OF THE DISK AFTER");
                 LogSystemInformation();
-
-                if (result != null)
-                {
-                    Log.Information(result.ToString());
-                }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to execute unpinning");
+                Log.Error(ex, "Failed to execute 'Free All Disk Space' operation.");
             }
             finally
             {
                 IsLoading = false;
             }
-            
+
             await CalculateSizeAsync();
         }
+
+
 
 
         private async Task CalculateSizeAsync()

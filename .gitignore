@@ -1,6 +1,7 @@
 # Build output directories
 bin/
 obj/
+publish/
 
 # Avalonia-specific cache files
 *.axaml.g.cs

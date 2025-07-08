@@ -205,6 +205,7 @@ namespace LorealAvaloniaUI.ViewModels
                 }
 
                 Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
+                Log.Information($"Office files cache path: {officeFilesPath}");
             }
             catch (Exception ex)
             {
@@ -311,9 +312,8 @@ namespace LorealAvaloniaUI.ViewModels
 
                 TotalSize = $"Total size of office cache files: {totalSize / (1024 * 1024):0.00} MB";
                 TotalNumber = $"Total no. of files greater than 100 MB: {Files.Count}";
-                //Log.Information("Downloads: ");
-                //Log.Information(TotalDownloadsSize);
-                //Log.Information(TotalNumber);
+                Log.Information($"Total size of office cache files: {totalSize / (1024 * 1024 * 1024):0.00} GB");
+
             }
             catch (Exception ex)
             {
@@ -398,7 +398,6 @@ namespace LorealAvaloniaUI.ViewModels
                     Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
-                    Log.Information("{TotalSize}", TotalSize);
 
                 }
                 else

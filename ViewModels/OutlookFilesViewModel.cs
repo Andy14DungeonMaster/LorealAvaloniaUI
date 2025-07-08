@@ -65,6 +65,13 @@ namespace LorealAvaloniaUI.ViewModels
             IsLoading = true; // Show loading indicator
 
             string psScript = @"
+$outlookProcesses = Get-Process -Name Outlook -ErrorAction SilentlyContinue
+
+if (-not $outlookProcesses) {
+    # Outlook is not running, return empty array and exit
+    Write-Output '[]'
+    exit
+}
 Add-Type -AssemblyName 'Microsoft.Office.Interop.Outlook'
 $outlook = New-Object -ComObject Outlook.Application
 $namespace = $outlook.GetNamespace('MAPI')
@@ -124,6 +131,13 @@ if ($results.Count -eq 1) {  # Check if only one item
                     return;
                 }
 
+                if (output.Trim() == "[]")
+                {
+                    Log.Information("Outlook in not running. OST/PST files not accessed");
+                    outlookStatus = $"Outlook is not running. Open outlook on your device. Navigate or click again on \"Outlook Files\" in the app to access OST/PST files.";
+                    return;
+                }
+
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var files = JsonSerializer.Deserialize<OutlookDisplayFiles[]>(output, options);
 
@@ -151,8 +165,6 @@ if ($results.Count -eq 1) {  # Check if only one item
             {
                 IsLoading = false;
             }
-
-            
 
         }
     }

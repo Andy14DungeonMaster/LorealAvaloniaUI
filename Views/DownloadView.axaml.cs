@@ -11,8 +11,8 @@ public partial class DownloadView : UserControl
     public DownloadView()
     {
         InitializeComponent();
-        DataContext = new DownloadViewModel();
-        Log.Information("-- Initializing Downloads Page --");
+       // DataContext = new DownloadViewModel();
+        Log.Information("------------------ Initializing Downloads Page ------------------");
     }
 
 }

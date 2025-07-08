@@ -10,7 +10,7 @@ public partial class OfficeFileCacheView : UserControl
     public OfficeFileCacheView()
     {
         InitializeComponent();
-        DataContext = new OfficeFileCacheViewModel();
-        Log.Information("-- Initializing Office Cache Files Page --");
+      //  DataContext = new OfficeFileCacheViewModel();
+        Log.Information("------------------ Initializing Office Cache Files Page ------------------");
     }
 }

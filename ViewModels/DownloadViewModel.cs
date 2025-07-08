@@ -190,7 +190,8 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
+                    Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
+                    Log.Information("Downloads directory: {DownloadsPath}", downloadsPath);
             }
             catch (Exception ex)
             {
@@ -305,7 +306,6 @@ namespace LorealAvaloniaUI.ViewModels
                 Log.Information("SIZE OF THE DISK AFTER MOVE");
                 LogSystemInformation(); // Log Size of disk before Move task
                 await CalculateDownloadsSizeAsync();
-                await CalculateDownloadsSizeAsync();
             }
             finally
             {
@@ -347,6 +347,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 TotalDownloadsSize = $"Total size of downloads folder: {totalSize / (1024 * 1024):0.00} MB";
                 TotalNumber = $"Total no. of files with size greater than 100 MB: {Files.Count}";
+                Log.Information($"Total size of downloads folder: {totalSize / (1024 * 1024 * 1024):0.00} GB");
             }
             catch (Exception ex)
             {
@@ -431,7 +432,6 @@ namespace LorealAvaloniaUI.ViewModels
                     Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2), 
                         Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
-                    Log.Information("{TotalDownloadsSize}", TotalDownloadsSize);
 
                 }
                 else
