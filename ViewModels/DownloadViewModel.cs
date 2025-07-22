@@ -12,7 +12,7 @@ using Avalonia;
 using Avalonia.Controls;
 using LorealAvaloniaUI.Views;
 using Serilog;
-using LorealAvaloniaUI.Services;
+using LorealAvaloniaUI.Services; // Add this using directive
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -32,12 +32,13 @@ namespace LorealAvaloniaUI.ViewModels
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesByDateCommand { get; }
-        public ReactiveCommand<Unit, Unit> CalculateDownloadsSizeCommand { get; }
+        // Remove CalculateDownloadsSizeCommand as it's handled by the service
 
         private bool _isSortedAscending = true;
         private bool _isSizeSortedAscending = true;
         private bool _isDateSortedAscending = true;
 
+        // RE-INTRODUCE THIS PROPERTY:
         private string _totalDownloadsSize = "0.00 MB";
         public string TotalDownloadsSize
         {
@@ -77,14 +78,19 @@ namespace LorealAvaloniaUI.ViewModels
             }
         }
 
-        public DownloadViewModel()
+        private readonly DownloadInfoService _downloadInfoService; // Add this field
+
+        // Modify the constructor to accept DownloadInfoService
+        public DownloadViewModel(DownloadInfoService downloadInfoService)
         {
+            _downloadInfoService = downloadInfoService; // Assign the injected service
+
             DeleteSelectedFilesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFilesAsync);
             MoveSelectedFilesCommand = ReactiveCommand.CreateFromTask(MoveSelectedFilesAsync);
             SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
             SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
             SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
-            CalculateDownloadsSizeCommand = ReactiveCommand.CreateFromTask(CalculateDownloadsSizeAsync);
+            // Remove the assignment for CalculateDownloadsSizeCommand
 
             DeleteSelectedFilesCommand.ThrownExceptions
                 .Subscribe(ex =>
@@ -92,13 +98,18 @@ namespace LorealAvaloniaUI.ViewModels
                     Log.Error("Delete command error: {Ex}", ex);
                 });
 
+            // SUBSCRIBE TO THE SERVICE'S PROPERTY:
+            _downloadInfoService.WhenAnyValue(x => x.TotalDownloadsSize)
+                .Subscribe(size => TotalDownloadsSize = size);
+
             InitializeAsync().ConfigureAwait(false);
         }
 
         private async Task InitializeAsync()
         {
             await LoadFilesAsync();
-            await CalculateDownloadsSizeAsync();
+            // No longer call CalculateDownloadsSizeAsync here directly, rely on the service
+            _ = _downloadInfoService.CalculateAndSetDownloadsSizeAsync(); // Trigger update via service
             SetupObservables();
         }
 
@@ -114,26 +125,35 @@ namespace LorealAvaloniaUI.ViewModels
             .StartWith(default(EventPattern<NotifyCollectionChangedEventArgs>))
             .Subscribe(_ =>
             {
-                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
-                    .Select(_ => Files.Where(f => f.IsSelected).Sum(f => f.FileSize))
-                    .Subscribe(sum => SizeOfFilesSelected = $"{sum:0.00} MB");
+                if (Files.Any())
+                {
+                    Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                        .Select(__ => Files.Where(f => f.IsSelected).Sum(f => f.FileSize))
+                        .Subscribe(sum => SizeOfFilesSelected = $"{sum:0.00} MB");
 
-                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
-                    .Select(_ =>
-                    {
-                        if (Files.Count == 0) return false;
-                        bool allSelected = Files.All(f => f.IsSelected);
-                        bool noneSelected = Files.All(f => !f.IsSelected);
-                        return allSelected ? true : noneSelected ? false : (bool?)null;
-                    })
-                    .Subscribe(state =>
-                    {
-                        if (_selectAll != state)
+                    Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                        .Select(__ =>
                         {
-                            _selectAll = state;
-                            this.RaisePropertyChanged(nameof(SelectAll));
-                        }
-                    });
+                            if (Files.Count == 0) return false;
+                            bool allSelected = Files.All(f => f.IsSelected);
+                            bool noneSelected = Files.All(f => !f.IsSelected);
+                            return allSelected ? true : noneSelected ? false : (bool?)null;
+                        })
+                        .Subscribe(state =>
+                        {
+                            if (_selectAll != state)
+                            {
+                                _selectAll = state;
+                                this.RaisePropertyChanged(nameof(SelectAll));
+                            }
+                        });
+                }
+                else
+                {
+                    SizeOfFilesSelected = "0.00 MB";
+                    _selectAll = false; // Reset SelectAll if no files are present
+                    this.RaisePropertyChanged(nameof(SelectAll));
+                }
             });
         }
 
@@ -176,9 +196,17 @@ namespace LorealAvaloniaUI.ViewModels
                                 ));
                             }
                         }
-                        catch (UnauthorizedAccessException)
+                        catch (UnauthorizedAccessException uae)
                         {
-                            Log.Error("Access denied to file: {File}", file);
+                            Log.Error("Access denied to file: {File}. Error: {Message}", file, uae.Message);
+                        }
+                        catch (FileNotFoundException fnf)
+                        {
+                            Log.Warning("File not found (possibly deleted): {File}. Error: {Message}", file, fnf.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Error processing file {File}: {Message}", file, ex.Message);
                         }
                     }
                     return items;
@@ -190,12 +218,12 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                    Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
-                    Log.Information("Downloads directory: {DownloadsPath}", downloadsPath);
+                Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
+                Log.Information("Downloads directory scanned: {DownloadsPath}", downloadsPath);
             }
             catch (Exception ex)
             {
-                Log.Error($"Error loading files: {ex.Message}");
+                Log.Error($"Error loading files in DownloadViewModel: {ex.Message}");
             }
             finally
             {
@@ -205,8 +233,8 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task DeleteSelectedFilesAsync()
         {
-            Log.Information("** Delete action initiated **");
-            Log.Information("SIZE OF THE DISK BEFORE DELETE");
+            Log.Information("** Delete action initiated in DownloadViewModel **");
+            Log.Information("SIZE OF THE DISK BEFORE DELETE (from DownloadViewModel)");
             LogSystemInformation(); // Log Size of disk before delete task
             IsLoading = true;
             try
@@ -219,7 +247,7 @@ namespace LorealAvaloniaUI.ViewModels
                 }
 
                 string message = $"Are you sure you want to permanently delete {selectedFiles.Count} file(s)?";
-                bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
+                bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message); // Assuming this is available
 
                 if (!confirmed)
                 {
@@ -241,7 +269,8 @@ namespace LorealAvaloniaUI.ViewModels
                         }
                         else
                         {
-                            Log.Information("File not found: {FullPath}", file.FullPath);
+                            Log.Information("File not found (already deleted?): {FullPath}", file.FullPath);
+                            Files.Remove(file); // Remove from list if file doesn't exist
                         }
                     }
                     catch (Exception ex)
@@ -249,10 +278,11 @@ namespace LorealAvaloniaUI.ViewModels
                         Log.Error("Error deleting {FileName}: {Message}", file.FileName, ex.Message);
                     }
                 }
-                Log.Information("{Count} file(s) processed.", selectedFiles.Count);
-                Log.Information("SIZE OF THE DISK AFTER DELETE");
-                LogSystemInformation(); // Log Size of disk before delete task
-                await CalculateDownloadsSizeAsync();
+                Log.Information("{Count} file(s) processed for deletion.", selectedFiles.Count);
+                Log.Information("SIZE OF THE DISK AFTER DELETE (from DownloadViewModel)");
+                LogSystemInformation(); // Log Size of disk after delete task
+                // Trigger the service to recalculate downloads size after deletion
+                _ = _downloadInfoService.CalculateAndSetDownloadsSizeAsync();
             }
             finally
             {
@@ -262,9 +292,9 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task MoveSelectedFilesAsync()
         {
-            Log.Information("Move action initiated");
-            Log.Information("SIZE OF THE DISK BEFORE MOVE");
-            LogSystemInformation(); // Log Size of disk before delete task
+            Log.Information("Move action initiated in DownloadViewModel");
+            Log.Information("SIZE OF THE DISK BEFORE MOVE (from DownloadViewModel)");
+            LogSystemInformation(); // Log Size of disk before move task
             IsLoading = true;
             try
             {
@@ -277,11 +307,13 @@ namespace LorealAvaloniaUI.ViewModels
                     try
                     {
                         Directory.CreateDirectory(targetDirectory);
+                        Log.Information("Created target directory: {TargetDirectory}", targetDirectory);
                     }
-
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Log.Error("Error creating directory {TargetDirectory}: {ex}", targetDirectory, ex);
+                        // Potentially inform user or handle gracefully if directory cannot be created
+                        return;
                     }
                 }
 
@@ -295,7 +327,12 @@ namespace LorealAvaloniaUI.ViewModels
                             string newPath = Path.Combine(targetDirectory, file.FileName);
                             await Task.Run(() => File.Move(file.FullPath, newPath));
                             Files.Remove(file);
-                            Log.Information($"{file.FileName} moved successfully.");
+                            Log.Information($"{file.FileName} moved successfully to {newPath}.");
+                        }
+                        else
+                        {
+                            Log.Information("File not found (already moved?): {FullPath}", file.FullPath);
+                            Files.Remove(file); // Remove from list if file doesn't exist
                         }
                     }
                     catch (Exception ex)
@@ -303,9 +340,10 @@ namespace LorealAvaloniaUI.ViewModels
                         Log.Error($"Error moving {file.FileName}: {ex.Message}");
                     }
                 }
-                Log.Information("SIZE OF THE DISK AFTER MOVE");
-                LogSystemInformation(); // Log Size of disk before Move task
-                await CalculateDownloadsSizeAsync();
+                Log.Information("SIZE OF THE DISK AFTER MOVE (from DownloadViewModel)");
+                LogSystemInformation(); // Log Size of disk after move task
+                // Trigger the service to recalculate downloads size after move
+                _ = _downloadInfoService.CalculateAndSetDownloadsSizeAsync();
             }
             finally
             {
@@ -313,52 +351,8 @@ namespace LorealAvaloniaUI.ViewModels
             }
         }
 
-        private async Task CalculateDownloadsSizeAsync()
-        {
-            IsLoading = true;
-            try
-            {
-                string downloadsPath = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "Downloads"
-                );
-
-                if (!Directory.Exists(downloadsPath))
-                {
-                    TotalDownloadsSize = "Downloads directory not found.";
-                    return;
-                }
-
-                long totalSize = await Task.Run(() =>
-                {
-                    return Directory.GetFiles(downloadsPath, "*", SearchOption.AllDirectories)
-                        .Sum(file =>
-                        {
-                            try
-                            {
-                                return new FileInfo(file).Length;
-                            }
-                            catch
-                            {
-                                return 0;
-                            }
-                        });
-                });
-
-                TotalDownloadsSize = $"Total size of downloads folder: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no. of files with size greater than 100 MB: {Files.Count}";
-                Log.Information($"Total size of downloads folder: {totalSize / (1024 * 1024 * 1024):0.00} GB");
-            }
-            catch (Exception ex)
-            {
-                TotalDownloadsSize = $"Error: {ex.Message}";
-                Log.Error(TotalDownloadsSize);
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
+        // Remove the old CalculateDownloadsSizeAsync method from here entirely.
+        // It's now handled by DownloadInfoService.
 
         private string DetermineRowColor(double fileSizeMB)
         {
@@ -414,22 +408,16 @@ namespace LorealAvaloniaUI.ViewModels
         {
             try
             {
-                // Get the Desktop directory path.  Adapt this to your needs!
                 DriveInfo cDrive = new DriveInfo(@"C:\");
                 long totalSize = 0;
 
                 if (cDrive.IsReady)
                 {
-                    // Total size of the drive in bytes
                     totalSize = cDrive.TotalSize;
-
-                    // Available free space in bytes
                     long freeSpace = cDrive.AvailableFreeSpace;
-
-                    // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
-                    Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2), 
+                    Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((freeSpace / (1024.0 * 1024.0 * 1024.0)), 2),
                         Math.Round((usedSpace / (1024.0 * 1024.0 * 1024.0)), 2));
 
@@ -440,13 +428,11 @@ namespace LorealAvaloniaUI.ViewModels
                 }
 
             }
-
             catch (Exception ex)
             {
-                Log.Error($"Error: {ex.Message}");
+                Log.Error($"Error in LogSystemInformation: {ex.Message}");
             }
         }
-
     }
 
     public class FileItemViewModel : ReactiveObject

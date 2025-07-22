@@ -1,3 +1,4 @@
+// LorealAvaloniaUI.ViewModels/DashboardViewModel.cs
 using System;
 using System.IO;
 using System.Reactive;
@@ -7,12 +8,16 @@ using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
 using Serilog;
+using System.Reactive.Linq; // Required for WhenAnyValue and Subscribe
 
 namespace LorealAvaloniaUI.ViewModels
 {
     public class DashboardViewModel : ReactiveObject
     {
         private readonly NavigationService _navigationService;
+        private readonly DownloadInfoService _downloadInfoService;
+        private readonly OfficeCacheInfoService _officeCacheInfoService; // Add this field
+
         private double _usedStorageGB;
         private double _totalStorageGB;
         private DateTime _cleanupDate = FileDeletionTracker.Instance.PreviousLastUsedDate;
@@ -20,7 +25,11 @@ namespace LorealAvaloniaUI.ViewModels
         private double _clearedSpace = FileDeletionTracker.Instance.PreviousTotalDeletedSizeGB;
         private double _noOfFilesUncached = FileDeletionTracker.Instance.PreviousUncachedFilesCount;
         private double _uncachedSpace = FileDeletionTracker.Instance.PreviousTotalUncachedSizeGB;
-        private string _totalAvailableAfterCleanup =$"{FileDeletionTracker.Instance.PreviousAvailableSpace} GB available of {FileDeletionTracker.Instance.PreviousTotalSize} GB";
+        private string _totalAvailableAfterCleanup = $"{FileDeletionTracker.Instance.PreviousAvailableSpace} GB available of {FileDeletionTracker.Instance.PreviousTotalSize} GB";
+
+        private string _downloadsFolderSize;
+        private string _officeCacheFolderSize; // New property backing field for Office Cache
+
         public ReactiveCommand<Unit, Unit> FreeUpDownloadsCommand { get; }
         public ReactiveCommand<Unit, Unit> FreeUpOneDriveCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowOutlookDetailsCommand { get; }
@@ -44,7 +53,9 @@ namespace LorealAvaloniaUI.ViewModels
 
         public SolidColorBrush StorageTextColor => UsagePercentage > 0.9 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.White);
 
-        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "Storage Critically Low" : "Storage Status";
+        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "URGENT: Critical Low Disk Space Alert!" : "Storage Status";
+
+        public string UserInstructionMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up space. Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk." : "Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.";
 
         public string StorageUsageText => $"{UsedStorageGB:F0} GB Used of {TotalStorageGB:F0} GB";
 
@@ -86,12 +97,42 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _totalAvailableAfterCleanup, value);
         }
 
-        public DashboardViewModel(NavigationService navigationService)
+        // Property to display downloads folder size
+        public string DownloadsFolderSize
+        {
+            get => _downloadsFolderSize;
+            set => this.RaiseAndSetIfChanged(ref _downloadsFolderSize, value);
+        }
+
+        // New property to display Office Cache folder size
+        public string OfficeCacheFolderSize
+        {
+            get => _officeCacheFolderSize;
+            set => this.RaiseAndSetIfChanged(ref _officeCacheFolderSize, value);
+        }
+
+
+        // Modify the constructor to accept DownloadInfoService and OfficeCacheInfoService
+        public DashboardViewModel(NavigationService navigationService,
+                                  DownloadInfoService downloadInfoService,
+                                  OfficeCacheInfoService officeCacheInfoService) // Add this parameter
         {
             _navigationService = navigationService;
+            _downloadInfoService = downloadInfoService;
+            _officeCacheInfoService = officeCacheInfoService; // Assign the injected service
+
+            // Subscribe to changes from the DownloadInfoService
+            _downloadInfoService.WhenAnyValue(x => x.TotalDownloadsSize)
+                .Subscribe(size => DownloadsFolderSize = size);
+
+            // Subscribe to changes from the OfficeCacheInfoService
+            _officeCacheInfoService.WhenAnyValue(x => x.TotalOfficeCacheSize)
+                .Subscribe(size => OfficeCacheFolderSize = size);
+
             FreeUpDownloadsCommand = ReactiveCommand.Create(() =>
             {
                 Log.Information("Navigating to DownloadView from dashboard");
+                // When navigating, ensure DownloadViewModel can update the service
                 _navigationService.Navigate<DownloadViewModel, DownloadView>();
             });
             FreeUpOneDriveCommand = ReactiveCommand.Create(() =>
@@ -107,10 +148,15 @@ namespace LorealAvaloniaUI.ViewModels
             ShowOfficeCacheDetailsCommand = ReactiveCommand.Create(() =>
             {
                 Log.Information("Navigating to OfficeCacheFilesView from dashboard");
+                // When navigating, ensure OfficeFileCacheViewModel can update the service
                 _navigationService.Navigate<OfficeFileCacheViewModel, OfficeFileCacheView>();
             });
 
             LoadDriveInfo();
+            // Trigger the calculation of downloads size when the dashboard loads
+            _ = _downloadInfoService.CalculateAndSetDownloadsSizeAsync();
+            // Trigger the calculation of Office Cache size when the dashboard loads
+            _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync();
         }
 
         private void LoadDriveInfo()
@@ -124,15 +170,13 @@ namespace LorealAvaloniaUI.ViewModels
                     // Convert bytes to GB (1 GB = 1024^3 bytes)
                     TotalStorageGB = drive.TotalSize / (1024.0 * 1024.0 * 1024.0);
                     UsedStorageGB = (drive.TotalSize - drive.AvailableFreeSpace) / (1024.0 * 1024.0 * 1024.0);
-                    //Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round(TotalStorageGB, 2),
-                    //   Math.Round((drive.AvailableFreeSpace) / (1024.0 * 1024.0 * 1024.0),2),
-                    //   Math.Round(UsedStorageGB,2));
                 }
                 else
                 {
                     // Fallback values if drive is not ready
                     TotalStorageGB = 200;
                     UsedStorageGB = 186;
+                    Log.Warning("Drive '{DriveName}' is not ready. Using fallback values.", driveName);
                 }
             }
             catch (Exception ex)

@@ -35,6 +35,8 @@ public partial class App : Application
 
         // ✅ Register Services
         serviceCollection.AddSingleton<NavigationService>();
+        serviceCollection.AddSingleton<DownloadInfoService>();
+        serviceCollection.AddSingleton<OfficeCacheInfoService>();
         serviceCollection.AddSingleton<FileDeletionTracker>();
 
         Services = serviceCollection.BuildServiceProvider();

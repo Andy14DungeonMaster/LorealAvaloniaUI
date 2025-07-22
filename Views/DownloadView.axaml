@@ -34,7 +34,7 @@
             <TextBlock
                 FontSize="16"
                 Foreground="White"
-                Text="{Binding TotalDownloadsSize}" />
+			    Text="{Binding TotalDownloadsSize, StringFormat='Total downloads Size: {0} GB'}" />
         </StackPanel>
 
         <!--  Table Headers  -->

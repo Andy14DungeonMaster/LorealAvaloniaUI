@@ -34,7 +34,7 @@
 			<TextBlock
                 FontSize="16"
                 Foreground="White"
-                Text="{Binding TotalSize}" />
+                Text="{Binding TotalSize, StringFormat='Total Size of Office Cache Files: {0} GB'}" />
 		</StackPanel>
 
 		<Grid

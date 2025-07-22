@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -8,12 +7,12 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using DynamicData;
-using LorealAvaloniaUI.Services;
+// Removed DynamicData as it was not used and caused warning
+using LorealAvaloniaUI.Services; // Add this using directive
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
 using Serilog;
-using static System.Net.WebRequestMethods;
+// Removed static System.Net.WebRequestMethods; as it was not used
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -33,10 +32,10 @@ namespace LorealAvaloniaUI.ViewModels
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesByDateCommand { get; }
-        public ReactiveCommand<Unit, Unit> CalculateOfficeFilesCacheSizeCommand { get; }
+        // REMOVE CalculateOfficeFilesCacheSizeCommand as it's now handled by the service
 
+        // RE-INTRODUCE TotalSize property here and its backing field
         private string _totalSize;
-
         public string TotalSize
         {
             get => _totalSize;
@@ -49,8 +48,6 @@ namespace LorealAvaloniaUI.ViewModels
             get => _totalNumberOfFiles;
             set => this.RaiseAndSetIfChanged(ref _totalNumberOfFiles, value);
         }
-
-
 
         private bool _isLoading;
         public bool IsLoading
@@ -80,13 +77,19 @@ namespace LorealAvaloniaUI.ViewModels
                 }
             }
         }
-        public OfficeFileCacheViewModel()
+
+        private readonly OfficeCacheInfoService _officeCacheInfoService; // Add this field
+
+        // MODIFY the constructor to accept OfficeCacheInfoService
+        public OfficeFileCacheViewModel(OfficeCacheInfoService officeCacheInfoService)
         {
+            _officeCacheInfoService = officeCacheInfoService; // Assign the injected service
+
             DeleteSelectedFilesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFilesAsync);
             SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
             SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
             SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
-            CalculateOfficeFilesCacheSizeCommand = ReactiveCommand.CreateFromTask(CalculateOfficeFilesCacheSizeAsync);
+            // REMOVE CalculateOfficeFilesCacheSizeCommand assignment here
 
             DeleteSelectedFilesCommand.ThrownExceptions
                 .Subscribe(ex =>
@@ -94,22 +97,25 @@ namespace LorealAvaloniaUI.ViewModels
                     Log.Error("Delete command error: {Ex}", ex);
                 });
 
-            _totalSize = string.Empty;
-            _totalNumberOfFiles = string.Empty;
+            // INITIALIZE TotalSize for display
+            _totalSize = "Loading..."; // Set an initial loading state
+            _totalNumberOfFiles = "Loading..."; // Set an initial loading state
+
+
+            // Subscribe to the OfficeCacheInfoService's TotalOfficeCacheSize property
+            // to update this ViewModel's TotalSize property.
+            _officeCacheInfoService.WhenAnyValue(x => x.TotalOfficeCacheSize)
+                .Subscribe(size => TotalSize = size);
 
             InitializeAsync().ConfigureAwait(false);
-
-            //string officeFilesPath = Path.Combine(
-            //    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            //    "AppData\\Local\\Microsoft\\Office\\16.0\\OfficeFileCache\\0\\0"
-            //);
-
         }
 
         private async Task InitializeAsync()
         {
             await LoadFilesAsync();
-            await CalculateOfficeFilesCacheSizeAsync();
+            // Trigger the service to calculate the total Office cache size
+            // This is important for initial load and after any operations.
+            _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync();
             SetupObservables();
         }
 
@@ -125,26 +131,36 @@ namespace LorealAvaloniaUI.ViewModels
             .StartWith(default(EventPattern<NotifyCollectionChangedEventArgs>))
             .Subscribe(_ =>
             {
-                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
-                    .Select(_ => Files.Where(f => f.IsSelected).Sum(f => f.FileSize))
-                    .Subscribe(sum => SizeOfFilesSelected = $"{sum:0.00} MB");
+                // Ensure subscriptions are properly managed if Files collection changes frequently
+                if (Files.Any())
+                {
+                    Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                        .Select(__ => Files.Where(f => f.IsSelected).Sum(f => f.FileSize))
+                        .Subscribe(sum => SizeOfFilesSelected = $"{sum:0.00} MB");
 
-                Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
-                    .Select(_ =>
-                    {
-                        if (Files.Count == 0) return false;
-                        bool allSelected = Files.All(f => f.IsSelected);
-                        bool noneSelected = Files.All(f => !f.IsSelected);
-                        return allSelected ? true : noneSelected ? false : (bool?)null;
-                    })
-                    .Subscribe(state =>
-                    {
-                        if (_selectAll != state)
+                    Observable.Merge(Files.Select(f => f.WhenAnyValue(x => x.IsSelected)))
+                        .Select(__ =>
                         {
-                            _selectAll = state;
-                            this.RaisePropertyChanged(nameof(SelectAll));
-                        }
-                    });
+                            if (Files.Count == 0) return false;
+                            bool allSelected = Files.All(f => f.IsSelected);
+                            bool noneSelected = Files.All(f => !f.IsSelected);
+                            return allSelected ? true : noneSelected ? false : (bool?)null;
+                        })
+                        .Subscribe(state =>
+                        {
+                            if (_selectAll != state)
+                            {
+                                _selectAll = state;
+                                this.RaisePropertyChanged(nameof(SelectAll));
+                            }
+                        });
+                }
+                else
+                {
+                    SizeOfFilesSelected = "0.00 MB"; // Reset if no files
+                    _selectAll = false; // Reset SelectAll to false/null
+                    this.RaisePropertyChanged(nameof(SelectAll));
+                }
             });
         }
 
@@ -160,7 +176,7 @@ namespace LorealAvaloniaUI.ViewModels
 
                 if (!Directory.Exists(officeFilesPath))
                 {
-                    Log.Error("Office files cache directory does not exist; {OfficeFilesCache}", officeFilesPath);
+                    Log.Error("Office files cache directory does not exist: {OfficeFilesCache}", officeFilesPath);
                     return;
                 }
 
@@ -168,31 +184,41 @@ namespace LorealAvaloniaUI.ViewModels
                 var fileItems = await Task.Run(() =>
                 {
                     var items = new List<OfficeFileItemViewModel>();
-                    var allDirectories = Directory.GetDirectories(officeFilesPath, "*.*", SearchOption.AllDirectories);
+                    var allDirectories = Directory.GetDirectories(officeFilesPath, "*", SearchOption.AllDirectories);
 
 
-                    foreach (var file in allDirectories)
+                    foreach (var dir in allDirectories)
                     {
                         try
                         {
-                            var dirInfo = new DirectoryInfo(file);
-                            long dirSize = 0;
-                            dirSize += dirInfo.GetFiles().Sum(file => file.Length);
+                            var dirInfo = new DirectoryInfo(dir);
+                            if (!dirInfo.Exists) continue;
+
+                            long dirSize = dirInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(f =>
+                            {
+                                try { return f.Length; }
+                                catch (UnauthorizedAccessException) { Log.Warning("Access denied to file in dir: {File}", f.FullName); return 0; }
+                                catch (FileNotFoundException) { Log.Warning("File not found in dir: {File}", f.FullName); return 0; }
+                            });
 
                             if (dirSize > (OneMB * 100))
                             {
                                 items.Add(new OfficeFileItemViewModel(
-     fileName: dirInfo.Name,
-     fileSize: Math.Round((double)dirSize / OneMB, 2),
-     lastModified: dirInfo.LastWriteTime,
-     rowBackground: "#222222",
-     fullPath: dirInfo.FullName
- ));
+                                    fileName: dirInfo.Name,
+                                    fileSize: Math.Round((double)dirSize / OneMB, 2),
+                                    lastModified: dirInfo.LastWriteTime,
+                                    rowBackground: DetermineRowColor(Math.Round((double)dirSize / OneMB, 2)),
+                                    fullPath: dirInfo.FullName
+                                ));
                             }
                         }
-                        catch (UnauthorizedAccessException)
+                        catch (UnauthorizedAccessException uae)
                         {
-                            Log.Error("Access denied to file: {File}", file);
+                            Log.Error("Access denied to directory: {Dir} - {Ex}", dir, uae.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Error processing directory {Dir}: {Ex}", dir, ex.Message);
                         }
                     }
                     return items;
@@ -204,12 +230,12 @@ namespace LorealAvaloniaUI.ViewModels
                     Files.Add(item);
                 }
 
-                Log.Information($"Found {Files.Count} file(s) larger than 100 MB");
+                Log.Information($"Found {Files.Count} Office cache directories/items larger than 100 MB.");
                 Log.Information($"Office files cache path: {officeFilesPath}");
             }
             catch (Exception ex)
             {
-                Log.Error($"Error loading files: {ex.Message}");
+                Log.Error($"Error loading files in OfficeFileCacheViewModel: {ex.Message}");
             }
             finally
             {
@@ -219,9 +245,9 @@ namespace LorealAvaloniaUI.ViewModels
 
         private async Task DeleteSelectedFilesAsync()
         {
-            Log.Information("** Delete action initiated **");
+            Log.Information("** Delete action initiated in OfficeFileCacheViewModel **");
             Log.Information("SIZE OF THE DISK BEFORE DELETE");
-            LogSystemInformation(); // Log Size of disk before delete task
+            LogSystemInformation();
             IsLoading = true;
             try
             {
@@ -232,7 +258,7 @@ namespace LorealAvaloniaUI.ViewModels
                     return;
                 }
 
-                string message = $"Are you sure you want to permanently delete {selectedFiles.Count} file(s)?";
+                string message = $"Are you sure you want to permanently delete {selectedFiles.Count} item(s) from Office Cache?";
                 bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
 
                 if (!confirmed)
@@ -245,16 +271,16 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     try
                     {
-                        if (Directory.Exists(file.FullPath)) // Check if the directory exists
+                        if (Directory.Exists(file.FullPath))
                         {
-                            await Task.Run(() => Directory.Delete(file.FullPath, true)); // 
+                            await Task.Run(() => Directory.Delete(file.FullPath, true));
                             Files.Remove(file);
-                            Log.Information($"{file.FileName} deleted successfully.");
-                            FileDeletionTracker.Instance.LogDeletion(file.FileName, file.FullPath, file.FileSize);
+                            Log.Information($"{file.FileName} (Office cache item) deleted successfully.");
                         }
                         else
                         {
-                            Log.Information($"File not found: {file.FullPath}");
+                            Log.Information($"Office cache item not found: {file.FullPath}");
+                            Files.Remove(file);
                         }
                     }
                     catch (Exception ex)
@@ -262,63 +288,11 @@ namespace LorealAvaloniaUI.ViewModels
                         Log.Error($"Error deleting {file.FileName}: {ex.Message}");
                     }
                 }
-                Log.Information($"{selectedFiles.Count} file(s) processed.");
+                Log.Information($"{selectedFiles.Count} item(s) processed.");
                 Log.Information("SIZE OF THE DISK AFTER DELETE");
-                LogSystemInformation(); // Log Size of disk before delete task
-                await CalculateOfficeFilesCacheSizeAsync();
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
-
-        private async Task CalculateOfficeFilesCacheSizeAsync()
-        {
-            IsLoading = true;
-            try
-            {
-                string officeFilesPath = Path.Combine(
-                                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                                    "AppData\\Local\\Microsoft\\Office\\16.0\\OfficeFileCache\\0\\0"
-                 );
-
-                if (!Directory.Exists(officeFilesPath))
-                {
-                    TotalSize = "Office Files Cache directory not found.";
-                    return;
-                }
-
-
-                double totalSize = await Task.Run(() =>
-                {
-
-                    //Calculate the total size of all files.
-                    DirectoryInfo dirInfo = new DirectoryInfo(officeFilesPath);
-                    return dirInfo.GetFiles("*", SearchOption.AllDirectories).Sum(file => file.Length);
-                    //return Directory.GetDirectories(officeFilesPath, "*", SearchOption.AllDirectories)
-                    //    .Sum(file =>
-                    //    {
-                    //        try
-                    //        {
-                    //            return new DirectoryInfo(file).Length;
-                    //        }
-                    //        catch
-                    //        {
-                    //            return 0;
-                    //        }
-                    //    });
-                });
-
-                TotalSize = $"Total size of office cache files: {totalSize / (1024 * 1024):0.00} MB";
-                TotalNumber = $"Total no. of files greater than 100 MB: {Files.Count}";
-                Log.Information($"Total size of office cache files: {totalSize / (1024 * 1024 * 1024):0.00} GB");
-
-            }
-            catch (Exception ex)
-            {
-                TotalSize = $"Error: {ex.Message}";
-                Log.Error(TotalSize);
+                LogSystemInformation();
+                // Trigger the service to recalculate Office cache size after deletion
+                _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync();
             }
             finally
             {
@@ -380,19 +354,13 @@ namespace LorealAvaloniaUI.ViewModels
         {
             try
             {
-                // Get the Desktop directory path.  Adapt this to your needs!
                 DriveInfo cDrive = new DriveInfo(@"C:\");
                 long totalSize = 0;
 
                 if (cDrive.IsReady)
                 {
-                    // Total size of the drive in bytes
                     totalSize = cDrive.TotalSize;
-
-                    // Available free space in bytes
                     long freeSpace = cDrive.AvailableFreeSpace;
-
-                    // Used space in bytes
                     long usedSpace = totalSize - freeSpace;
 
                     Log.Information("C: Drive Information - Total Space: {TotalSize} GB, Free Space: {FreeSpace} GB, Used Space: {UsedSpace} GB ", Math.Round((totalSize / (1024.0 * 1024.0 * 1024.0)), 2),
@@ -406,10 +374,9 @@ namespace LorealAvaloniaUI.ViewModels
                 }
 
             }
-
             catch (Exception ex)
             {
-                Log.Error($"Error: {ex.Message}");
+                Log.Error($"Error in LogSystemInformation: {ex.Message}");
             }
         }
 
@@ -440,7 +407,6 @@ namespace LorealAvaloniaUI.ViewModels
             LastModified = lastModified;
             RowBackground = rowBackground;
             FullPath = fullPath;
-
         }
     }
 }

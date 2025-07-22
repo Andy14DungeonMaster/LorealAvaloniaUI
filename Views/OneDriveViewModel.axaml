@@ -6,14 +6,21 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 			<!-- For the TabControl -->
 		</Grid.RowDefinitions>
 
 		<ProgressBar Grid.Row ="0" Margin="5" IsVisible="{Binding IsLoading}" IsIndeterminate="True" />
 		
-        <TabControl Grid.Row="1" Margin="10">
+		<!-- Free Selected Disk Space -->
+		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5">
+			<!-- StackPanel to hold both -->
+			<TextBlock Padding="10" FontSize="16" Text="Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again." Foreground="White" TextWrapping="Wrap" />
+			<Button HorizontalAlignment="Right" Content="Free up all disk space" Command="{Binding FreeAllDiskSpaceCommand}" Background="#4444FF" Foreground="White"/>
+		</StackPanel>
+		
+        <TabControl Grid.Row="2" Margin="10">
             <TabItem Header="Desktop" Foreground="DodgerBlue">
 				<Grid>
 					<Grid.RowDefinitions>
@@ -78,7 +85,7 @@
 
                     <!-- Free Selected Disk Space -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0" HorizontalAlignment="Right">
-                        <Button Content="Free up locally cached space"
+                        <Button Content="Free up selected locally cached space"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommand}"/>
                     </StackPanel>
@@ -149,7 +156,7 @@
 
 					<!-- Free Selected Disk Space -->
 					<StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
-						<Button Content="Free up locally cached space"
+						<Button Content="Free up selected locally cached space"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommandDocuments}"/>
 					</StackPanel>
@@ -219,7 +226,7 @@
 					
 					<!-- Free Selected Disk Space -->
 					<StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
-						<Button Content="Free up locally cached space"
+						<Button Content="Free up selected locally cached space"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommandPictures}"/>
 					</StackPanel>
@@ -230,12 +237,6 @@
             </TabItem>
         </TabControl>
 		
-		<!-- Free Selected Disk Space -->
-		<StackPanel Grid.Row="2" Orientation="Vertical" Margin="20">
-			<!-- StackPanel to hold both -->
-			<TextBlock Padding="10" FontSize="16" Text="Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again." Foreground="White" TextWrapping="Wrap" />
-			<Button HorizontalAlignment="Right" Content="Free up all disk space" Command="{Binding FreeAllDiskSpaceCommand}" Background="#4444FF" Foreground="White"/>
-		</StackPanel>
 </Grid>
 
 </UserControl>
