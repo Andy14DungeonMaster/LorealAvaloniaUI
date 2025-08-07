@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using LorealAvaloniaUI.ViewModels;
 using LorealAvaloniaUI.Views;
 using LorealAvaloniaUI.Services;
+using System.Globalization;
 
 namespace LorealAvaloniaUI;
 
@@ -44,6 +45,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Lang.Resources.Culture = new CultureInfo("es-MX");
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             Dispatcher.UIThread.Post(() =>

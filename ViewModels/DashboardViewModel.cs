@@ -9,6 +9,7 @@ using LorealAvaloniaUI.Views;
 using ReactiveUI;
 using Serilog;
 using System.Reactive.Linq; // Required for WhenAnyValue and Subscribe
+using LorealAvaloniaUI.Lang; 
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -25,7 +26,8 @@ namespace LorealAvaloniaUI.ViewModels
         private double _clearedSpace = FileDeletionTracker.Instance.PreviousTotalDeletedSizeGB;
         private double _noOfFilesUncached = FileDeletionTracker.Instance.PreviousUncachedFilesCount;
         private double _uncachedSpace = FileDeletionTracker.Instance.PreviousTotalUncachedSizeGB;
-        private string _totalAvailableAfterCleanup = $"{FileDeletionTracker.Instance.PreviousAvailableSpace} GB available of {FileDeletionTracker.Instance.PreviousTotalSize} GB";
+        private string _totalAvailableAfterCleanup = string.Format(Resources.PreviousFreeSpaceFormat, FileDeletionTracker.Instance.PreviousAvailableSpace, FileDeletionTracker.Instance.PreviousTotalSize);
+//            $"{FileDeletionTracker.Instance.PreviousAvailableSpace} GB available of {FileDeletionTracker.Instance.PreviousTotalSize} GB";
 
         private string _downloadsFolderSize;
         private string _officeCacheFolderSize; // New property backing field for Office Cache
@@ -53,13 +55,16 @@ namespace LorealAvaloniaUI.ViewModels
 
         public SolidColorBrush StorageTextColor => UsagePercentage > 0.9 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.White);
 
-        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "URGENT: Critical Low Disk Space Alert!" : "Storage Status";
+        public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? Resources.HeaderMessageCritical : Resources.HeaderMessageNormal;
 
-        public string UserInstructionMessage => (TotalStorageGB - UsedStorageGB) < 20 ? "Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up space. Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk." : "Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.";
+        public string UserInstructionMessage => (TotalStorageGB - UsedStorageGB) < 20 ? Resources.UserInstructionMessageCritical: Resources.UserInstructionMessageCritical;
+        
 
-        public string StorageUsageText => $"{UsedStorageGB:F0} GB Used of {TotalStorageGB:F0} GB";
+        public string StorageUsageText =>
+        string.Format(Resources.StorageUsageTextFormat, UsedStorageGB.ToString("F0"), TotalStorageGB.ToString("F0"));
 
-        public string FreeStorageText => $"{TotalStorageGB - UsedStorageGB:F0} GB Free";
+
+        public string FreeStorageText => string.Format(Resources.FreeStorageTextFormat, (TotalStorageGB - UsedStorageGB).ToString("F0"));
 
         public DateTime CleanupDate
         {
