@@ -13,6 +13,7 @@ using Avalonia.Controls;
 using LorealAvaloniaUI.Views;
 using Serilog;
 using LorealAvaloniaUI.Services; // Add this using directive
+using LorealAvaloniaUI.Lang;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -116,7 +117,8 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no. of files with size greater than 100 MB: {count}");
+                .Subscribe(count => TotalNumber = string.Format(Resources.DownloadNoFiles,count) );
+
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,
@@ -246,7 +248,7 @@ namespace LorealAvaloniaUI.ViewModels
                     return;
                 }
 
-                string message = $"Are you sure you want to permanently delete {selectedFiles.Count} file(s)?";
+                string message = string.Format(Resources.ConfirmationDialogMessage,selectedFiles.Count);
                 bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message); // Assuming this is available
 
                 if (!confirmed)

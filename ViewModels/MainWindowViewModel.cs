@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
+using LorealAvaloniaUI.Lang;
 using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
@@ -36,8 +37,8 @@ namespace LorealAvaloniaUI.ViewModels
                 {
                     Children =
                     {
-                        new MenuItemViewModel("Download", NavigateCommand<DownloadViewModel, DownloadView>()),
-                        new MenuItemViewModel("Office Cache Files", NavigateCommand<OfficeFileCacheViewModel, OfficeFileCacheView>()),
+                        new MenuItemViewModel(Resources.DownloadsTitle, NavigateCommand<DownloadViewModel, DownloadView>()),
+                        new MenuItemViewModel(Resources.OfficeFilesCacheTitle, NavigateCommand<OfficeFileCacheViewModel, OfficeFileCacheView>()),
                         new MenuItemViewModel("OneDrive", NavigateCommand<OneDriveViewModel, OneDriveView>()),
                         new MenuItemViewModel("Outlook Files", NavigateCommand<OutlookFilesViewModel, OutlookFilesView>())
                     }

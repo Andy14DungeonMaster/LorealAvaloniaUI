@@ -15,6 +15,7 @@ using Serilog;
 using LorealAvaloniaUI.Views;
 using LorealAvaloniaUI.Services;
 using System.Text;
+using LorealAvaloniaUI.Lang;
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -490,7 +491,7 @@ namespace LorealAvaloniaUI.ViewModels
 
             try
             {
-                string message = $"This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.";
+                string message = string.Format(Resources.OneDriveDialogMessageText);
                 bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
 
                 if (!confirmed)
@@ -609,20 +610,20 @@ namespace LorealAvaloniaUI.ViewModels
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDesktopNumber = $"Total no. of files greater than 100 MB: {DesktopFiles.Count}";
-                        TotalDesktopSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
+                        TotalDesktopNumber = string.Format(Resources.NoOfFilesOneDrive,DesktopFiles.Count);
+                        TotalDesktopSize = string.Format(Resources.SizeInOneDrive, totalSizeGB.ToString("F2"));
                     });
 
                     await UpdateUIAsync(() =>
                     {
-                        TotalDocumentNumber = $"Total no. of files greater than 100 MB: {DocumentFiles.Count}";
-                        TotalDocumentSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
+                        TotalDocumentNumber = string.Format(Resources.NoOfFilesOneDrive, DocumentFiles.Count);
+                        TotalDocumentSize = string.Format(Resources.SizeInOneDrive, totalSizeGB.ToString("F2"));
                     });
 
                 await UpdateUIAsync(() =>
                 {
-                    TotalPicturesNumber = $"Total no. of files greater than 100 MB: {PicturesFiles.Count}";
-                    TotalPicturesSize = $"Size of C:\\ drive: {totalSizeGB:F2} GB";
+                    TotalPicturesNumber = string.Format(Resources.NoOfFilesOneDrive, PicturesFiles.Count);
+                    TotalPicturesSize = string.Format(Resources.SizeInOneDrive, totalSizeGB.ToString("F2"));
                 });
 
                

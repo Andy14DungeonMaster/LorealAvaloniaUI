@@ -57,8 +57,7 @@
                     <Image Source="avares://LorealAvaloniaUI/Assets/downloads_icon.png" Width="40" Height="40"/>
                     <TextBlock Text="{x:Static res:Resources.DownloadsTitle}" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
 					<TextBlock Text="{Binding DownloadsFolderSize, StringFormat={x:Static res:Resources.SizeDisplay}}" HorizontalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"/>
-					<Button Content="{x:Static res:Resources.DOFCButtonText}" Background="#333" Foreground="White" HorizontalContentAlignment="Center"
-                            HorizontalAlignment="Stretch" Padding="10,5" Command="{Binding FreeUpDownloadsCommand}"/>
+					<Button Content="{x:Static res:Resources.DOFCButtonText}" Background="#333" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Padding="10,5" Command="{Binding FreeUpDownloadsCommand}"/>
                 </StackPanel>
             </Border>
 

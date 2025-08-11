@@ -3,6 +3,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+	xmlns:res="clr-namespace:LorealAvaloniaUI.Lang;assembly=LorealAvaloniaUI"
     x:DataType="vm:DownloadViewModel">
 	
     <Grid Margin="20">
@@ -34,7 +35,7 @@
             <TextBlock
                 FontSize="16"
                 Foreground="White"
-			    Text="{Binding TotalDownloadsSize, StringFormat='Total downloads Size: {0} GB'}" />
+			    Text="{Binding TotalDownloadsSize, StringFormat={x:Static res:Resources.DownloadsTotalSize}}" />
         </StackPanel>
 
         <!--  Table Headers  -->
@@ -53,21 +54,21 @@
             <!-- Sortable File Name Header -->
             <Button Grid.Column="1" Padding="0" Background="Transparent" Command="{Binding SortFilesCommand}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static res:Resources.FileNameHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
                     <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
                 </StackPanel>
             </Button>
 
             <Button Grid.Column="2" Padding="0" Background="Transparent" Command="{Binding SortFilesBySizeCommand}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Size" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static res:Resources.SizeHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
                     <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
                 </StackPanel>
             </Button>
 
             <Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortFilesByDateCommand}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static res:Resources.LastModifiedHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
                     <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
                 </StackPanel>
             </Button>
@@ -126,7 +127,7 @@
 	            FontSize="16"
 	            Foreground="DodgerBlue"
 				Padding="10"
-	            Text="Size Selected" />
+	            Text="{x:Static res:Resources.SizeSelected}" />
             <TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"
@@ -136,13 +137,13 @@
                 Padding="10,5"
                 Background="#FF4444"
                 Command="{Binding DeleteSelectedFilesCommand}"
-                Content="Permanent Delete"
+                Content="{x:Static res:Resources.PermanentDelete}"
                 Foreground="White" />
             <Button
                 Padding="10,5"
                 Background="#4444FF"
                 Command="{Binding MoveSelectedFilesCommand}"
-                Content="Move to OneDrive"
+                Content="{x:Static res:Resources.MoveToOneDrive}"
                 Foreground="White" />
         </StackPanel>
     </Grid>

@@ -193,4 +193,107 @@
     <value>{0} GB available of {1} GB</value>
     <comment>Previous clean up summary space display, last line</comment>
   </data>
+  <data name="YesButtonContent" xml:space="preserve">
+    <value>Yes</value>
+    <comment>Yes button text</comment>
+  </data>
+  <data name="NoButtonContent" xml:space="preserve">
+    <value>No</value>
+    <comment>no button text</comment>
+  </data>
+  <data name="ConfirmationDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to permanently delete {0} file(s)?</value>
+    <comment>Text in delete confirmation dialog</comment>
+  </data>
+  <data name="ConfirmationDialogTitle" xml:space="preserve">
+    <value>Confirm Deletion</value>
+    <comment>Title for pop up dialog</comment>
+  </data>
+  <data name="DownloadNoFiles" xml:space="preserve">
+    <value>Total no. of files with size greater than 100 MB: {0}</value>
+    <comment>Download no of files</comment>
+  </data>
+  <data name="DownloadsTotalSize" xml:space="preserve">
+    <value>Total downloads Size: {0} GB</value>
+    <comment>Downloads total size displayed at top</comment>
+  </data>
+  <data name="FileNameHeader" xml:space="preserve">
+    <value>File Name</value>
+    <comment>File name header</comment>
+  </data>
+  <data name="SizeHeader" xml:space="preserve">
+    <value>Size</value>
+    <comment>Size text in header</comment>
+  </data>
+  <data name="LastModifiedHeader" xml:space="preserve">
+    <value>Last Modified</value>
+    <comment>Last Modified header text</comment>
+  </data>
+  <data name="SizeSelected" xml:space="preserve">
+    <value>Size selected:</value>
+    <comment>Size selected</comment>
+  </data>
+  <data name="PermanentDelete" xml:space="preserve">
+    <value>Permanent Delete</value>
+    <comment>Permanent Delete</comment>
+  </data>
+  <data name="MoveToOneDrive" xml:space="preserve">
+    <value>Move to OneDrive</value>
+    <comment>Mpve to one Drive</comment>
+  </data>
+  <data name="OFCInfoMessage" xml:space="preserve">
+    <value>ⓘ Cached data from Microsoft Office apps, used for faster loading. You can safely remove these files without affecting your originals.</value>
+  </data>
+  <data name="OfficeFilesCacheSize" xml:space="preserve">
+    <value>Total Size of Office Cache Files: {0} GB</value>
+    <comment>OFC size displayed at top within the section</comment>
+  </data>
+  <data name="FreeUpAllDeskMessage" xml:space="preserve">
+    <value>Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again.</value>
+    <comment>Border content for Free up all disk space</comment>
+  </data>
+  <data name="FreeUpAllDiskSpaceButtonText" xml:space="preserve">
+    <value>Free up all disk space</value>
+    <comment>Free up all disk space</comment>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Desktop</value>
+    <comment>Desktop tab</comment>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
+    <comment>Documents tab</comment>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Pictures</value>
+    <comment>Pictures tab</comment>
+  </data>
+  <data name="NoOfFilesOneDrive" xml:space="preserve">
+    <value>Total no. of files greater than 100 MB: {0}</value>
+    <comment>No of files displayed at top in One Drive</comment>
+  </data>
+  <data name="SizeInOneDrive" xml:space="preserve">
+    <value>Size of C:\\ drive: {0} GB</value>
+    <comment>Size displayed for tabs in one drive</comment>
+  </data>
+  <data name="FreeUpLocalDiskSpaceButtonText" xml:space="preserve">
+    <value>Free up selected locally cached space</value>
+    <comment>Button text for free up local cache</comment>
+  </data>
+  <data name="ExtensionHeader" xml:space="preserve">
+    <value>Extension</value>
+    <comment>ExtensionHeader</comment>
+  </data>
+  <data name="FilePathHeader" xml:space="preserve">
+    <value>File Path</value>
+    <comment>File Path Header</comment>
+  </data>
+  <data name="OutlookStatus" xml:space="preserve">
+    <value>Outlook is not running. Please open Outlook on your device.\r\nOnce open, navigate to or click on \"Outlook files\" within this application to access information about your OST/PST files.</value>
+    <comment>Outlook status message</comment>
+  </data>
+  <data name="OneDriveDialogMessageText" xml:space="preserve">
+    <value> This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.</value>
+    <comment>Confirmation dialog text one drive</comment>
+  </data>
 </root>

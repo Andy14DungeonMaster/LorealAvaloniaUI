@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using LorealAvaloniaUI.Lang;
 using ReactiveUI;
 using Serilog;
 
@@ -134,7 +135,7 @@ if ($results.Count -eq 1) {  # Check if only one item
                 if (output.Trim() == "[]")
                 {
                     Log.Information("Outlook in not running. OST/PST files not accessed");
-                    outlookStatus = $"Outlook is not running. Please open Outlook on your device.\r\nOnce open, navigate to or click on \"Outlook files\" within this application to access information about your OST/PST files.";
+                    outlookStatus = string.Format(Resources.OutlookStatus);
                     return;
                 }
 

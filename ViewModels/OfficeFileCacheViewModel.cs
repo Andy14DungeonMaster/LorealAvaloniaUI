@@ -7,6 +7,8 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using LorealAvaloniaUI.Lang;
+
 // Removed DynamicData as it was not used and caused warning
 using LorealAvaloniaUI.Services; // Add this using directive
 using LorealAvaloniaUI.Views;
@@ -122,7 +124,7 @@ namespace LorealAvaloniaUI.ViewModels
         private void SetupObservables()
         {
             this.WhenAnyValue(x => x.Files.Count)
-                .Subscribe(count => TotalNumber = $"Total no. of files greater than 100 MB: {count}");
+                .Subscribe(count => TotalNumber = string.Format(Resources.DownloadNoFiles, count));
 
             Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => Files.CollectionChanged += h,

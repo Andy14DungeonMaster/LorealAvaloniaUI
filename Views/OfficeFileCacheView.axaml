@@ -3,6 +3,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+	xmlns:res="clr-namespace:LorealAvaloniaUI.Lang;assembly=LorealAvaloniaUI"
     x:DataType="vm:OfficeFileCacheViewModel">
 
 	
@@ -26,7 +27,7 @@
                 FontSize="14" FontWeight="Regular"
 				TextWrapping="Wrap"
 				Foreground="#4A74F3"
-                Text="ⓘ Cached data from Microsoft Office apps, used for faster loading. You can safely remove these files without affecting your originals." />
+                Text="{x:Static res:Resources.OFCInfoMessage}" />
 
 		<!--  File Summary  -->
 		<StackPanel
@@ -41,7 +42,7 @@
 			<TextBlock
                 FontSize="16"
                 Foreground="White"
-                Text="{Binding TotalSize, StringFormat='Total Size of Office Cache Files: {0} GB'}" />
+                Text="{Binding TotalSize, StringFormat={x:Static res:Resources.OfficeFilesCacheSize}}" />
 
 					</StackPanel>
 
@@ -74,7 +75,7 @@
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<!-- Adjust margin as needed -->
-					<TextBlock Text="File Name"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static res:Resources.FileNameHeader}"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
 					<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
 
 				</StackPanel>
@@ -85,7 +86,7 @@
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<!-- Adjust margin as needed -->
-					<TextBlock Text="Size"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static res:Resources.SizeHeader}"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
 					<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
 
 				</StackPanel>
@@ -96,7 +97,7 @@
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 					<!-- Adjust margin as needed -->
-					<TextBlock Text="Last Modified"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static res:Resources.LastModifiedHeader}"  Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center"/>
 					<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="0,0,5,0"/>
 
 				</StackPanel>
@@ -157,7 +158,7 @@
 	            FontSize="16"
 	            Foreground="DodgerBlue"
 				Padding="10"
-	            Text="Size Selected" />
+	            Text="{x:Static res:Resources.SizeSelected}" />
 			<TextBlock
                 FontSize="16"
                 Foreground="DodgerBlue"
@@ -168,7 +169,7 @@
                 Padding="10,5"
                 Background="DodgerBlue"
                 Command="{Binding DeleteSelectedFilesCommand}"
-                Content="Permanent Delete"
+                Content="{x:Static res:Resources.PermanentDelete}"
                 Foreground="White" />
 		</StackPanel>
 	

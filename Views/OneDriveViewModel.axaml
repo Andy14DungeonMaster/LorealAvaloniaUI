@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:LorealAvaloniaUI.ViewModels"
+			 xmlns:res="clr-namespace:LorealAvaloniaUI.Lang;assembly=LorealAvaloniaUI"
              x:Class="LorealAvaloniaUI.Views.OneDriveView"
              x:DataType="vm:OneDriveViewModel">
 	<Grid>
@@ -16,12 +17,12 @@
 		<!-- Free Selected Disk Space -->
 		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5">
 			<!-- StackPanel to hold both -->
-			<TextBlock Padding="10" FontSize="16" Text="Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again." Foreground="White" TextWrapping="Wrap" />
-			<Button HorizontalAlignment="Right" Content="Free up all disk space" Command="{Binding FreeAllDiskSpaceCommand}" Background="#4444FF" Foreground="White"/>
+			<TextBlock Padding="10" FontSize="16" Text="{x:Static res:Resources.FreeUpAllDeskMessage}" Foreground="White" TextWrapping="Wrap" />
+			<Button HorizontalAlignment="Right" Content="{x:Static res:Resources.FreeUpAllDiskSpaceButtonText}" Command="{Binding FreeAllDiskSpaceCommand}" Background="#4444FF" Foreground="White"/>
 		</StackPanel>
 		
         <TabControl Grid.Row="2" Margin="10">
-            <TabItem Header="Desktop" Foreground="DodgerBlue">
+            <TabItem Header="{x:Static res:Resources.Desktop}" Foreground="DodgerBlue">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -43,19 +44,19 @@
                                   IsChecked="{Binding SelectAll, Mode=TwoWay}" />
                         <Button Grid.Column="1" Padding="0" Background="Transparent" Command="{Binding SortByNameCommand}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static res:Resources.FileNameHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
                                 <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
                             </StackPanel>
                         </Button>
                         <Button Grid.Column="2" Padding="10" Background="Transparent" Command="{Binding SortBySizeCommand}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="Size" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static res:Resources.SizeHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
                                 <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
                             </StackPanel>
                         </Button>
                         <Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortByDateCommand}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static res:Resources.LastModifiedHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
                                 <Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
                             </StackPanel>
                         </Button>
@@ -85,14 +86,14 @@
 
                     <!-- Free Selected Disk Space -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0" HorizontalAlignment="Right">
-                        <Button Content="Free up selected locally cached space"
+                        <Button Content="{x:Static res:Resources.FreeUpLocalDiskSpaceButtonText}"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommand}"/>
                     </StackPanel>
 					</Grid>
 
             </TabItem>
-            <TabItem Header="Documents" Foreground="DodgerBlue">
+            <TabItem Header="{x:Static res:Resources.Documents}" Foreground="DodgerBlue">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -113,19 +114,19 @@
                                   IsChecked="{Binding SelectAllDocuments, Mode=TwoWay}" />
 						<Button Grid.Column="1" Padding="0" Background="Transparent" Command="{Binding SortByNameDocumentsCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.FileNameHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
 						<Button Grid.Column="2" Padding="10" Background="Transparent" Command="{Binding SortBySizeDocumentsCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="Size" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.SizeHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
 						<Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortByDateDocumentsCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.LastModifiedHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
@@ -156,14 +157,14 @@
 
 					<!-- Free Selected Disk Space -->
 					<StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
-						<Button Content="Free up selected locally cached space"
+						<Button Content="{x:Static res:Resources.FreeUpLocalDiskSpaceButtonText}"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommandDocuments}"/>
 					</StackPanel>
 			</Grid>
 
 			</TabItem>
-            <TabItem Header="Pictures" Foreground="DodgerBlue">
+            <TabItem Header="{x:Static res:Resources.Pictures}" Foreground="DodgerBlue">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
@@ -184,19 +185,19 @@
                                   IsChecked="{Binding SelectAllPictures, Mode=TwoWay}" />
 						<Button Grid.Column="1" Padding="0" Background="Transparent" Command="{Binding SortByNamePicturesCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="File Name" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.FileNameHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
 						<Button Grid.Column="2" Padding="10" Background="Transparent" Command="{Binding SortBySizePicturesCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="Size" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.SizeHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
 						<Button Grid.Column="3" Padding="0" Background="Transparent" Command="{Binding SortByDatePicturesCommand}">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<TextBlock Text="Last Modified" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
+								<TextBlock Text="{x:Static res:Resources.LastModifiedHeader}" Foreground="DodgerBlue" FontWeight="Bold" VerticalAlignment="Center" />
 								<Image Source="avares://LorealAvaloniaUI/Assets/sort_icon.png" Width="15" Height="15" Margin="5,0" />
 							</StackPanel>
 						</Button>
@@ -226,7 +227,7 @@
 					
 					<!-- Free Selected Disk Space -->
 					<StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,20,0,0" HorizontalAlignment="Right">
-						<Button Content="Free up selected locally cached space"
+						<Button Content="{x:Static res:Resources.FreeUpLocalDiskSpaceButtonText}"
                                 Background="#4444FF" Foreground="White"
                                 Command="{Binding FreeSelectedDiskSpaceCommandPictures}"/>
 					</StackPanel>

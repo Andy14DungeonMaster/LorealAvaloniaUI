@@ -70,6 +70,24 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to permanently delete {0} file(s)?.
+        /// </summary>
+        public static string ConfirmationDialogMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Deletion.
+        /// </summary>
+        public static string ConfirmationDialogTitle {
+            get {
+                return ResourceManager.GetString("ConfirmationDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No. of files deleted: {0}.
         /// </summary>
         public static string DeletedFileCountFormat {
@@ -88,11 +106,38 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Desktop.
+        /// </summary>
+        public static string Desktop {
+            get {
+                return ResourceManager.GetString("Desktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documents.
+        /// </summary>
+        public static string Documents {
+            get {
+                return ResourceManager.GetString("Documents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View/Manage space.
         /// </summary>
         public static string DOFCButtonText {
             get {
                 return ResourceManager.GetString("DOFCButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total no. of files with size greater than 100 MB: {0}.
+        /// </summary>
+        public static string DownloadNoFiles {
+            get {
+                return ResourceManager.GetString("DownloadNoFiles", resourceCulture);
             }
         }
         
@@ -106,11 +151,74 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total downloads Size: {0} GB.
+        /// </summary>
+        public static string DownloadsTotalSize {
+            get {
+                return ResourceManager.GetString("DownloadsTotalSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension.
+        /// </summary>
+        public static string ExtensionHeader {
+            get {
+                return ResourceManager.GetString("ExtensionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Name.
+        /// </summary>
+        public static string FileNameHeader {
+            get {
+                return ResourceManager.GetString("FileNameHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Path.
+        /// </summary>
+        public static string FilePathHeader {
+            get {
+                return ResourceManager.GetString("FilePathHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} GB Free.
         /// </summary>
         public static string FreeStorageTextFormat {
             get {
                 return ResourceManager.GetString("FreeStorageTextFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again..
+        /// </summary>
+        public static string FreeUpAllDeskMessage {
+            get {
+                return ResourceManager.GetString("FreeUpAllDeskMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free up all disk space.
+        /// </summary>
+        public static string FreeUpAllDiskSpaceButtonText {
+            get {
+                return ResourceManager.GetString("FreeUpAllDiskSpaceButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free up selected locally cached space.
+        /// </summary>
+        public static string FreeUpLocalDiskSpaceButtonText {
+            get {
+                return ResourceManager.GetString("FreeUpLocalDiskSpaceButtonText", resourceCulture);
             }
         }
         
@@ -133,6 +241,60 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last Modified.
+        /// </summary>
+        public static string LastModifiedHeader {
+            get {
+                return ResourceManager.GetString("LastModifiedHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to OneDrive.
+        /// </summary>
+        public static string MoveToOneDrive {
+            get {
+                return ResourceManager.GetString("MoveToOneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string NoButtonContent {
+            get {
+                return ResourceManager.GetString("NoButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total no. of files greater than 100 MB: {0}.
+        /// </summary>
+        public static string NoOfFilesOneDrive {
+            get {
+                return ResourceManager.GetString("NoOfFilesOneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⓘ Cached data from Microsoft Office apps, used for faster loading. You can safely remove these files without affecting your originals..
+        /// </summary>
+        public static string OFCInfoMessage {
+            get {
+                return ResourceManager.GetString("OFCInfoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Size of Office Cache Files: {0} GB.
+        /// </summary>
+        public static string OfficeFilesCacheSize {
+            get {
+                return ResourceManager.GetString("OfficeFilesCacheSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Office Files Cache.
         /// </summary>
         public static string OfficeFilesCacheTitle {
@@ -151,11 +313,47 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  This saves space on this PC by setting all your files to online-only, including the files that are currently set to \&quot;Always keep on this device\&quot;. The first time you open a file in the future, you&apos;ll need to be online..
+        /// </summary>
+        public static string OneDriveDialogMessageText {
+            get {
+                return ResourceManager.GetString("OneDriveDialogMessageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show details.
         /// </summary>
         public static string OutlookButtonText {
             get {
                 return ResourceManager.GetString("OutlookButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outlook is not running. Please open Outlook on your device.\r\nOnce open, navigate to or click on \&quot;Outlook files\&quot; within this application to access information about your OST/PST files..
+        /// </summary>
+        public static string OutlookStatus {
+            get {
+                return ResourceManager.GetString("OutlookStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permanent Delete.
+        /// </summary>
+        public static string PermanentDelete {
+            get {
+                return ResourceManager.GetString("PermanentDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pictures.
+        /// </summary>
+        public static string Pictures {
+            get {
+                return ResourceManager.GetString("Pictures", resourceCulture);
             }
         }
         
@@ -174,6 +372,33 @@ namespace LorealAvaloniaUI.Lang {
         public static string SizeDisplay {
             get {
                 return ResourceManager.GetString("SizeDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string SizeHeader {
+            get {
+                return ResourceManager.GetString("SizeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size of C:\\ drive: {0} GB.
+        /// </summary>
+        public static string SizeInOneDrive {
+            get {
+                return ResourceManager.GetString("SizeInOneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size selected:.
+        /// </summary>
+        public static string SizeSelected {
+            get {
+                return ResourceManager.GetString("SizeSelected", resourceCulture);
             }
         }
         
@@ -228,6 +453,15 @@ namespace LorealAvaloniaUI.Lang {
         public static string UserInstructionMessageNormal {
             get {
                 return ResourceManager.GetString("UserInstructionMessageNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string YesButtonContent {
+            get {
+                return ResourceManager.GetString("YesButtonContent", resourceCulture);
             }
         }
     }

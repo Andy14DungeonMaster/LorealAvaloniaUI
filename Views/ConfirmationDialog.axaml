@@ -3,10 +3,11 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:LorealAvaloniaUI.Views"
+	xmlns:res="clr-namespace:LorealAvaloniaUI.Lang;assembly=LorealAvaloniaUI"
     x:DataType="vm:ConfirmationDialogViewModel"
-    Title="Confirm Deletion"
+    Title="{x:Static res:Resources.ConfirmationDialogTitle}"
     Width="400"
-    Height="150"
+    SizeToContent="Height"
     CanResize="False"
     WindowStartupLocation="CenterOwner">
     <Grid Margin="20">
@@ -28,11 +29,11 @@
             Spacing="10"
             Margin="0,20,0,0">
             <Button
-                Content="Yes"
+                Content="{x:Static res:Resources.YesButtonContent}"
                 Command="{Binding ConfirmCommand}"
                 Width="80" />
             <Button
-                Content="No"
+                Content="{x:Static res:Resources.NoButtonContent}"
                 Command="{Binding CancelCommand}"
                 Width="80" />
         </StackPanel>

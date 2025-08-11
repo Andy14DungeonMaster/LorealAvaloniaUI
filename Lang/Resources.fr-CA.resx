@@ -142,7 +142,7 @@
     <value>Afficher les détails</value>
   </data>
   <data name="SizeDisplay" xml:space="preserve">
-    <value>Taille : {0} Go</value>
+    <value>Taille: {0} Go</value>
   </data>
   <data name="StorageUsageTextFormat" xml:space="preserve">
     <value>{0} Go utilisés sur {1} Go</value>
@@ -173,5 +173,83 @@
   </data>
   <data name="PreviousFreeSpaceFormat" xml:space="preserve">
     <value>{0} Go disponibles sur {1} Go</value>
+  </data>
+  <data name="YesButtonContent" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="NoButtonContent" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="ConfirmationDialogMessage" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer définitivement {0} fichier(s) ?</value>
+  </data>
+  <data name="ConfirmationDialogTitle" xml:space="preserve">
+    <value>Confirmer la suppression</value>
+  </data>
+  <data name="DownloadNoFiles" xml:space="preserve">
+    <value>Nombre total de fichiers de plus de 100 Mo : {0}</value>
+  </data>
+  <data name="DownloadsTotalSize" xml:space="preserve">
+    <value>Téléchargements totaux Taille : {0} Go</value>
+  </data>
+  <data name="FileNameHeader" xml:space="preserve">
+    <value>Nom du fichier</value>
+  </data>
+  <data name="SizeHeader" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="LastModifiedHeader" xml:space="preserve">
+    <value>Dernière modification</value>
+  </data>
+  <data name="SizeSelected" xml:space="preserve">
+    <value>Taille sélectionnée:</value>
+  </data>
+  <data name="PermanentDelete" xml:space="preserve">
+    <value>Suppression permanente</value>
+  </data>
+  <data name="MoveToOneDrive" xml:space="preserve">
+    <value>Déplacer vers OneDrive</value>
+  </data>
+  <data name="OFCInfoMessage" xml:space="preserve">
+    <value>ⓘ Données en cache des applications Microsoft Office, utilisées pour un chargement plus rapide. Vous pouvez supprimer ces fichiers en toute sécurité sans affecter vos originaux.</value>
+  </data>
+  <data name="OfficeFilesCacheSize" xml:space="preserve">
+    <value>Taille totale des fichiers cache Office : {0} Go</value>
+  </data>
+  <data name="FreeUpAllDeskMessage" xml:space="preserve">
+    <value>Libérez de l'espace disque en supprimant les fichiers mis en cache localement sur cet appareil. Les fichiers resteront à la demande et pourront être facilement accessibles en ouvrant à nouveau le fichier.</value>
+  </data>
+  <data name="FreeUpAllDiskSpaceButtonText" xml:space="preserve">
+    <value>Libérer tout l'espace disque</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Bureau</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="NoOfFilesOneDrive" xml:space="preserve">
+    <value>Nombre total de fichiers supérieurs à 100 Mo : {0}</value>
+  </data>
+  <data name="SizeInOneDrive" xml:space="preserve">
+    <value>Taille du lecteur C:\ : {0} Go</value>
+  </data>
+  <data name="FreeUpLocalDiskSpaceButtonText" xml:space="preserve">
+    <value>Libérer l'espace cache local sélectionné</value>
+  </data>
+  <data name="ExtensionHeader" xml:space="preserve">
+    <value>Extension</value>
+  </data>
+  <data name="FilePathHeader" xml:space="preserve">
+    <value>Chemin du fichier</value>
+  </data>
+  <data name="OutlookStatus" xml:space="preserve">
+    <value>Outlook n'est pas en cours d'exécution. Veuillez ouvrir Outlook sur votre appareil. Une fois ouvert, naviguez jusqu'à ou cliquez sur « Fichiers Outlook » dans cette application pour accéder aux informations concernant vos fichiers OST/PST.</value>
+  </data>
+  <data name="OneDriveDialogMessageText" xml:space="preserve">
+    <value>Cela permet d'économiser de l'espace sur ce PC en définissant tous vos fichiers comme 'en ligne uniquement', y compris les fichiers qui sont actuellement définis sur 'Toujours conserver sur cet appareil'. La première fois que vous ouvrirez un fichier à l'avenir, vous devrez être connecté(e).</value>
   </data>
 </root>

@@ -174,4 +174,82 @@
   <data name="PreviousFreeSpaceFormat" xml:space="preserve">
     <value>{0} GB disponibles de {1} GB</value>
   </data>
+  <data name="YesButtonContent" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="NoButtonContent" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ConfirmationDialogMessage" xml:space="preserve">
+    <value>¿Estás seguro de que deseas eliminar permanentemente {0} archivo(s)?</value>
+  </data>
+  <data name="ConfirmationDialogTitle" xml:space="preserve">
+    <value>Confirmar eliminación</value>
+  </data>
+  <data name="DownloadNoFiles" xml:space="preserve">
+    <value>Número total de archivos con tamaño mayor a 100 MB: {0}</value>
+  </data>
+  <data name="DownloadsTotalSize" xml:space="preserve">
+    <value>Descargas totales Tamaño: {0} GB</value>
+  </data>
+  <data name="FileNameHeader" xml:space="preserve">
+    <value>Nombre de archivo</value>
+  </data>
+  <data name="SizeHeader" xml:space="preserve">
+    <value>Tamaño</value>
+  </data>
+  <data name="LastModifiedHeader" xml:space="preserve">
+    <value>Última modificación</value>
+  </data>
+  <data name="SizeSelected" xml:space="preserve">
+    <value>Tamaño seleccionado:</value>
+  </data>
+  <data name="PermanentDelete" xml:space="preserve">
+    <value>Eliminar permanentemente</value>
+  </data>
+  <data name="MoveToOneDrive" xml:space="preserve">
+    <value>Mover a OneDrive</value>
+  </data>
+  <data name="OFCInfoMessage" xml:space="preserve">
+    <value>ⓘ Datos en caché de las aplicaciones de Microsoft Office, utilizados para una carga más rápida. Puede eliminar estos archivos de forma segura sin afectar sus originales.</value>
+  </data>
+  <data name="OfficeFilesCacheSize" xml:space="preserve">
+    <value>Tamaño total de los archivos de caché de Office: {0} GB</value>
+  </data>
+  <data name="FreeUpAllDeskMessage" xml:space="preserve">
+    <value>Libere espacio en disco eliminando archivos almacenados en caché localmente en este dispositivo. Los archivos permanecerán a petición y se podrán acceder fácilmente abriendo el archivo de nuevo.</value>
+  </data>
+  <data name="FreeUpAllDiskSpaceButtonText" xml:space="preserve">
+    <value>Liberar todo el espacio en disco</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Escritorio</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documentos</value>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Imágenes</value>
+  </data>
+  <data name="NoOfFilesOneDrive" xml:space="preserve">
+    <value>Número total de archivos superiores a 100 MB: {0}</value>
+  </data>
+  <data name="SizeInOneDrive" xml:space="preserve">
+    <value>Tamaño de la unidad C:\ : {0} GB</value>
+  </data>
+  <data name="FreeUpLocalDiskSpaceButtonText" xml:space="preserve">
+    <value>Liberar espacio en caché local seleccionado</value>
+  </data>
+  <data name="ExtensionHeader" xml:space="preserve">
+    <value>Extensión</value>
+  </data>
+  <data name="FilePathHeader" xml:space="preserve">
+    <value>Ruta del archivo</value>
+  </data>
+  <data name="OutlookStatus" xml:space="preserve">
+    <value>Outlook no se está ejecutando. Por favor, abra Outlook en su dispositivo. Una vez abierto, navegue hasta o haga clic en "Archivos de Outlook" dentro de esta aplicación para acceder a la información sobre sus archivos OST/PST.</value>
+  </data>
+  <data name="OneDriveDialogMessageText" xml:space="preserve">
+    <value>Esto ahorra espacio en esta PC al configurar todos sus archivos como 'solo en línea', incluidos los archivos que actualmente están configurados como 'Mantener siempre en este dispositivo'. La primera vez que abra un archivo en el futuro, deberá estar en línea.</value>
+  </data>
 </root>

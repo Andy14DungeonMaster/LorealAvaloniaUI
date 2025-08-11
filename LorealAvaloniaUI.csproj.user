@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>C:\Users\alekhya.nandina\Source\Repos\LorealAvaloniaUIDemo\Properties\PublishProfiles\FolderProfile6.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Lang\Resources.es-MX.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Update="Lang\Resources.fr-CA.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
