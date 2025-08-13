@@ -296,11 +296,4 @@
     <value> This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.</value>
     <comment>Confirmation dialog text one drive</comment>
   </data>
-  <data name="OneDriveSectionTitle" xml:space="preserve">
-    <value>OneDrive</value>
-    <comment>OneDrive</comment>
-  </data>
-  <data name="OutlookSectionTitle" xml:space="preserve">
-    <value>Outlook</value>
-  </data>
 </root>

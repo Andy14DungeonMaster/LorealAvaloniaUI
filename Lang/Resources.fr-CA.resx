@@ -252,10 +252,4 @@
   <data name="OneDriveDialogMessageText" xml:space="preserve">
     <value>Cela permet d'économiser de l'espace sur ce PC en définissant tous vos fichiers comme 'en ligne uniquement', y compris les fichiers qui sont actuellement définis sur 'Toujours conserver sur cet appareil'. La première fois que vous ouvrirez un fichier à l'avenir, vous devrez être connecté(e).</value>
   </data>
-  <data name="OneDriveSectionTitle" xml:space="preserve">
-    <value>OneDrive</value>
-  </data>
-  <data name="OutlookSectionTitle" xml:space="preserve">
-    <value>Outlook</value>
-  </data>
 </root>
