@@ -322,11 +322,29 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OneDrive.
+        /// </summary>
+        public static string OneDriveSectionTitle {
+            get {
+                return ResourceManager.GetString("OneDriveSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show details.
         /// </summary>
         public static string OutlookButtonText {
             get {
                 return ResourceManager.GetString("OutlookButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outlook.
+        /// </summary>
+        public static string OutlookSectionTitle {
+            get {
+                return ResourceManager.GetString("OutlookSectionTitle", resourceCulture);
             }
         }
         

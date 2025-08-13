@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DOFCButtonText" xml:space="preserve">
-    <value>View/Manage space</value>
+    <value>Visualizar/Gerenciar espaço</value>
     <comment>Button text</comment>
   </data>
   <data name="DownloadsTitle" xml:space="preserve">
@@ -126,179 +126,178 @@
     <comment>Section title</comment>
   </data>
   <data name="FreeStorageTextFormat" xml:space="preserve">
-    <value>{0} GB Free</value>
+    <value>{0} GB Grátis</value>
     <comment>Free Text</comment>
   </data>
   <data name="HeaderMessageCritical" xml:space="preserve">
-    <value>URGENT: Critical Low Disk Space Alert!</value>
+    <value>URGENTE: Alerta Crítico de Pouco Espaço em Disco!</value>
     <comment>Header message</comment>
   </data>
   <data name="HeaderMessageNormal" xml:space="preserve">
-    <value>Storage Status</value>
+    <value>Status do Armazenamento</value>
     <comment>Headermessage</comment>
   </data>
   <data name="OfficeFilesCacheTitle" xml:space="preserve">
-    <value>Office Files Cache</value>
+    <value>Cache de Arquivos do Office</value>
     <comment>Section title</comment>
   </data>
   <data name="OneDriveButtonText" xml:space="preserve">
-    <value>Uncache local space</value>
+    <value>Liberar espaço local</value>
     <comment>One drive section button</comment>
   </data>
   <data name="OutlookButtonText" xml:space="preserve">
-    <value>Show details</value>
+    <value>Mostrar detalhes</value>
     <comment>Outlook section button text</comment>
   </data>
   <data name="SizeDisplay" xml:space="preserve">
-    <value>Size: {0} GB</value>
+    <value>Tamanho: {0} GB</value>
     <comment>Size displayed in dashboard folders</comment>
   </data>
   <data name="StorageUsageTextFormat" xml:space="preserve">
-    <value>{0} GB Used of {1} GB</value>
+    <value>{0} GB Usados de {1} GB</value>
     <comment>StorageUsageText</comment>
   </data>
   <data name="CleanupDateFormat" xml:space="preserve">
-    <value>Date: {0:f}</value>
+    <value>Data: {0:f}</value>
     <comment>Date within cleanup summary</comment>
   </data>
   <data name="SummaryHeader" xml:space="preserve">
-    <value>Previous clean up summary:</value>
+    <value>Resumo da limpeza anterior:</value>
     <comment>Previous clean up summary header text</comment>
   </data>
   <data name="UserInstructionMessageCritical" xml:space="preserve">
-    <value>Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up space. Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.</value>
+    <value>Seu sistema está com pouco espaço de armazenamento, o que pode afetar o desempenho e a estabilidade. Recomendamos fortemente que você libere espaço imediatamente. Navegue pelas seções Downloads, OneDrive e Cache do Office para limpar seu disco.</value>
     <comment>User instruction overview page</comment>
   </data>
   <data name="UserInstructionMessageNormal" xml:space="preserve">
-    <value>Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.</value>
+    <value>Navegue pelas seções Downloads, OneDrive e Cache do Office para limpar seu disco.</value>
     <comment>User instruction overview page</comment>
   </data>
   <data name="DeletedFileCountFormat" xml:space="preserve">
-    <value>No. of files deleted: {0}</value>
+    <value>Nº de arquivos excluídos: {0}</value>
     <comment>Deleted file count in clean ups summary</comment>
   </data>
   <data name="DeletedFileSizeFormat" xml:space="preserve">
-    <value>Size of the deleted files: {0} GB</value>
+    <value>Tamanho dos arquivos excluídos: {0} GB</value>
     <comment>File size in cleanup summary</comment>
   </data>
   <data name="UncachedFileCountFormat" xml:space="preserve">
-    <value>No. of OneDrive files uncached through selection: {0}</value>
+    <value>Nº de arquivos do OneDrive com cache liberado por seleção: {0}</value>
     <comment>Uncache file count clean up summary</comment>
   </data>
   <data name="UncachedSpaceFormat" xml:space="preserve">
-    <value>Size of the OneDrive uncached files through selection: {0} GB</value>
+    <value>Tamanho dos arquivos do OneDrive com cache liberado por seleção: {0} GB</value>
     <comment>Uncache space cleanup summary</comment>
   </data>
   <data name="PreviousFreeSpaceFormat" xml:space="preserve">
-    <value>{0} GB available of {1} GB</value>
+    <value>{0} GB disponíveis de {1} GB</value>
     <comment>Previous clean up summary space display, last line</comment>
   </data>
   <data name="YesButtonContent" xml:space="preserve">
-    <value>Yes</value>
+    <value>Sim</value>
     <comment>Yes button text</comment>
   </data>
   <data name="NoButtonContent" xml:space="preserve">
-    <value>No</value>
+    <value>Não</value>
     <comment>no button text</comment>
   </data>
   <data name="ConfirmationDialogMessage" xml:space="preserve">
-    <value>Are you sure you want to permanently delete {0} file(s)?</value>
+    <value>Tem certeza de que deseja excluir permanentemente {0} arquivo(s)?</value>
     <comment>Text in delete confirmation dialog</comment>
   </data>
   <data name="ConfirmationDialogTitle" xml:space="preserve">
-    <value>Confirm Deletion</value>
+    <value>Confirmar Exclusão</value>
     <comment>Title for pop up dialog</comment>
   </data>
   <data name="DownloadNoFiles" xml:space="preserve">
-    <value>Total no. of files with size greater than 100 MB: {0}</value>
+    <value>Nº total de arquivos com tamanho superior a 100 MB: {0}</value>
     <comment>Download no of files</comment>
   </data>
   <data name="DownloadsTotalSize" xml:space="preserve">
-    <value>Total downloads Size: {0} GB</value>
+    <value>Tamanho total dos Downloads: {0} GB</value>
     <comment>Downloads total size displayed at top</comment>
   </data>
   <data name="FileNameHeader" xml:space="preserve">
-    <value>File Name</value>
+    <value>Nome do Arquivo</value>
     <comment>File name header</comment>
   </data>
   <data name="SizeHeader" xml:space="preserve">
-    <value>Size</value>
+    <value>Tamanho</value>
     <comment>Size text in header</comment>
   </data>
   <data name="LastModifiedHeader" xml:space="preserve">
-    <value>Last Modified</value>
+    <value>Última Modificação</value>
     <comment>Last Modified header text</comment>
   </data>
   <data name="SizeSelected" xml:space="preserve">
-    <value>Size selected:</value>
+    <value>Tamanho selecionado:</value>
     <comment>Size selected</comment>
   </data>
   <data name="PermanentDelete" xml:space="preserve">
-    <value>Permanent Delete</value>
+    <value>Excluir Permanentemente</value>
     <comment>Permanent Delete</comment>
   </data>
   <data name="MoveToOneDrive" xml:space="preserve">
-    <value>Move to OneDrive</value>
+    <value>Mover para o OneDrive</value>
     <comment>Mpve to one Drive</comment>
   </data>
   <data name="OFCInfoMessage" xml:space="preserve">
-    <value>ⓘ Cached data from Microsoft Office apps, used for faster loading. You can safely remove these files without affecting your originals.</value>
+    <value>ⓘ Dados em cache de aplicativos do Microsoft Office, usados para carregamento mais rápido. Você pode remover esses arquivos com segurança sem afetar seus originais.</value>
   </data>
   <data name="OfficeFilesCacheSize" xml:space="preserve">
-    <value>Total Size of Office Cache Files: {0} GB</value>
+    <value>Tamanho Total dos Arquivos de Cache do Office: {0} GB</value>
     <comment>OFC size displayed at top within the section</comment>
   </data>
   <data name="FreeUpAllDeskMessage" xml:space="preserve">
-    <value>Free up disk space by removing locally cached  files on this device. The files will remain On-Demand and can easily be accessed by opening the file again.</value>
+    <value>Libere espaço em disco removendo arquivos armazenados em cache localmente neste dispositivo. Os arquivos permanecerão On-Demand e poderão ser facilmente acessados abrindo-os novamente.</value>
     <comment>Border content for Free up all disk space</comment>
   </data>
   <data name="FreeUpAllDiskSpaceButtonText" xml:space="preserve">
-    <value>Free up all disk space</value>
+    <value>Liberar todo o espaço em disco</value>
     <comment>Free up all disk space</comment>
   </data>
   <data name="Desktop" xml:space="preserve">
-    <value>Desktop</value>
+    <value>Área de Trabalho</value>
     <comment>Desktop tab</comment>
   </data>
   <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
+    <value>Documentos</value>
     <comment>Documents tab</comment>
   </data>
   <data name="Pictures" xml:space="preserve">
-    <value>Pictures</value>
+    <value>Imagens</value>
     <comment>Pictures tab</comment>
   </data>
   <data name="NoOfFilesOneDrive" xml:space="preserve">
-    <value>Total no. of files greater than 100 MB: {0}</value>
+    <value>Nº total de arquivos maiores que 100 MB: {0}</value>
     <comment>No of files displayed at top in One Drive</comment>
   </data>
   <data name="SizeInOneDrive" xml:space="preserve">
-    <value>Size of C:\\ drive: {0} GB</value>
+    <value>Tamanho da unidade C:\\: {0} GB</value>
     <comment>Size displayed for tabs in one drive</comment>
   </data>
   <data name="FreeUpLocalDiskSpaceButtonText" xml:space="preserve">
-    <value>Free up selected locally cached space</value>
+    <value>Liberar espaço selecionado em cache local</value>
     <comment>Button text for free up local cache</comment>
   </data>
   <data name="ExtensionHeader" xml:space="preserve">
-    <value>Extension</value>
+    <value>Extensão</value>
     <comment>ExtensionHeader</comment>
   </data>
   <data name="FilePathHeader" xml:space="preserve">
-    <value>File Path</value>
+    <value>Caminho do Arquivo</value>
     <comment>File Path Header</comment>
   </data>
   <data name="OutlookStatus" xml:space="preserve">
-    <value>Outlook is not running. Please open Outlook on your device.\r\nOnce open, navigate to or click on \"Outlook files\" within this application to access information about your OST/PST files.</value>
+    <value>O Outlook não está em execução. Por favor, abra o Outlook em seu dispositivo.\r\nUma vez aberto, navegue ou clique em "Arquivos do Outlook" dentro deste aplicativo para acessar informações sobre seus arquivos OST/PST.</value>
     <comment>Outlook status message</comment>
   </data>
   <data name="OneDriveDialogMessageText" xml:space="preserve">
-    <value> This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.</value>
+    <value>Isso economiza espaço neste PC ao definir todos os seus arquivos como somente online, incluindo os arquivos que estão atualmente definidos como "Manter sempre neste dispositivo". Na primeira vez que você abrir um arquivo no futuro, precisará estar online.</value>
     <comment>Confirmation dialog text one drive</comment>
   </data>
   <data name="OneDriveSectionTitle" xml:space="preserve">
     <value>OneDrive</value>
-    <comment>OneDrive</comment>
   </data>
   <data name="OutlookSectionTitle" xml:space="preserve">
     <value>Outlook</value>

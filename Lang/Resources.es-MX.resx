@@ -252,4 +252,10 @@
   <data name="OneDriveDialogMessageText" xml:space="preserve">
     <value>Esto ahorra espacio en esta PC al configurar todos sus archivos como 'solo en línea', incluidos los archivos que actualmente están configurados como 'Mantener siempre en este dispositivo'. La primera vez que abra un archivo en el futuro, deberá estar en línea.</value>
   </data>
+  <data name="OneDriveSectionTitle" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="OutlookSectionTitle" xml:space="preserve">
+    <value>Outlook</value>
+  </data>
 </root>

@@ -10,6 +10,12 @@
     <EmbeddedResource Update="Lang\Resources.fr-CA.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Update="Lang\Resources.fr-FR.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Lang\Resources.pt-BR.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Update="Lang\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
