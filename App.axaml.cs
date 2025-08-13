@@ -8,6 +8,7 @@ using LorealAvaloniaUI.ViewModels;
 using LorealAvaloniaUI.Views;
 using LorealAvaloniaUI.Services;
 using System.Globalization;
+using Serilog;
 
 namespace LorealAvaloniaUI;
 
@@ -45,7 +46,15 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        Lang.Resources.Culture = new CultureInfo("es-MX");
+        // Get the current UI culture of the operating system
+        CultureInfo osCulture = CultureInfo.CurrentUICulture;
+
+        // Set the application's resource culture to the OS culture
+        Lang.Resources.Culture = osCulture;
+
+        // For demonstration, you could print it or use it for logging
+        Log.Information($"Operating System Language: {osCulture.DisplayName} ({osCulture.Name})");
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             Dispatcher.UIThread.Post(() =>

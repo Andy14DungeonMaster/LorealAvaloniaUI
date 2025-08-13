@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DOFCButtonText" xml:space="preserve">
+    <value>Afficher/Gérer l'espace</value>
+    <comment>Button text</comment>
+  </data>
+  <data name="DownloadsTitle" xml:space="preserve">
+    <value>Téléchargements</value>
+    <comment>Section title</comment>
+  </data>
+  <data name="FreeStorageTextFormat" xml:space="preserve">
+    <value>{0} Go Libres</value>
+    <comment>Free Text</comment>
+  </data>
+  <data name="HeaderMessageCritical" xml:space="preserve">
+    <value>URGENT : Alerte critique d'espace disque faible !</value>
+    <comment>Header message</comment>
+  </data>
+  <data name="HeaderMessageNormal" xml:space="preserve">
+    <value>Statut du Stockage</value>
+    <comment>Headermessage</comment>
+  </data>
+  <data name="OfficeFilesCacheTitle" xml:space="preserve">
+    <value>Cache des Fichiers Office</value>
+    <comment>Section title</comment>
+  </data>
+  <data name="OneDriveButtonText" xml:space="preserve">
+    <value>Libérer l'espace local mis en cache</value>
+    <comment>One drive section button</comment>
+  </data>
+  <data name="OutlookButtonText" xml:space="preserve">
+    <value>Afficher les détails</value>
+    <comment>Outlook section button text</comment>
+  </data>
+  <data name="SizeDisplay" xml:space="preserve">
+    <value>Taille : {0} Go</value>
+    <comment>Size displayed in dashboard folders</comment>
+  </data>
+  <data name="StorageUsageTextFormat" xml:space="preserve">
+    <value>{0} Go Utilisés sur {1} Go</value>
+    <comment>StorageUsageText</comment>
+  </data>
+  <data name="CleanupDateFormat" xml:space="preserve">
+    <value>Date : {0:f}</value>
+    <comment>Date within cleanup summary</comment>
+  </data>
+  <data name="SummaryHeader" xml:space="preserve">
+    <value>Résumé du nettoyage précédent :</value>
+    <comment>Previous clean up summary header text</comment>
+  </data>
+  <data name="UserInstructionMessageCritical" xml:space="preserve">
+    <value>Votre système manque cruellement d'espace de stockage, ce qui peut impacter ses performances et sa stabilité. Nous vous recommandons vivement de libérer de l'espace immédiatement. Veuillez naviguer dans les sections Téléchargements, OneDrive et Cache Office pour nettoyer votre disque.</value>
+    <comment>User instruction overview page</comment>
+  </data>
+  <data name="UserInstructionMessageNormal" xml:space="preserve">
+    <value>Veuillez naviguer dans les sections Téléchargements, OneDrive et Cache Office pour nettoyer votre disque.</value>
+    <comment>User instruction overview page</comment>
+  </data>
+  <data name="DeletedFileCountFormat" xml:space="preserve">
+    <value>Nbre de fichiers supprimés : {0}</value>
+    <comment>Deleted file count in clean ups summary</comment>
+  </data>
+  <data name="DeletedFileSizeFormat" xml:space="preserve">
+    <value>Taille des fichiers supprimés : {0} Go</value>
+    <comment>File size in cleanup summary</comment>
+  </data>
+  <data name="UncachedFileCountFormat" xml:space="preserve">
+    <value>Nbre de fichiers OneDrive dont le cache a été libéré par sélection : {0}</value>
+    <comment>Uncache file count clean up summary</comment>
+  </data>
+  <data name="UncachedSpaceFormat" xml:space="preserve">
+    <value>Taille de l'espace OneDrive dont le cache a été libéré par sélection : {0} Go</value>
+    <comment>Uncache space cleanup summary</comment>
+  </data>
+  <data name="PreviousFreeSpaceFormat" xml:space="preserve">
+    <value>{0} Go disponibles sur {1} Go</value>
+    <comment>Previous clean up summary space display, last line</comment>
+  </data>
+  <data name="YesButtonContent" xml:space="preserve">
+    <value>Oui</value>
+    <comment>Yes button text</comment>
+  </data>
+  <data name="NoButtonContent" xml:space="preserve">
+    <value>Non</value>
+    <comment>no button text</comment>
+  </data>
+  <data name="ConfirmationDialogMessage" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer définitivement {0} fichier(s) ?</value>
+    <comment>Text in delete confirmation dialog</comment>
+  </data>
+  <data name="ConfirmationDialogTitle" xml:space="preserve">
+    <value>Confirmer la Suppression</value>
+    <comment>Title for pop up dialog</comment>
+  </data>
+  <data name="DownloadNoFiles" xml:space="preserve">
+    <value>Nbre total de fichiers de taille supérieure à 100 Mo : {0}</value>
+    <comment>Download no of files</comment>
+  </data>
+  <data name="DownloadsTotalSize" xml:space="preserve">
+    <value>Taille totale des Téléchargements : {0} Go</value>
+    <comment>Downloads total size displayed at top</comment>
+  </data>
+  <data name="FileNameHeader" xml:space="preserve">
+    <value>Nom du Fichier</value>
+    <comment>File name header</comment>
+  </data>
+  <data name="SizeHeader" xml:space="preserve">
+    <value>Taille</value>
+    <comment>Size text in header</comment>
+  </data>
+  <data name="LastModifiedHeader" xml:space="preserve">
+    <value>Dernière Modification</value>
+    <comment>Last Modified header text</comment>
+  </data>
+  <data name="SizeSelected" xml:space="preserve">
+    <value>Taille sélectionnée :</value>
+    <comment>Size selected</comment>
+  </data>
+  <data name="PermanentDelete" xml:space="preserve">
+    <value>Suppression Définitive</value>
+    <comment>Permanent Delete</comment>
+  </data>
+  <data name="MoveToOneDrive" xml:space="preserve">
+    <value>Déplacer vers OneDrive</value>
+    <comment>Mpve to one Drive</comment>
+  </data>
+  <data name="OFCInfoMessage" xml:space="preserve">
+    <value>ⓘ Données mises en cache par les applications Microsoft Office pour un chargement plus rapide. Vous pouvez supprimer ces fichiers en toute sécurité sans affecter vos originaux.</value>
+  </data>
+  <data name="OfficeFilesCacheSize" xml:space="preserve">
+    <value>Taille totale des fichiers du cache Office : {0} Go</value>
+    <comment>OFC size displayed at top within the section</comment>
+  </data>
+  <data name="FreeUpAllDeskMessage" xml:space="preserve">
+    <value>Libérez de l'espace disque en supprimant les fichiers mis en cache localement sur cet appareil. Les fichiers resteront disponibles à la demande et pourront être facilement accessibles en les ouvrant à nouveau.</value>
+    <comment>Border content for Free up all disk space</comment>
+  </data>
+  <data name="FreeUpAllDiskSpaceButtonText" xml:space="preserve">
+    <value>Libérer tout l'espace disque</value>
+    <comment>Free up all disk space</comment>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Bureau</value>
+    <comment>Desktop tab</comment>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documents</value>
+    <comment>Documents tab</comment>
+  </data>
+  <data name="Pictures" xml:space="preserve">
+    <value>Images</value>
+    <comment>Pictures tab</comment>
+  </data>
+  <data name="NoOfFilesOneDrive" xml:space="preserve">
+    <value>Nbre total de fichiers supérieurs à 100 Mo : {0}</value>
+    <comment>No of files displayed at top in One Drive</comment>
+  </data>
+  <data name="SizeInOneDrive" xml:space="preserve">
+    <value>Taille du lecteur C:\\ : {0} Go</value>
+    <comment>Size displayed for tabs in one drive</comment>
+  </data>
+  <data name="FreeUpLocalDiskSpaceButtonText" xml:space="preserve">
+    <value>Libérer l'espace cache local sélectionné</value>
+    <comment>Button text for free up local cache</comment>
+  </data>
+  <data name="ExtensionHeader" xml:space="preserve">
+    <value>Extension</value>
+    <comment>ExtensionHeader</comment>
+  </data>
+  <data name="FilePathHeader" xml:space="preserve">
+    <value>Chemin du Fichier</value>
+    <comment>File Path Header</comment>
+  </data>
+  <data name="OutlookStatus" xml:space="preserve">
+    <value>Outlook n'est pas en cours d'exécution. Veuillez ouvrir Outlook sur votre appareil.\r\nUne fois ouvert, naviguez ou cliquez sur "Fichiers Outlook" dans cette application pour accéder aux informations concernant vos fichiers OST/PST.</value>
+    <comment>Outlook status message</comment>
+  </data>
+  <data name="OneDriveDialogMessageText" xml:space="preserve">
+    <value>Cela économise de l'espace sur ce PC en définissant tous vos fichiers comme "en ligne seulement", y compris les fichiers actuellement définis comme "Toujours conserver sur cet appareil". La première fois que vous ouvrirez un fichier à l'avenir, vous devrez être en ligne.</value>
+    <comment>Confirmation dialog text one drive</comment>
+  </data>
+  <data name="OneDriveSectionTitle" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="OutlookSectionTitle" xml:space="preserve">
+    <value>Outlook</value>
+  </data>
+</root>
