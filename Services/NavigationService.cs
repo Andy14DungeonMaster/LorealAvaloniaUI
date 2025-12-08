@@ -10,6 +10,10 @@ namespace LorealAvaloniaUI.Services
         private readonly IServiceProvider _serviceProvider;
         private ContentControl? _contentControl;
 
+        private object? _currentViewModel;
+        private Control? _currentView;
+        private Type? _currentViewModelType;
+
         public NavigationService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -19,6 +23,10 @@ namespace LorealAvaloniaUI.Services
         {
             _contentControl = contentControl;
         }
+
+        public object? CurrentViewModel => _currentViewModel;
+        public Control? CurrentView => _currentView;
+        public Type? CurrentViewModelType => _currentViewModelType;
 
         public void Navigate<TViewModel, TView>()
             where TViewModel : class
@@ -40,7 +48,12 @@ namespace LorealAvaloniaUI.Services
             {
                 var view = new TView { DataContext = viewModel };
                 _contentControl.Content = view;
+
+                _currentViewModel = viewModel;
+                _currentView = view;
+                _currentViewModelType = typeof(TViewModel);
             });
         }
+
     }
 }

@@ -88,6 +88,15 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Permanently Delete All Cache Files.
+        /// </summary>
+        public static string DeleteAllCacheFiles {
+            get {
+                return ResourceManager.GetString("DeleteAllCacheFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No. of files deleted: {0}.
         /// </summary>
         public static string DeletedFileCountFormat {
@@ -322,11 +331,29 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OneDrive.
+        /// </summary>
+        public static string OneDriveSectionTitle {
+            get {
+                return ResourceManager.GetString("OneDriveSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show details.
         /// </summary>
         public static string OutlookButtonText {
             get {
                 return ResourceManager.GetString("OutlookButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outlook.
+        /// </summary>
+        public static string OutlookSectionTitle {
+            get {
+                return ResourceManager.GetString("OutlookSectionTitle", resourceCulture);
             }
         }
         
@@ -340,7 +367,7 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permanent Delete.
+        ///   Looks up a localized string similar to Permanent Delete (Selected files).
         /// </summary>
         public static string PermanentDelete {
             get {
@@ -439,11 +466,20 @@ namespace LorealAvaloniaUI.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up space. Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk..
+        ///   Looks up a localized string similar to Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up storage. You can free up storage by checking the options below to remove unnecessary files..
         /// </summary>
         public static string UserInstructionMessageCritical {
             get {
                 return ResourceManager.GetString("UserInstructionMessageCritical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ensure optimal system performance, it&apos;s a good practice to regularly manage your disk storage. You can free up storage by checking the options below to remove unnecessary files..
+        /// </summary>
+        public static string UserInstructionMessageNonCritical {
+            get {
+                return ResourceManager.GetString("UserInstructionMessageNonCritical", resourceCulture);
             }
         }
         

@@ -133,7 +133,7 @@
     <value>Estado de almacenamiento</value>
   </data>
   <data name="OfficeFilesCacheTitle" xml:space="preserve">
-    <value>Office Files Cache</value>
+    <value>Caché de archivos de Office</value>
   </data>
   <data name="OneDriveButtonText" xml:space="preserve">
     <value>Liberar espacio de caché local</value>
@@ -154,7 +154,7 @@
     <value>Resumen de limpieza anterior:</value>
   </data>
   <data name="UserInstructionMessageCritical" xml:space="preserve">
-    <value>Su sistema tiene un nivel críticamente bajo de almacenamiento, lo que puede afectar el rendimiento y la estabilidad. Le recomendamos liberar espacio de inmediato. Por favor, navegue por las secciones de Descargas, One Drive y Caché de Office para limpiar su disco.</value>
+    <value>Tu sistema tiene muy poco espacio de almacenamiento, lo que podría afectar el rendimiento y la estabilidad. Te recomendamos encarecidamente que liberes espacio de inmediato. Puedes liberar almacenamiento revisando las opciones a continuación para eliminar archivos innecesarios.</value>
   </data>
   <data name="UserInstructionMessageNormal" xml:space="preserve">
     <value>Por favor, navegue por las secciones de Descargas, One Drive y Caché de Office para limpiar su disco.</value>
@@ -205,7 +205,7 @@
     <value>Tamaño seleccionado:</value>
   </data>
   <data name="PermanentDelete" xml:space="preserve">
-    <value>Eliminar permanentemente</value>
+    <value>Eliminar Permanentemente (Archivos Seleccionados)</value>
   </data>
   <data name="MoveToOneDrive" xml:space="preserve">
     <value>Mover a OneDrive</value>
@@ -251,5 +251,17 @@
   </data>
   <data name="OneDriveDialogMessageText" xml:space="preserve">
     <value>Esto ahorra espacio en esta PC al configurar todos sus archivos como 'solo en línea', incluidos los archivos que actualmente están configurados como 'Mantener siempre en este dispositivo'. La primera vez que abra un archivo en el futuro, deberá estar en línea.</value>
+  </data>
+  <data name="OneDriveSectionTitle" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="OutlookSectionTitle" xml:space="preserve">
+    <value>Outlook</value>
+  </data>
+  <data name="UserInstructionMessageNonCritical" xml:space="preserve">
+    <value>Para asegurar un rendimiento óptimo del sistema, es una buena práctica gestionar regularmente el almacenamiento de su disco. Puede liberar espacio revisando las opciones a continuación para eliminar archivos innecesarios.</value>
+  </data>
+  <data name="DeleteAllCacheFiles" xml:space="preserve">
+    <value>Eliminar Permanentemente Todos los Archivos de Caché</value>
   </data>
 </root>

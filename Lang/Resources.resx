@@ -166,8 +166,8 @@
     <comment>Previous clean up summary header text</comment>
   </data>
   <data name="UserInstructionMessageCritical" xml:space="preserve">
-    <value>Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up space. Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.</value>
-    <comment>User instruction overview page</comment>
+    <value>Your system is running critically low on storage, which may impact performance and stability. We highly recommend you immediately free up storage. You can free up storage by checking the options below to remove unnecessary files.</value>
+    <comment>User instruction overview page - Critical</comment>
   </data>
   <data name="UserInstructionMessageNormal" xml:space="preserve">
     <value>Please navigate through the Downloads, One Drive, and Office Cache sections to clean up your disk.</value>
@@ -234,7 +234,7 @@
     <comment>Size selected</comment>
   </data>
   <data name="PermanentDelete" xml:space="preserve">
-    <value>Permanent Delete</value>
+    <value>Permanent Delete (Selected files)</value>
     <comment>Permanent Delete</comment>
   </data>
   <data name="MoveToOneDrive" xml:space="preserve">
@@ -295,5 +295,21 @@
   <data name="OneDriveDialogMessageText" xml:space="preserve">
     <value> This saves space on this PC by setting all your files to online-only, including the files that are currently set to \"Always keep on this device\". The first time you open a file in the future, you'll need to be online.</value>
     <comment>Confirmation dialog text one drive</comment>
+  </data>
+  <data name="OneDriveSectionTitle" xml:space="preserve">
+    <value>OneDrive</value>
+    <comment>OneDrive</comment>
+  </data>
+  <data name="OutlookSectionTitle" xml:space="preserve">
+    <value>Outlook</value>
+    <comment>Outlook</comment>
+  </data>
+  <data name="UserInstructionMessageNonCritical" xml:space="preserve">
+    <value>To ensure optimal system performance, it's a good practice to regularly manage your disk storage. You can free up storage by checking the options below to remove unnecessary files.</value>
+    <comment>User instruction overview page - Non-Critical</comment>
+  </data>
+  <data name="DeleteAllCacheFiles" xml:space="preserve">
+    <value>Permanently Delete All Cache Files</value>
+    <comment>Button text for Delete All Cache Files</comment>
   </data>
 </root>

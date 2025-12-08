@@ -122,7 +122,7 @@
     <comment>Button text</comment>
   </data>
   <data name="DownloadsTitle" xml:space="preserve">
-    <value>Downloads</value>
+    <value>Descargas</value>
     <comment>Section title</comment>
   </data>
   <data name="FreeStorageTextFormat" xml:space="preserve">
@@ -166,7 +166,7 @@
     <comment>Previous clean up summary header text</comment>
   </data>
   <data name="UserInstructionMessageCritical" xml:space="preserve">
-    <value>Seu sistema está com pouco espaço de armazenamento, o que pode afetar o desempenho e a estabilidade. Recomendamos fortemente que você libere espaço imediatamente. Navegue pelas seções Downloads, OneDrive e Cache do Office para limpar seu disco.</value>
+    <value>Seu sistema está com espaço de armazenamento criticamente baixo, o que pode afetar o desempenho e a estabilidade. Recomendamos fortemente que você libere espaço imediatamente. Você pode liberar armazenamento verificando as opções abaixo para remover arquivos desnecessários.</value>
     <comment>User instruction overview page</comment>
   </data>
   <data name="UserInstructionMessageNormal" xml:space="preserve">
@@ -234,7 +234,7 @@
     <comment>Size selected</comment>
   </data>
   <data name="PermanentDelete" xml:space="preserve">
-    <value>Excluir Permanentemente</value>
+    <value>Excluir Permanentemente (Arquivos Selecionados)</value>
     <comment>Permanent Delete</comment>
   </data>
   <data name="MoveToOneDrive" xml:space="preserve">
@@ -301,5 +301,11 @@
   </data>
   <data name="OutlookSectionTitle" xml:space="preserve">
     <value>Outlook</value>
+  </data>
+  <data name="UserInstructionMessageNonCritical" xml:space="preserve">
+    <value>Para garantir o desempenho ideal do sistema, é uma boa prática gerenciar regularmente o armazenamento do seu disco. Você pode liberar espaço verificando as opções abaixo para remover arquivos desnecessários.</value>
+  </data>
+  <data name="DeleteAllCacheFiles" xml:space="preserve">
+    <value>Excluir Permanentemente Todos os Arquivos de Cache</value>
   </data>
 </root>

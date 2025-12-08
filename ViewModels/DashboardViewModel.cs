@@ -57,7 +57,7 @@ namespace LorealAvaloniaUI.ViewModels
 
         public string HeaderMessage => (TotalStorageGB - UsedStorageGB) < 20 ? Resources.HeaderMessageCritical : Resources.HeaderMessageNormal;
 
-        public string UserInstructionMessage => (TotalStorageGB - UsedStorageGB) < 20 ? Resources.UserInstructionMessageCritical: Resources.UserInstructionMessageCritical;
+        public string UserInstructionMessage => (TotalStorageGB - UsedStorageGB) < 20 ? Resources.UserInstructionMessageCritical: Resources.UserInstructionMessageNonCritical;
         
 
         public string StorageUsageText =>

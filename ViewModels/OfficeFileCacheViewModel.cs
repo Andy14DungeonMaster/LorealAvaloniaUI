@@ -8,13 +8,10 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using LorealAvaloniaUI.Lang;
-
-// Removed DynamicData as it was not used and caused warning
-using LorealAvaloniaUI.Services; // Add this using directive
+using LorealAvaloniaUI.Services;
 using LorealAvaloniaUI.Views;
 using ReactiveUI;
 using Serilog;
-// Removed static System.Net.WebRequestMethods; as it was not used
 
 namespace LorealAvaloniaUI.ViewModels
 {
@@ -28,8 +25,11 @@ namespace LorealAvaloniaUI.ViewModels
             get => _selectFilesSize;
             set => this.RaiseAndSetIfChanged(ref _selectFilesSize, value);
         }
-        // Command to delete files
+        // Command to delete selected files
         public ReactiveCommand<Unit, Unit> DeleteSelectedFilesCommand { get; }
+
+        // Command to clear all office files cache
+        public ReactiveCommand<Unit, Unit> ClearAllFilesCommand { get; }
 
         public ReactiveCommand<Unit, Unit> SortFilesCommand { get; }
         public ReactiveCommand<Unit, Unit> SortFilesBySizeCommand { get; }
@@ -80,28 +80,33 @@ namespace LorealAvaloniaUI.ViewModels
             }
         }
 
-        private readonly OfficeCacheInfoService _officeCacheInfoService; // Add this field
+        private readonly OfficeCacheInfoService _officeCacheInfoService;
 
-        // MODIFY the constructor to accept OfficeCacheInfoService
         public OfficeFileCacheViewModel(OfficeCacheInfoService officeCacheInfoService)
         {
             _officeCacheInfoService = officeCacheInfoService; // Assign the injected service
 
             DeleteSelectedFilesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFilesAsync);
+            ClearAllFilesCommand = ReactiveCommand.CreateFromTask(ClearAllFilesAsync);
             SortFilesCommand = ReactiveCommand.Create(SortFilesByName);
             SortFilesBySizeCommand = ReactiveCommand.Create(SortFilesBySize);
             SortFilesByDateCommand = ReactiveCommand.Create(SortFilesByDate);
-            // REMOVE CalculateOfficeFilesCacheSizeCommand assignment here
 
             DeleteSelectedFilesCommand.ThrownExceptions
                 .Subscribe(ex =>
                 {
-                    Log.Error("Delete command error: {Ex}", ex);
+                    Log.Error("Delete selected files command error: {Ex}", ex);
                 });
 
-            // INITIALIZE TotalSize for display
-            _totalSize = "Loading..."; // Set an initial loading state
-            _totalNumberOfFiles = "Loading..."; // Set an initial loading state
+            ClearAllFilesCommand.ThrownExceptions
+                .Subscribe(ex =>
+                {
+                    Log.Error("Clear all files command error: {Ex}", ex);
+                });
+
+
+            _totalSize = "Loading...";
+            _totalNumberOfFiles = "Loading...";
 
 
             // Subscribe to the OfficeCacheInfoService's TotalOfficeCacheSize property
@@ -295,6 +300,87 @@ namespace LorealAvaloniaUI.ViewModels
                 LogSystemInformation();
                 // Trigger the service to recalculate Office cache size after deletion
                 _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task ClearAllFilesAsync()
+        {
+            Log.Information("** Clear All Office Files Cache action initiated in OfficeFileCacheViewModel **");
+            Log.Information("SIZE OF THE DISK BEFORE CLEAR ALL");
+            LogSystemInformation();
+            IsLoading = true;
+            try
+            {
+                string officeFilesCacheRootPath = Path.Combine(
+                                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                                    "AppData\\Local\\Microsoft\\Office\\16.0\\OfficeFileCache\\0\\0"
+                 );
+
+                if (!Directory.Exists(officeFilesCacheRootPath))
+                {
+                    Log.Information("Office files cache directory does not exist or is already clear: {OfficeFilesCache}", officeFilesCacheRootPath);
+                    Files.Clear(); // Ensure UI reflects empty state
+                    TotalNumber = string.Format(Resources.DownloadNoFiles, 0);
+                    _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync(); // Update service as well
+                    return;
+                }
+
+                // Get ALL directories directly within the cache path
+                var directoriesToDelete = Directory.GetDirectories(officeFilesCacheRootPath, "*", SearchOption.TopDirectoryOnly).ToList();
+
+                if (!directoriesToDelete.Any())
+                {
+                    Log.Information("No directories found in the Office cache to clear: {OfficeFilesCache}", officeFilesCacheRootPath);
+                    return;
+                }
+
+                string message = $"Are you sure you want to permanently delete ALL {directoriesToDelete.Count} cached items (folders) from the Office Cache folder?";
+                bool confirmed = await ConfirmationDialogViewModel.ShowAsync(null, message);
+
+                if (!confirmed)
+                {
+                    Log.Information("Clear All cancelled by user.");
+                    return;
+                }
+
+                int deletedCount = 0;
+
+                // Delete all subdirectories within the cache folder
+                foreach (var dirPath in directoriesToDelete)
+                {
+                    try
+                    {
+                        if (Directory.Exists(dirPath))
+                        {
+                            await Task.Run(() => Directory.Delete(dirPath, true)); // true for recursive delete
+                            Log.Information($"{Path.GetFileName(dirPath)} (Office cache directory) deleted successfully during Clear All.");
+                            deletedCount++;
+                        }
+                        else
+                        {
+                            Log.Information($"Office cache directory not found: {dirPath} during Clear All. Already gone or path invalid.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error deleting directory {Path.GetFileName(dirPath)} during Clear All: {ex.Message}");
+                    }
+                }
+
+                Log.Information($"{deletedCount} item(s) successfully deleted during Clear All operation.");
+                Log.Information("SIZE OF THE DISK AFTER CLEAR ALL");
+                LogSystemInformation();
+
+                await LoadFilesAsync(); // This will re-apply the >100MB filter for display.
+                _ = _officeCacheInfoService.CalculateAndSetOfficeCacheSizeAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An unexpected error occurred during ClearAllFilesAsync: {ex.Message}");
             }
             finally
             {

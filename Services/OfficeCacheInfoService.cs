@@ -34,7 +34,7 @@ namespace LorealAvaloniaUI.Services
 
                 if (!Directory.Exists(officeCachePath))
                 {
-                    TotalOfficeCacheSize = "Office cache folder not found.";
+                    TotalOfficeCacheSize = $"Office cache directory does not exist or is not at expected path: {officeCachePath}";
                     Log.Information("Office cache directory does not exist or is not at expected path: {OfficeCachePath}", officeCachePath);
                     return;
                 }

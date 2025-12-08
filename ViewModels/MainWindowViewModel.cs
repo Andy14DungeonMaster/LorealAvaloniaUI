@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
 using LorealAvaloniaUI.Lang;
@@ -23,11 +24,80 @@ namespace LorealAvaloniaUI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedMenuItem, value);
         }
 
+        private ObservableCollection<CultureInfo> _availableLanguages;
+        public ObservableCollection<CultureInfo> AvailableLanguages
+        {
+            get => _availableLanguages;
+            private set => this.RaiseAndSetIfChanged(ref _availableLanguages, value);
+        }
+
+        private CultureInfo? _selectedLanguage; 
+        public CultureInfo? SelectedLanguage
+        {
+            get => _selectedLanguage;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedLanguage, value);
+          
+                if (value != null)
+                {
+                    Log.Information($"Language changed to: {value}");
+                    Lang.Resources.Culture = value;
+
+                    var x = _navigationService.CurrentViewModelType;
+
+                    if (x != null ) 
+                    {
+                        if (x.Name == "DownloadViewModel")
+                        {
+                            _navigationService.Navigate<DownloadViewModel, DownloadView>();
+                        }
+
+                        else if (x.Name == "OneDriveViewModel")
+                        {
+                            _navigationService.Navigate<OneDriveViewModel, OneDriveView>();
+                        }
+
+                        else if (x.Name == "OutlookFilesViewModel")
+                        {
+                            _navigationService.Navigate<OutlookFilesViewModel, OutlookFilesView>();
+                        }
+
+                        else if (x.Name == "OfficeFileCacheViewModel")
+                        {
+                            _navigationService.Navigate<OfficeFileCacheViewModel, OfficeFileCacheView>();
+                        }
+                        else
+                        {
+                            _navigationService.Navigate<DashboardViewModel, DashboardView>();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("CurrentViewModelType is null. Navigation likely not completed yet.");
+                    }
+
+                   // _navigationService.Navigate<DashboardViewModel, DashboardView>();
+                }
+            }
+        } 
+
         public MainViewModel(NavigationService navigationService)
         {
             _navigationService = navigationService;
 
             var dashboardMenuItem = new MenuItemViewModel("Overview", NavigateCommand<DashboardViewModel, DashboardView>());
+
+            AvailableLanguages = new ObservableCollection<CultureInfo>
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("fr-FR"), 
+                new CultureInfo("pt-BR"), 
+                new CultureInfo("fr-CA"), 
+                new CultureInfo("es-MX"), 
+            };
+
+            SelectedLanguage = CultureInfo.CurrentUICulture;
 
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {

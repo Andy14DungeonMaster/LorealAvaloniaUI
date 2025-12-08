@@ -9,47 +9,70 @@
     Background="#222223"
 	Loaded="Window_Loaded">
 
-    <Grid ColumnDefinitions="250, *" RowDefinitions="50, *">
+	<Grid ColumnDefinitions="250, *" RowDefinitions="50, *">
 
-        <!--  Header Section  -->
-        <Border
+		<!--  Header Section  -->
+		<Border
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Padding="10">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
-                    <GradientStop Offset="0.0" Color="#4353EA" />
-                    <GradientStop Offset="0.4" Color="#2FA5DF" />
-                    <GradientStop Offset="1.0" Color="#40E16B" />
+			<Border.Background>
+				<LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+					<GradientStop Offset="0.0" Color="#4353EA" />
+					<GradientStop Offset="0.4" Color="#2FA5DF" />
+					<GradientStop Offset="1.0" Color="#40E16B" />
 
-                </LinearGradientBrush>
-            </Border.Background>
+				</LinearGradientBrush>
+			</Border.Background>
+			<Grid ColumnDefinitions="*, Auto, *">
 
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="LOREAL Essentielle"
-                FontSize="24"
-                FontWeight="Normal"
-                Foreground="White"
-                Text="L'ORÉAL DISK CLEANUP" />
-        </Border>
+				<TextBlock
+                    Grid.Column="0"
+				Grid.ColumnSpan="3"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				FontFamily="LOREAL Essentielle"
+				FontSize="24"
+				FontWeight="Normal"
+				Foreground="White"
+				Text="L'ORÉAL DISK CLEANUP" />
 
-        <!--  Sidebar with TreeView  -->
-        <Border
+
+				<StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+					<TextBlock Text="Language:" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
+					<ComboBox ItemsSource="{Binding AvailableLanguages}"
+                              SelectedItem="{Binding SelectedLanguage}"
+                              Width="150"
+                              Foreground="White"
+                              Background="#2A2A2A"
+
+						BorderBrush="#555555"
+						BorderThickness="1">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding DisplayName}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<!--  Sidebar with TreeView  -->
+		<Border
             Grid.Row="1"
             Grid.Column="0"
 			Margin="0,10,0,0"
             Background="#222223">
-            <TreeView ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}" Margin="0,0,0,0">
+			<TreeView ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}" Margin="0,0,0,0">
 				<TreeView.Styles>
 					<Style Selector="TreeView">
 						<Setter Property="HorizontalAlignment" Value="Stretch"/>
-						
+
 					</Style>
 				</TreeView.Styles>
-                <TreeView.DataTemplates>
-                    <TreeDataTemplate DataType="vm:MenuItemViewModel" ItemsSource="{Binding Children}" >
+				<TreeView.DataTemplates>
+					<TreeDataTemplate DataType="vm:MenuItemViewModel" ItemsSource="{Binding Children}" >
 						<Border
 						   HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -64,18 +87,18 @@
 									   FontSize="16"
 									   />
 						</Border>
-                    </TreeDataTemplate>
-                </TreeView.DataTemplates>
-            </TreeView>
-        </Border>
+					</TreeDataTemplate>
+				</TreeView.DataTemplates>
+			</TreeView>
+		</Border>
 
-        <!--  Main Content  -->
-        <Border
+		<!--  Main Content  -->
+		<Border
             Grid.Row="1"
             Grid.Column="1"
             Background="Black">
-            <ContentControl Name="MainContent" />
-        </Border>
+			<ContentControl Name="MainContent" />
+		</Border>
 
-    </Grid>
+	</Grid>
 </Window>

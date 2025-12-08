@@ -42,6 +42,7 @@
 			<TextBlock
                 FontSize="16"
                 Foreground="White"
+				TextWrapping="Wrap"
                 Text="{Binding TotalSize, StringFormat={x:Static res:Resources.OfficeFilesCacheSize}}" />
 
 					</StackPanel>
@@ -170,6 +171,12 @@
                 Background="DodgerBlue"
                 Command="{Binding DeleteSelectedFilesCommand}"
                 Content="{x:Static res:Resources.PermanentDelete}"
+                Foreground="White" />
+			<Button
+                Padding="10,5"
+                Background="DodgerBlue"
+                Command="{Binding ClearAllFilesCommand}"
+                Content="{x:Static res:Resources.DeleteAllCacheFiles}"
                 Foreground="White" />
 		</StackPanel>
 	

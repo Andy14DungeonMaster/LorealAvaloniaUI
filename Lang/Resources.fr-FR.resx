@@ -166,7 +166,7 @@
     <comment>Previous clean up summary header text</comment>
   </data>
   <data name="UserInstructionMessageCritical" xml:space="preserve">
-    <value>Votre système manque cruellement d'espace de stockage, ce qui peut impacter ses performances et sa stabilité. Nous vous recommandons vivement de libérer de l'espace immédiatement. Veuillez naviguer dans les sections Téléchargements, OneDrive et Cache Office pour nettoyer votre disque.</value>
+    <value>L'espace de stockage de votre système est dangereusement bas, ce qui pourrait impacter les performances et la stabilité. Nous vous recommandons vivement de libérer de l'espace immédiatement. Vous pouvez libérer du stockage en vérifiant les options ci-dessous pour supprimer les fichiers inutiles.</value>
     <comment>User instruction overview page</comment>
   </data>
   <data name="UserInstructionMessageNormal" xml:space="preserve">
@@ -234,7 +234,7 @@
     <comment>Size selected</comment>
   </data>
   <data name="PermanentDelete" xml:space="preserve">
-    <value>Suppression Définitive</value>
+    <value>Supprimer Définitivement (Fichiers Sélectionnés)</value>
     <comment>Permanent Delete</comment>
   </data>
   <data name="MoveToOneDrive" xml:space="preserve">
@@ -301,5 +301,11 @@
   </data>
   <data name="OutlookSectionTitle" xml:space="preserve">
     <value>Outlook</value>
+  </data>
+  <data name="UserInstructionMessageNonCritical" xml:space="preserve">
+    <value>Pour garantir des performances optimales du système, il est de bonne pratique de gérer régulièrement l'espace de stockage de votre disque. Vous pouvez libérer de l'espace en vérifiant les options ci-dessous pour supprimer les fichiers inutiles.</value>
+  </data>
+  <data name="DeleteAllCacheFiles" xml:space="preserve">
+    <value>Supprimer Définitivement Tous les Fichiers Cache</value>
   </data>
 </root>

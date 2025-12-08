@@ -138,7 +138,7 @@ namespace LorealAvaloniaUI.Services
                 Log.Error(ex, "Failed to save deletion stats");
             }
         }
-
+        
 
         private class DeletionStats
         {
